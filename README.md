@@ -67,21 +67,22 @@ The platform supports three distinct user roles:
 ### 📚 Courses & Learning
 | Feature | Details |
 |---|---|
-| **Course Catalog** | Browse by category, level, and keyword with full-text search & pagination |
+| **Course Catalog** | Browse by category, level, keyword with full-text search, pagination & **creation date** |
 | **Multi-format Lessons** | Rich text content + PDF upload with automatic text extraction |
 | **Progress Tracking** | Lesson-by-lesson advancement with completion percentage |
 | **Enrollment Management** | One-click enroll/unenroll with persistent state |
 | **Auto Certification** | Completion certificate with QR code generated at 100% course progress |
+| **Auto-Publication** | Course published automatically when ≥ 1 lesson; reverted to draft when 0 lessons |
 
 ### 👨‍🏫 Instructor Dashboard
 - Create, edit, and delete courses and individual lessons
 - Upload PDFs — text is automatically extracted and indexed for the RAG tutor
 - Analytics dashboard: enrolled students, lesson completion rates, published courses
 - Detailed per-student progress view
+- **Auto-publication**: a course is automatically published as soon as it has at least one lesson, and reverted to draft if all lessons are deleted — no manual publish button needed
 
 ### 🛡️ Admin Panel
 - Full user management (students & instructors)
-- Course moderation (publish, delete, review)
 - Global platform statistics dashboard
 
 ### 💬 Community & Social
@@ -199,7 +200,7 @@ elearning-pfe/
 │   │   │   ├── dashboard/           # Student dashboard
 │   │   │   ├── courses/             # Course catalog + [id] detail page
 │   │   │   ├── instructor/          # Instructor space (courses, analytics)
-│   │   │   ├── admin/               # Admin panel (users, courses, stats)
+│   │   │   ├── admin/               # Admin panel (users & stats — no courses page)
 │   │   │   ├── chat/                # AI tutor chat interface
 │   │   │   ├── forum/               # Community forum
 │   │   │   ├── messages/            # Direct messaging
@@ -534,9 +535,9 @@ Content-Type: application/json
 
 | Role | Accessible Features |
 |---|---|
-| `student` | Course catalog, lessons, AI tutor, adaptive quizzes, forum, DMs, certificates, profile |
-| `instructor` | All student features + course creation/editing, PDF uploads, student analytics |
-| `admin` | All instructor features + platform-wide user & course management, global stats |
+| `student` | Course catalog (with creation date), lessons, AI tutor, adaptive quizzes, forum, DMs, certificates, profile |
+| `instructor` | All student features + course creation/editing, PDF uploads, student analytics (courses auto-published on first lesson) |
+| `admin` | User management (students & instructors), global statistics dashboard |
 
 ---
 
@@ -609,6 +610,8 @@ The AI tutor uses **Retrieval-Augmented Generation (RAG)** to provide accurate, 
 ```
 
 > **Auto-ingestion:** On every server startup, all published course content is automatically re-ingested into the vector store — ensuring the AI tutor is always up to date without manual intervention.
+
+> **Auto-publication:** Courses are published automatically as soon as the first lesson is created, and reverted to draft status if all lessons are removed. No manual publish/unpublish action is required from instructors.
 
 ---
 
