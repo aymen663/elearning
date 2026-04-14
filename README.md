@@ -637,6 +637,6 @@ Please follow the [Conventional Commits](https://www.conventionalcommits.org/) s
 
 <div align="center">
 
-**© 2026 EduAI** &nbsp;·&nbsp; Powered by Llama 3.3 70B & LangChain &nbsp;·&nbsp; Secured by Keycloak
+**© 2026 EduAI** &nbsp;·&nbsp; Powered by Llama 3.3 70B & LangChain &nbsp;·&nbsp; Secured by Keycloak ...
 
 </div>
