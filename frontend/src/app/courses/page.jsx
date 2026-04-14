@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { coursesAPI } from '@/lib/api';
 import Sidebar from '@/components/layout/Sidebar';
-import { Search, Users, BookOpen, ArrowRight, Star, Layers } from 'lucide-react';
+import { Search, Users, BookOpen, ArrowRight, Star, Calendar } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -37,6 +37,9 @@ function CourseCard({ course }) {
     const lessons = course.lessons?.length ?? 0;
     const students = course.enrolledStudents?.length ?? 0;
     const rating = course.rating ?? (4.2 + Math.random() * 0.7).toFixed(1);
+    const createdAt = course.createdAt
+        ? new Date(course.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })
+        : null;
 
     return (
         <Link href={`/courses/${course._id}`} className="cc-card group block">
@@ -90,6 +93,14 @@ function CourseCard({ course }) {
                     <span className="cc-meta-item">
                         <BookOpen className="w-3 h-3" /> {lessons} leçons
                     </span>
+                    {createdAt && (
+                        <>
+                            <span className="cc-dot">·</span>
+                            <span className="cc-meta-item">
+                                <Calendar className="w-3 h-3" /> {createdAt}
+                            </span>
+                        </>
+                    )}
                 </div>
 
                 {/* CTA */}

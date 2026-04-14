@@ -170,7 +170,6 @@ const adminNav = [
     { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/admin/teachers', icon: GraduationCap, label: 'Professeurs' },
     { href: '/admin/students', icon: Users, label: 'Étudiants' },
-    { href: '/admin/courses', icon: BookOpen, label: 'Cours' },
 ];
 
 const instructorNav = [

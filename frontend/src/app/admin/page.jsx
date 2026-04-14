@@ -100,7 +100,7 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* ── Quick links ── */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                         <div className="card">
                             <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
                                 <GraduationCap className="w-4 h-4 text-indigo-400" /> Gestion des professeurs
@@ -110,17 +110,6 @@ export default function AdminDashboard() {
                             </p>
                             <a href="/admin/teachers" className="btn-primary text-sm w-fit">
                                 Voir les professeurs →
-                            </a>
-                        </div>
-                        <div className="card">
-                            <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
-                                <BookOpen className="w-4 h-4 text-emerald-400" /> Gestion des cours
-                            </h3>
-                            <p className="text-sm text-slate-400 mb-4">
-                                Consultez et modérez tous les cours de la plateforme, publiez ou dépubliez des cours.
-                            </p>
-                            <a href="/admin/courses" className="btn-secondary text-sm w-fit">
-                                Voir les cours →
                             </a>
                         </div>
                     </div>

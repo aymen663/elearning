@@ -5,7 +5,7 @@ import { coursesAPI } from '@/lib/api';
 import Sidebar from '@/components/layout/Sidebar';
 import {
     ArrowLeft, Plus, Loader2, BookOpen, X, Save, Trash2,
-    GripVertical, Edit3, Check, Eye, EyeOff, FileText, Upload, ChevronDown, ChevronUp
+    GripVertical, Edit3, Check, FileText, Upload, ChevronDown, ChevronUp
 } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -20,7 +20,7 @@ export default function EditCoursePage() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [form, setForm] = useState({ title: '', description: '', category: '', level: '', thumbnail: '' });
-    const [newLesson, setNewLesson] = useState({ title: '', content: '', duration: 0 });
+    const [newLesson, setNewLesson] = useState({ title: '', content: '' });
     const [addingLesson, setAddingLesson] = useState(false);
     const [deletingLesson, setDeletingLesson] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
@@ -63,13 +63,7 @@ export default function EditCoursePage() {
         finally { setSaving(false); }
     };
 
-    const togglePublish = async () => {
-        try {
-            await coursesAPI.update(id, { isPublished: !course.isPublished });
-            toast.success(course.isPublished ? 'Cours dépublié' : 'Cours publié ! Les étudiants peuvent maintenant le voir.');
-            load();
-        } catch { toast.error('Erreur'); }
-    };
+
 
     const addLesson = async () => {
         if (!newLesson.title.trim()) return toast.error('Titre requis');
@@ -77,7 +71,7 @@ export default function EditCoursePage() {
         try {
             await coursesAPI.addLesson(id, newLesson);
             toast.success('Leçon ajoutée !');
-            setNewLesson({ title: '', content: '', duration: 0 });
+            setNewLesson({ title: '', content: '' });
             setShowAddForm(false);
             load();
         } catch { toast.error('Erreur ajout leçon'); }
@@ -142,12 +136,6 @@ export default function EditCoursePage() {
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <button onClick={togglePublish}
-                        className={`btn-secondary text-sm gap-2 flex items-center ${course?.isPublished ? 'border-amber-500/30 text-amber-400' : 'border-emerald-500/30 text-emerald-400'}`}>
-                        {course?.isPublished
-                            ? <><EyeOff className="w-4 h-4" /> Dépublier</>
-                            : <><Eye className="w-4 h-4" /> Publier</>}
-                    </button>
                     <Link href={`/courses/${id}`} className="btn-ghost text-sm">
                         Voir le cours
                     </Link>
@@ -202,12 +190,12 @@ export default function EditCoursePage() {
                         <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${course?.isPublished ? 'bg-emerald-400' : 'bg-amber-400'}`} />
                         <div>
                             <p className={`text-sm font-medium ${course?.isPublished ? 'text-emerald-400' : 'text-amber-400'}`}>
-                                {course?.isPublished ? 'Cours publié' : 'Cours non publié'}
+                                {course?.isPublished ? 'Cours publié' : 'Brouillon'}
                             </p>
                             <p className="text-xs text-slate-500 mt-0.5">
                                 {course?.isPublished
                                     ? 'Les étudiants peuvent voir et s\'inscrire à ce cours.'
-                                    : 'Cliquez sur "Publier" pour rendre le cours visible aux étudiants.'}
+                                    : 'Ajoutez au moins une leçon pour publier automatiquement ce cours.'}
                             </p>
                         </div>
                     </div>
@@ -234,12 +222,6 @@ export default function EditCoursePage() {
                                     value={newLesson.content}
                                     onChange={(e) => setNewLesson({ ...newLesson, content: e.target.value })} />
                                 <div className="flex gap-3 items-end">
-                                    <div className="flex-1">
-                                        <label className="input-label">Durée (min)</label>
-                                        <input type="number" min={0} className="input"
-                                            value={newLesson.duration || ''}
-                                            onChange={(e) => setNewLesson({ ...newLesson, duration: +e.target.value })} />
-                                    </div>
                                     <button onClick={addLesson} disabled={addingLesson} className="btn-primary px-4 py-2.5">
                                         {addingLesson ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                                         Ajouter
@@ -274,7 +256,7 @@ export default function EditCoursePage() {
                                                 <div className="flex-1 min-w-0">
                                                     <p className="text-sm font-medium text-white truncate">{lesson.title}</p>
                                                     <div className="flex items-center gap-2 mt-0.5">
-                                                        {lesson.duration > 0 && <span className="text-xs text-slate-500">{lesson.duration} min</span>}
+
                                                         {hasContent && (
                                                             <span className="text-xs text-emerald-400 flex items-center gap-1">
                                                                 <Check className="w-3 h-3" /> Contenu

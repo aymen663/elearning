@@ -394,6 +394,12 @@ router.post('/:id/lessons', protect, restrictTo('instructor', 'admin'), async (r
     const { title, content, pdfUrl, duration } = req.body;
     const order = course.lessons.length + 1;
     course.lessons.push({ title, content, pdfUrl, duration: duration || 0, order });
+
+    // Auto-publish : publié dès qu'il y a au moins 1 leçon
+    if (!course.isPublished && course.lessons.length >= 1) {
+      course.isPublished = true;
+    }
+
     await course.save();
 
 
@@ -456,6 +462,12 @@ router.delete('/:id/lessons/:lessonId', protect, restrictTo('instructor', 'admin
     );
 
     course.lessons.forEach((l, i) => { l.order = i + 1; });
+
+    // Auto-unpublish : brouillon s'il ne reste plus de leçons
+    if (course.isPublished && course.lessons.length === 0) {
+      course.isPublished = false;
+    }
+
     await course.save();
 
     res.json({ message: 'Leçon supprimée', course });

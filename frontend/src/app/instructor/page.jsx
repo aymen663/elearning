@@ -102,13 +102,7 @@ export default function InstructorDashboard() {
 
     useEffect(() => { load(); }, [load]);
 
-    const togglePublish = async (course) => {
-        try {
-            await coursesAPI.update(course._id, { isPublished: !course.isPublished });
-            toast.success(course.isPublished ? 'Cours dépublié' : 'Cours publié !');
-            load();
-        } catch { toast.error('Erreur'); }
-    };
+
 
     const deleteCourse = async (courseId) => {
         if (!confirm('Supprimer ce cours ? Cette action est irréversible.')) return;
@@ -182,9 +176,7 @@ export default function InstructorDashboard() {
                                 <Link href={`/instructor/courses/${c._id}/students`} className="btn-secondary flex-1 justify-center text-xs py-2" title="Voir les étudiants">
                                     <Users className="w-3.5 h-3.5" /> Étudiants
                                 </Link>
-                                <button onClick={() => togglePublish(c)} className="btn-ghost px-3 py-2" title={c.isPublished ? 'Dépublier' : 'Publier'}>
-                                    {c.isPublished ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5 text-emerald-400" />}
-                                </button>
+
                                 <button onClick={() => deleteCourse(c._id)} disabled={deletingId === c._id} className="btn-ghost px-3 py-2" title="Supprimer">
                                     {deletingId === c._id
                                         ? <Loader2 className="w-3.5 h-3.5 animate-spin text-red-400" />
