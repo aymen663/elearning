@@ -42,7 +42,7 @@ export default function CourseStudentsPage() {
                     </Link>
                     <div>
                         <h1 className="page-title flex items-center gap-2">
-                            <Users className="w-6 h-6 text-indigo-400" /> Étudiants inscrits
+                            <Users className="w-6 h-6 text-teal-400" /> Étudiants inscrits
                         </h1>
                         <p className="page-subtitle truncate max-w-md">{courseTitle}</p>
                     </div>
@@ -54,12 +54,12 @@ export default function CourseStudentsPage() {
 
             {loading ? (
                 <div className="flex justify-center py-24">
-                    <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+                    <Loader2 className="w-8 h-8 text-teal-400 animate-spin" />
                 </div>
             ) : students.length === 0 ? (
                 <div className="card text-center py-20 max-w-lg mx-auto">
-                    <div className="w-20 h-20 rounded-2xl bg-indigo-600/10 flex items-center justify-center mx-auto mb-5">
-                        <Users className="w-10 h-10 text-indigo-400/40" />
+                    <div className="w-20 h-20 rounded-2xl bg-teal-600/10 flex items-center justify-center mx-auto mb-5">
+                        <Users className="w-10 h-10 text-teal-400/40" />
                     </div>
                     <h2 className="text-white font-semibold text-lg mb-2">Aucun étudiant inscrit</h2>
                     <p className="text-slate-400 text-sm">
@@ -86,7 +86,7 @@ export default function CourseStudentsPage() {
                                     <tr key={s._id}>
                                         <td>
                                             <div className="flex items-center gap-3">
-                                                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
+                                                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
                                                     {s.name?.charAt(0).toUpperCase()}
                                                 </div>
                                                 <span className="font-medium text-white text-sm">{s.name}</span>
@@ -102,7 +102,7 @@ export default function CourseStudentsPage() {
                                             <div className="flex items-center gap-2 min-w-[100px]">
                                                 <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                                                     <div
-                                                        className={`h-full rounded-full transition-all ${isComplete ? 'bg-emerald-500' : 'bg-gradient-to-r from-indigo-500 to-purple-500'}`}
+                                                        className={`h-full rounded-full transition-all ${isComplete ? 'bg-emerald-500' : 'bg-gradient-to-r from-teal-500 to-teal-500'}`}
                                                         style={{ width: `${pct}%` }}
                                                     />
                                                 </div>

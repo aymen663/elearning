@@ -1,6 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { GraduationCap, FileText, ArrowLeft } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 const SECTIONS = [
     {
@@ -48,22 +50,23 @@ const SECTIONS = [
 export default function TermsPage() {
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-slate-200 relative overflow-hidden">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+            <Header />
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-teal-600/15 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/15 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="relative z-10 max-w-3xl mx-auto px-6 py-16">
+            <div className="relative z-10 max-w-3xl mx-auto px-6 pt-24 pb-16">
                 <div className="mb-10">
-                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-indigo-400 transition-colors mb-8">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-teal-400 transition-colors mb-8">
                         <ArrowLeft className="w-4 h-4" />
                         Retour à l'accueil
                     </Link>
 
                     <div className="flex items-center gap-4 mb-6">
                         <div className="w-12 h-12 rounded-xl bg-[#0f0f1a] border border-white/5 flex items-center justify-center shadow-xl">
-                            <FileText className="w-6 h-6 text-indigo-400" />
+                            <FileText className="w-6 h-6 text-teal-400" />
                         </div>
                         <div>
-                            <p className="text-xs text-indigo-400 font-semibold uppercase tracking-widest mb-1">EduAI</p>
+                            <p className="text-xs text-teal-400 font-semibold uppercase tracking-widest mb-1">EduAI</p>
                             <h1 className="text-3xl font-bold text-white">Conditions de service</h1>
                         </div>
                     </div>
@@ -74,7 +77,7 @@ export default function TermsPage() {
                     {SECTIONS.map((section, i) => (
                         <div key={i}>
                             <h2 className="text-base font-semibold text-white mb-2 flex items-center gap-2">
-                                <span className="w-1.5 h-5 bg-indigo-500 rounded-full inline-block flex-shrink-0" />
+                                <span className="w-1.5 h-5 bg-teal-500 rounded-full inline-block flex-shrink-0" />
                                 {section.title}
                             </h2>
                             <p className="text-slate-400 leading-relaxed text-sm pl-4">
@@ -90,18 +93,14 @@ export default function TermsPage() {
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         <p className="text-xs text-slate-500 font-medium">
                             Des questions ?{' '}
-                            <Link href="/contact" className="text-indigo-400 hover:underline">Contactez-nous</Link>
+                            <Link href="/contact" className="text-teal-400 hover:underline">Contactez-nous</Link>
                             {' '}·{' '}
-                            <Link href="/privacy" className="text-indigo-400 hover:underline">Politique de confidentialité</Link>
+                            <Link href="/privacy" className="text-teal-400 hover:underline">Politique de confidentialité</Link>
                         </p>
                     </div>
                 </div>
 
-                <div className="mt-8 flex items-center gap-3">
-                    <GraduationCap className="w-5 h-5 text-indigo-400" />
-                    <span className="text-slate-500 text-sm">© 2026 EduAI. Tous droits réservés.</span>
-                </div>
-            </div>
+            <Footer />
         </div>
     );
 }

@@ -122,7 +122,7 @@ export default function EditCoursePage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-8 h-8 text-indigo-400 animate-spin" /></div></Sidebar>
+        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-8 h-8 text-teal-400 animate-spin" /></div></Sidebar>
     );
 
     return (
@@ -146,7 +146,7 @@ export default function EditCoursePage() {
                 <div className="lg:col-span-2">
                     <form onSubmit={saveInfo} className="card space-y-5">
                         <h3 className="font-semibold text-white flex items-center gap-2">
-                            <BookOpen className="w-4 h-4 text-indigo-400" /> Informations générales
+                            <BookOpen className="w-4 h-4 text-teal-400" /> Informations générales
                         </h3>
 
                         <div>
@@ -213,8 +213,8 @@ export default function EditCoursePage() {
                         </div>
 
                         {showAddForm && (
-                            <div className="mb-4 p-4 rounded-xl bg-indigo-600/10 border border-indigo-500/20 space-y-3">
-                                <p className="text-sm font-medium text-indigo-300">Nouvelle leçon</p>
+                            <div className="mb-4 p-4 rounded-xl bg-teal-600/10 border border-teal-500/20 space-y-3">
+                                <p className="text-sm font-medium text-teal-300">Nouvelle leçon</p>
                                 <input className="input" placeholder="Titre de la leçon *" value={newLesson.title}
                                     onChange={(e) => setNewLesson({ ...newLesson, title: e.target.value })} />
                                 <textarea rows={3} className="input resize-none text-xs"
@@ -250,7 +250,7 @@ export default function EditCoursePage() {
                                         <div key={lesson._id}
                                             className="rounded-xl bg-white/[0.02] border border-white/[0.05] overflow-hidden transition-colors hover:border-white/10">
                                             <div className="flex items-center gap-3 p-3">
-                                                <div className="w-7 h-7 rounded-full bg-indigo-600/20 flex items-center justify-center text-xs text-indigo-400 font-bold flex-shrink-0">
+                                                <div className="w-7 h-7 rounded-full bg-teal-600/20 flex items-center justify-center text-xs text-teal-400 font-bold flex-shrink-0">
                                                     {i + 1}
                                                 </div>
                                                 <div className="flex-1 min-w-0">
@@ -272,7 +272,7 @@ export default function EditCoursePage() {
                                                 <div className="flex items-center gap-1">
                                                     <button
                                                         onClick={() => toggleLesson(lesson._id)}
-                                                        className="btn-ghost p-1.5 text-xs flex items-center gap-1 text-slate-400 hover:text-indigo-400 transition-colors"
+                                                        className="btn-ghost p-1.5 text-xs flex items-center gap-1 text-slate-400 hover:text-teal-400 transition-colors"
                                                         title="Éditer le contenu">
                                                         <Edit3 className="w-3.5 h-3.5" />
                                                         {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}

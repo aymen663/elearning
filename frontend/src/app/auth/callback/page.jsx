@@ -18,7 +18,7 @@ export default function AuthCallbackPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
             <div className="flex flex-col items-center gap-4">
-                <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+                <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
                 <p className="text-slate-400 text-sm">Redirection en cours...</p>
             </div>
         </div>

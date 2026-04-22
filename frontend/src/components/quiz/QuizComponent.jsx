@@ -59,7 +59,7 @@ export default function QuizComponent({ courseId }) {
             value={config.topic}
             onChange={(e) => setConfig(prev => ({ ...prev, topic: e.target.value }))}
             placeholder="Ex: Les boucles en Python..."
-            className="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 outline-none"
           />
         </div>
 
@@ -71,8 +71,8 @@ export default function QuizComponent({ courseId }) {
                 key={d}
                 onClick={() => setConfig(prev => ({ ...prev, difficulty: d }))}
                 className={`flex-1 py-2 rounded-lg text-sm font-medium border transition ${config.difficulty === d
-                    ? 'bg-indigo-600 text-white border-indigo-600'
-                    : 'border-gray-300 text-gray-700 hover:border-indigo-400'
+                    ? 'bg-teal-600 text-white border-teal-600'
+                    : 'border-gray-300 text-gray-700 hover:border-teal-400'
                   }`}
               >
                 {difficultyLabels[d]}
@@ -93,7 +93,7 @@ export default function QuizComponent({ courseId }) {
         <button
           onClick={generateQuiz}
           disabled={isLoading}
-          className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 transition"
+          className="w-full bg-teal-600 text-white py-3 rounded-xl font-semibold hover:bg-teal-700 disabled:opacity-50 transition"
         >
           {isLoading ? '⏳ Génération en cours...' : '🚀 Générer le Quiz'}
         </button>
@@ -112,7 +112,7 @@ export default function QuizComponent({ courseId }) {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="bg-indigo-600 h-2 rounded-full transition-all"
+              className="bg-teal-600 h-2 rounded-full transition-all"
               style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
             />
           </div>
@@ -126,8 +126,8 @@ export default function QuizComponent({ courseId }) {
               key={i}
               onClick={() => selectAnswer(i)}
               className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition ${answers[currentQ] === i
-                  ? 'border-indigo-600 bg-indigo-50 text-indigo-700 font-medium'
-                  : 'border-gray-200 hover:border-indigo-300'
+                  ? 'border-teal-600 bg-teal-50 text-teal-700 font-medium'
+                  : 'border-gray-200 hover:border-teal-300'
                 }`}
             >
               {opt}
@@ -148,7 +148,7 @@ export default function QuizComponent({ courseId }) {
             <button
               onClick={() => setCurrentQ(currentQ + 1)}
               disabled={answers[currentQ] === null}
-              className="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-sm disabled:opacity-50"
+              className="flex-1 bg-teal-600 text-white py-2 rounded-xl text-sm disabled:opacity-50"
             >
               Suivant →
             </button>
@@ -199,7 +199,7 @@ export default function QuizComponent({ courseId }) {
 
         <button
           onClick={() => setStep('config')}
-          className="w-full border border-indigo-600 text-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-50"
+          className="w-full border border-teal-600 text-teal-600 py-3 rounded-xl font-semibold hover:bg-teal-50"
         >
           🔄 Nouveau Quiz
         </button>

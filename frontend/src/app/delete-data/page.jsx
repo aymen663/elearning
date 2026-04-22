@@ -21,13 +21,13 @@ export default function DeleteDataPage() {
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-slate-200 relative overflow-hidden">
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-rose-600/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/10 rounded-full blur-[120px] pointer-events-none" />
 
             <div className="relative z-10 max-w-2xl mx-auto px-6 py-16">
 
                 {/* Header */}
                 <div className="mb-10">
-                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-indigo-400 transition-colors mb-8">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-teal-400 transition-colors mb-8">
                         <ArrowLeft className="w-4 h-4" />
                         Retour à l'accueil
                     </Link>
@@ -48,7 +48,7 @@ export default function DeleteDataPage() {
                 <div className="backdrop-blur-xl bg-[#0f0f1a]/70 border border-white/5 rounded-2xl p-6 mb-5 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.4)]">
                     <p className="text-slate-300 leading-relaxed text-sm">
                         Pour supprimer vos données personnelles, contactez-nous à{' '}
-                        <a href="mailto:contact@eduai.com" className="text-indigo-400 hover:underline font-medium">
+                        <a href="mailto:contact@eduai.com" className="text-teal-400 hover:underline font-medium">
                             contact@eduai.com
                         </a>{' '}
                         ou utilisez le formulaire ci-dessous. Nous traiterons votre demande dans un délai de{' '}
@@ -80,14 +80,14 @@ export default function DeleteDataPage() {
                             <p className="text-slate-400 text-sm max-w-xs">
                                 Nous avons bien reçu votre demande. Vos données seront supprimées dans un délai de 30 jours.
                             </p>
-                            <Link href="/" className="mt-2 text-sm text-indigo-400 hover:text-indigo-300 transition-colors">
+                            <Link href="/" className="mt-2 text-sm text-teal-400 hover:text-teal-300 transition-colors">
                                 Retour à l'accueil
                             </Link>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <h2 className="text-white font-semibold text-base mb-1 flex items-center gap-2">
-                                <Mail className="w-4 h-4 text-indigo-400" />
+                                <Mail className="w-4 h-4 text-teal-400" />
                                 Formulaire de suppression
                             </h2>
 
@@ -100,7 +100,7 @@ export default function DeleteDataPage() {
                                     onChange={handleChange}
                                     required
                                     placeholder="Votre nom"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 transition-all"
                                 />
                             </div>
 
@@ -113,7 +113,7 @@ export default function DeleteDataPage() {
                                     onChange={handleChange}
                                     required
                                     placeholder="email@exemple.com"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+                                    className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 transition-all"
                                 />
                             </div>
 
@@ -125,7 +125,7 @@ export default function DeleteDataPage() {
                                     onChange={handleChange}
                                     rows={3}
                                     placeholder="Pourquoi souhaitez-vous supprimer vos données ?"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all resize-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 transition-all resize-none"
                                 />
                             </div>
 
@@ -162,7 +162,7 @@ export default function DeleteDataPage() {
                 </div>
 
                 <div className="mt-8 flex items-center gap-3">
-                    <GraduationCap className="w-5 h-5 text-indigo-400" />
+                    <GraduationCap className="w-5 h-5 text-teal-400" />
                     <span className="text-slate-500 text-sm">© 2026 EduAI. Tous droits réservés.</span>
                 </div>
             </div>

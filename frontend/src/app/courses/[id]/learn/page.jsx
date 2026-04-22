@@ -172,7 +172,7 @@ export default function LearnPage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-indigo-400 animate-spin" /></div></Sidebar>
+        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-teal-400 animate-spin" /></div></Sidebar>
     );
     if (!data) return <Sidebar><p className="text-slate-400 p-8">Cours introuvable</p></Sidebar>;
 
@@ -220,17 +220,17 @@ export default function LearnPage() {
                             const active = activeLesson === i;
                             return (
                                 <button key={l._id} onClick={() => setActiveLesson(i)}
-                                    className={`w-full text-left flex items-start gap-3 px-3 py-3 rounded-xl mb-1 transition-all group ${active ? 'ring-1 ring-indigo-500/30' : 'hover:bg-white/5'
+                                    className={`w-full text-left flex items-start gap-3 px-3 py-3 rounded-xl mb-1 transition-all group ${active ? 'ring-1 ring-teal-500/30' : 'hover:bg-white/5'
                                         }`}
                                     style={{
                                         background: active ? 'rgba(99,102,241,0.12)' : 'transparent',
                                     }}>
-                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-[11px] font-bold transition-all ${done ? 'bg-emerald-500/20 text-emerald-400' : active ? 'bg-indigo-600 text-white' : 'bg-white/10 text-slate-500'
+                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-[11px] font-bold transition-all ${done ? 'bg-emerald-500/20 text-emerald-400' : active ? 'bg-teal-600 text-white' : 'bg-white/10 text-slate-500'
                                         }`}>
                                         {done ? <CheckCircle className="w-3.5 h-3.5" /> : i + 1}
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <p className={`text-sm font-medium leading-snug ${active ? 'text-indigo-300' : done ? '' : ''}`}
+                                        <p className={`text-sm font-medium leading-snug ${active ? 'text-teal-300' : done ? '' : ''}`}
                                             style={{ color: active ? undefined : done ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
                                             {l.title}
                                         </p>
@@ -277,7 +277,7 @@ export default function LearnPage() {
                                 <button
                                     onClick={() => setFocusMode(f => !f)}
                                     title={focusMode ? 'Quitter le mode focus (Échap)' : 'Mode focus'}
-                                    className={`btn-nav text-xs px-3 py-1.5 ${focusMode ? 'ring-1 ring-indigo-500/50' : ''}`}
+                                    className={`btn-nav text-xs px-3 py-1.5 ${focusMode ? 'ring-1 ring-teal-500/50' : ''}`}
                                 >
                                     {focusMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
                                     {focusMode ? 'Quitter focus' : 'Mode focus'}
@@ -287,10 +287,10 @@ export default function LearnPage() {
                             <div className="lg:hidden mb-6 p-4 rounded-2xl border" style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}>
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Progression</span>
-                                    <span className="text-xs font-bold text-indigo-400">{pct}%</span>
+                                    <span className="text-xs font-bold text-teal-400">{pct}%</span>
                                 </div>
                                 <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(99,102,241,0.15)' }}>
-                                    <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-700"
+                                    <div className="h-2 rounded-full bg-gradient-to-r from-teal-500 to-teal-500 transition-all duration-700"
                                         style={{ width: `${pct}%` }} />
                                 </div>
                                 <p className="text-[11px] mt-1" style={{ color: 'var(--text-muted)' }}>
@@ -300,14 +300,14 @@ export default function LearnPage() {
 
                             <div className="flex items-center flex-wrap gap-2 mb-6 p-3 rounded-xl border"
                                 style={{ background: 'rgba(99,102,241,0.04)', borderColor: 'rgba(99,102,241,0.15)' }}>
-                                <Languages className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                                <Languages className="w-4 h-4 text-teal-400 flex-shrink-0" />
                                 <span className="text-xs mr-1" style={{ color: 'var(--text-muted)' }}>Traduire :</span>
                                 {LANGUAGES.map(lang => (
                                     <button key={lang.code}
                                         onClick={() => translate(lang.code)} disabled={translating}
                                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all border ${activeLang === lang.code
-                                            ? 'bg-indigo-600 border-indigo-500 text-white'
-                                            : 'bg-white/[0.04] border-white/10 text-slate-400 hover:border-indigo-500/40 hover:text-indigo-300'
+                                            ? 'bg-teal-600 border-teal-500 text-white'
+                                            : 'bg-white/[0.04] border-white/10 text-slate-400 hover:border-teal-500/40 hover:text-teal-300'
                                             }`}>
                                         {translating && activeLang === lang.code
                                             ? <Loader2 className="w-3 h-3 animate-spin" />
@@ -328,7 +328,7 @@ export default function LearnPage() {
                                 style={{ background: 'var(--bg-card)', borderColor: 'var(--border)' }}>
                                 {translating && !translatedContent ? (
                                     <div className="flex items-center justify-center py-16">
-                                        <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+                                        <Loader2 className="w-8 h-8 text-teal-400 animate-spin" />
                                         <span className="ml-3 text-sm" style={{ color: 'var(--text-muted)' }}>Traduction en cours...</span>
                                     </div>
                                 ) : (
@@ -360,7 +360,7 @@ export default function LearnPage() {
                                 <div className="flex-1 flex justify-center">
                                     {!isDone(lesson._id) ? (
                                         <button onClick={() => completeLesson(lesson._id)} disabled={completing}
-                                            className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/25">
+                                            className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-teal-600 hover:bg-teal-500 text-white shadow-lg shadow-teal-600/25">
                                             {completing ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                                             {completing ? 'Enregistrement...' : 'Marquer comme complétée'}
                                         </button>
@@ -403,10 +403,10 @@ export default function LearnPage() {
                 </div>
                 <div className="hidden lg:flex items-center gap-3">
                     <div className="w-40 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(99,102,241,0.15)' }}>
-                        <div className="h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-700"
+                        <div className="h-1.5 rounded-full bg-gradient-to-r from-teal-500 to-teal-500 transition-all duration-700"
                             style={{ width: `${pct}%` }} />
                     </div>
-                    <span className="text-xs font-semibold text-indigo-400">{pct}%</span>
+                    <span className="text-xs font-semibold text-teal-400">{pct}%</span>
                 </div>
             </div>
 

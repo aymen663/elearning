@@ -76,7 +76,7 @@ export default function SearchModal({ open, onClose }) {
         const parts = text.split(regex);
         return parts.map((part, i) =>
             regex.test(part)
-                ? <mark key={i} className="bg-indigo-500/30 text-indigo-300 rounded px-0.5">{part}</mark>
+                ? <mark key={i} className="bg-teal-500/30 text-teal-300 rounded px-0.5">{part}</mark>
                 : part
         );
     };
@@ -107,7 +107,7 @@ export default function SearchModal({ open, onClose }) {
 
                             <div className="flex items-center gap-3 px-5 py-4 border-b border-white/[0.07]">
                                 {loading
-                                    ? <Loader2 className="w-5 h-5 text-indigo-400 animate-spin flex-shrink-0" />
+                                    ? <Loader2 className="w-5 h-5 text-teal-400 animate-spin flex-shrink-0" />
                                     : <Search className="w-5 h-5 text-slate-500 flex-shrink-0" />
                                 }
                                 <input
@@ -147,12 +147,12 @@ export default function SearchModal({ open, onClose }) {
                                                 key={`${result.courseId}-${result.lessonId || 'c'}`}
                                                 onClick={() => navigate(result)}
                                                 onMouseEnter={() => setSelected(i)}
-                                                className={`w-full flex items-start gap-3 px-5 py-3 text-left transition-colors ${selected === i ? 'bg-indigo-600/15' : 'hover:bg-white/[0.04]'}`}
+                                                className={`w-full flex items-start gap-3 px-5 py-3 text-left transition-colors ${selected === i ? 'bg-teal-600/15' : 'hover:bg-white/[0.04]'}`}
                                             >
-                                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 ${result.type === 'course' ? 'bg-indigo-600/20' : 'bg-purple-600/20'}`}>
+                                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 ${result.type === 'course' ? 'bg-teal-600/20' : 'bg-teal-600/20'}`}>
                                                     {result.type === 'course'
-                                                        ? <BookOpen className="w-4 h-4 text-indigo-400" />
-                                                        : <FileText className="w-4 h-4 text-purple-400" />
+                                                        ? <BookOpen className="w-4 h-4 text-teal-400" />
+                                                        : <FileText className="w-4 h-4 text-teal-400" />
                                                     }
                                                 </div>
 
@@ -169,8 +169,8 @@ export default function SearchModal({ open, onClose }) {
                                                 </div>
 
                                                 <span className={`flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-md mt-1 ${result.type === 'course'
-                                                    ? 'bg-indigo-500/20 text-indigo-400'
-                                                    : 'bg-purple-500/20 text-purple-400'
+                                                    ? 'bg-teal-500/20 text-teal-400'
+                                                    : 'bg-teal-500/20 text-teal-400'
                                                     }`}>
                                                     {result.type === 'course' ? 'Cours' : 'Leçon'}
                                                 </span>

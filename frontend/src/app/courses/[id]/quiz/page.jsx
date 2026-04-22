@@ -57,7 +57,7 @@ export default function QuizPage() {
                 <div className="flex items-center gap-4 mb-6">
                     <Link href={`/courses/${id}`} className="btn-ghost px-3 py-2"><ArrowLeft className="w-4 h-4" /></Link>
                     <div>
-                        <h1 className="page-title flex items-center gap-2"><Brain className="w-6 h-6 text-purple-400" /> Quiz adaptatif</h1>
+                        <h1 className="page-title flex items-center gap-2"><Brain className="w-6 h-6 text-teal-400" /> Quiz adaptatif</h1>
                     </div>
                 </div>
 
@@ -75,7 +75,7 @@ export default function QuizPage() {
                                 {[{ v: 1, l: 'Débutant' }, { v: 2, l: 'Intermédiaire' }, { v: 3, l: 'Avancé' }].map(({ v, l }) => (
                                     <button key={v} onClick={() => setConfig(prev => ({ ...prev, difficulty: v }))}
                                         className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all
-                      ${config.difficulty === v ? 'bg-indigo-600 border-indigo-500 text-white' : 'border-white/10 text-slate-400 hover:text-white'}`}>
+                      ${config.difficulty === v ? 'bg-teal-600 border-teal-500 text-white' : 'border-white/10 text-slate-400 hover:text-white'}`}>
                                         {l}
                                     </button>
                                 ))}
@@ -87,7 +87,7 @@ export default function QuizPage() {
                                 {[3, 5, 10].map((n) => (
                                     <button key={n} onClick={() => setConfig(prev => ({ ...prev, count: n }))}
                                         className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all
-                      ${config.count === n ? 'bg-indigo-600 border-indigo-500 text-white' : 'border-white/10 text-slate-400 hover:text-white'}`}>
+                      ${config.count === n ? 'bg-teal-600 border-teal-500 text-white' : 'border-white/10 text-slate-400 hover:text-white'}`}>
                                         {n} questions
                                     </button>
                                 ))}
@@ -105,15 +105,15 @@ export default function QuizPage() {
                         {questions.map((q, qi) => (
                             <div key={qi} className="card">
                                 <p className="font-medium text-white mb-4 text-sm">
-                                    <span className="text-indigo-400 font-bold">Q{qi + 1}.</span> {q.question}
+                                    <span className="text-teal-400 font-bold">Q{qi + 1}.</span> {q.question}
                                 </p>
                                 <div className="space-y-2">
                                     {q.options.map((opt, oi) => (
                                         <button key={oi} onClick={() => setAnswers({ ...answers, [qi]: oi })}
                                             className={`w-full text-left p-3 rounded-xl border text-sm transition-all
                         ${answers[qi] === oi
-                                                    ? 'bg-indigo-600/20 border-indigo-500 text-white'
-                                                    : 'border-white/[0.08] text-slate-300 hover:border-indigo-500/40 hover:bg-white/[0.03]'}`}>
+                                                    ? 'bg-teal-600/20 border-teal-500 text-white'
+                                                    : 'border-white/[0.08] text-slate-300 hover:border-teal-500/40 hover:bg-white/[0.03]'}`}>
                                             {opt}
                                         </button>
                                     ))}
@@ -135,7 +135,7 @@ export default function QuizPage() {
                             </div>
                             <p className="text-4xl font-bold text-white mb-1">{results.score}%</p>
                             <p className="text-slate-400 text-sm">{results.correct} / {results.total} correctes</p>
-                            <p className="text-xs text-slate-500 mt-2">Recommandation : <span className="text-indigo-400 font-medium">{results.nextRecommendation}</span></p>
+                            <p className="text-xs text-slate-500 mt-2">Recommandation : <span className="text-teal-400 font-medium">{results.nextRecommendation}</span></p>
                         </div>
 
                         {results.results?.map((r, i) => (

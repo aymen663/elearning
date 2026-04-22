@@ -92,8 +92,8 @@ export default function NewForumPostPage() {
                                         type="button"
                                         onClick={() => toggleTag(tag)}
                                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all border ${selectedTags.includes(tag)
-                                                ? 'bg-indigo-600 border-indigo-600 text-white'
-                                                : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400 hover:bg-indigo-500/20'
+                                                ? 'bg-teal-600 border-teal-600 text-white'
+                                                : 'bg-teal-500/10 border-teal-500/20 text-teal-400 hover:bg-teal-500/20'
                                             }`}
                                     >
                                         <Tag className="w-3 h-3" />{tag}

@@ -58,7 +58,7 @@ export default function MessagesPage() {
 
             {loading ? (
                 <div className="flex justify-center py-24">
-                    <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+                    <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
                 </div>
             ) : filtered.length === 0 ? (
                 <div className="card text-center py-20">
@@ -94,7 +94,7 @@ export default function MessagesPage() {
                                         {lastMessage?.content || '…'}
                                     </p>
                                     {unreadCount > 0 && (
-                                        <span className="ml-2 flex-shrink-0 w-5 h-5 bg-indigo-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+                                        <span className="ml-2 flex-shrink-0 w-5 h-5 bg-teal-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
                                             {unreadCount > 9 ? '9+' : unreadCount}
                                         </span>
                                     )}

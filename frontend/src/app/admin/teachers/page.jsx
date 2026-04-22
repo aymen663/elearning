@@ -78,7 +78,7 @@ export default function TeachersPage() {
             <div className="page-header">
                 <div>
                     <h1 className="page-title flex items-center gap-3">
-                        <GraduationCap className="w-7 h-7 text-indigo-400" /> Professeurs
+                        <GraduationCap className="w-7 h-7 text-teal-400" /> Professeurs
                     </h1>
                     <p className="page-subtitle">{teachers.length} instructeur(s) enregistré(s)</p>
                 </div>
@@ -137,7 +137,7 @@ export default function TeachersPage() {
                                     {/* Name + Email */}
                                     <td className="px-5 py-3.5">
                                         <div className="flex items-center gap-3 min-w-0">
-                                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
+                                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
                                                 {t.name?.charAt(0).toUpperCase()}
                                             </div>
                                             <div className="min-w-0">
@@ -225,7 +225,7 @@ export default function TeachersPage() {
                             {/* Top row: avatar + name + status */}
                             <div className="flex items-start justify-between gap-3">
                                 <div className="flex items-center gap-3 min-w-0">
-                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+                                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
                                         {t.name?.charAt(0).toUpperCase()}
                                     </div>
                                     <div className="min-w-0">

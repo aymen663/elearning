@@ -52,7 +52,7 @@ export default function CertificatesPage() {
 
             {loading ? (
                 <div className="flex justify-center py-24">
-                    <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+                    <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
                 </div>
             ) : certificates.length === 0 ? (
                 <div className="card text-center py-20 max-w-lg mx-auto">

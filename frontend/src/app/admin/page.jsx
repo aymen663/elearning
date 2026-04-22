@@ -103,7 +103,7 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                         <div className="card">
                             <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
-                                <GraduationCap className="w-4 h-4 text-indigo-400" /> Gestion des professeurs
+                                <GraduationCap className="w-4 h-4 text-teal-400" /> Gestion des professeurs
                             </h3>
                             <p className="text-sm text-slate-400 mb-4">
                                 Gérez les comptes instructeurs, suivez leurs cours et leurs statistiques d&apos;engagement.

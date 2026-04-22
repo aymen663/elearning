@@ -30,7 +30,7 @@ export default function AdminStudentDetailPage() {
     if (loading) return (
         <Sidebar>
             <div className="flex justify-center py-24">
-                <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+                <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
             </div>
         </Sidebar>
     );
@@ -99,7 +99,7 @@ export default function AdminStudentDetailPage() {
                 <div className="lg:col-span-2">
                     <div className="card">
                         <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-                            <BookOpen className="w-4 h-4 text-indigo-400" />
+                            <BookOpen className="w-4 h-4 text-teal-400" />
                             Cours inscrits ({student.enrolledCourses?.length ?? 0})
                         </h3>
 
@@ -113,8 +113,8 @@ export default function AdminStudentDetailPage() {
                                 {student.enrolledCourses.map((course) => (
                                     <div key={course._id ?? course}
                                         className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-                                        <div className="w-10 h-10 rounded-xl bg-indigo-600/20 flex items-center justify-center flex-shrink-0">
-                                            <BookOpen className="w-5 h-5 text-indigo-400" />
+                                        <div className="w-10 h-10 rounded-xl bg-teal-600/20 flex items-center justify-center flex-shrink-0">
+                                            <BookOpen className="w-5 h-5 text-teal-400" />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium text-white truncate">

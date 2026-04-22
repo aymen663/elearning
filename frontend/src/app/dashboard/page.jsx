@@ -158,8 +158,8 @@ export default function DashboardPage() {
         <DashboardSkeleton />
       ) : progress.length === 0 ? (
         <div className="card text-center py-16">
-          <div className="w-20 h-20 rounded-2xl bg-indigo-600/10 flex items-center justify-center mx-auto mb-4">
-            <BookOpen className="w-10 h-10 text-indigo-400" />
+          <div className="w-20 h-20 rounded-2xl bg-teal-600/10 flex items-center justify-center mx-auto mb-4">
+            <BookOpen className="w-10 h-10 text-teal-400" />
           </div>
           <h2 className="text-white font-semibold text-lg mb-2">Commencez à apprendre</h2>
           <p className="text-slate-400 mb-6 max-w-sm mx-auto">Inscrivez-vous à votre premier cours et commencez votre parcours d&apos;apprentissage.</p>
@@ -220,10 +220,10 @@ function CourseProgressCard({ p }) {
     <div className="card group flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600/20 to-purple-600/20 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600/20 to-teal-600/20 flex items-center justify-center flex-shrink-0">
             {isComplete
               ? <CheckCircle className="w-5 h-5 text-emerald-400" />
-              : <BookOpen className="w-5 h-5 text-indigo-400" />}
+              : <BookOpen className="w-5 h-5 text-teal-400" />}
           </div>
           <div className="min-w-0">
             <h3 className="font-semibold text-white text-sm truncate">{p.course?.title || 'Cours'}</h3>
@@ -251,7 +251,7 @@ function CourseProgressCard({ p }) {
           {isComplete ? 'Revoir' : 'Continuer'} <ArrowRight className="w-3.5 h-3.5" />
         </Link>
         <Link href={`/courses/${p.course?._id}/quiz`} className="btn-ghost px-3 py-2" title="Quiz adaptatif">
-          <Brain className="w-3.5 h-3.5 text-purple-400" />
+          <Brain className="w-3.5 h-3.5 text-teal-400" />
         </Link>
         <Link href={`/courses/${p.course?._id}/chat`} className="btn-ghost px-3 py-2" title="Tuteur IA">
           <Zap className="w-3.5 h-3.5 text-amber-400" />

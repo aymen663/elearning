@@ -100,7 +100,7 @@ export default function ProfilePage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-indigo-400 animate-spin" /></div></Sidebar>
+        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-teal-400 animate-spin" /></div></Sidebar>
     );
 
     return (
@@ -116,7 +116,7 @@ export default function ProfilePage() {
                 <div className="card">
                     <div className="flex items-start gap-5">
                         <div className="relative flex-shrink-0 group">
-                            <div className="rounded-2xl overflow-hidden w-20 h-20 shadow-lg shadow-indigo-500/20">
+                            <div className="rounded-2xl overflow-hidden w-20 h-20 shadow-lg shadow-teal-500/20">
                                 <UserAvatar user={profile} size="xl" />
                             </div>
 
@@ -134,7 +134,7 @@ export default function ProfilePage() {
                             </button>
 
                             {!uploadingAvatar && (
-                                <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-indigo-600 border-2 border-[#1a1a2e] flex items-center justify-center cursor-pointer"
+                                <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-teal-600 border-2 border-[#1a1a2e] flex items-center justify-center cursor-pointer"
                                     onClick={() => fileInputRef.current?.click()}>
                                     <Camera className="w-3.5 h-3.5 text-white" />
                                 </div>
@@ -207,10 +207,10 @@ export default function ProfilePage() {
                         <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Statistiques</h3>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                             {[
-                                { icon: <BookOpen className="w-5 h-5 text-indigo-400" />, bg: 'bg-indigo-600/20', value: stats.totalCourses, label: 'Cours inscrits' },
+                                { icon: <BookOpen className="w-5 h-5 text-teal-400" />, bg: 'bg-teal-600/20', value: stats.totalCourses, label: 'Cours inscrits' },
                                 { icon: <Check className="w-5 h-5 text-emerald-400" />, bg: 'bg-emerald-600/20', value: stats.completedCourses, label: 'Terminés' },
                                 { icon: <TrendingUp className="w-5 h-5 text-amber-400" />, bg: 'bg-amber-600/20', value: `${stats.averageCompletion}%`, label: 'Progression moy.' },
-                                { icon: <Trophy className="w-5 h-5 text-purple-400" />, bg: 'bg-purple-600/20', value: `${stats.avgScore}%`, label: 'Score quiz moy.' },
+                                { icon: <Trophy className="w-5 h-5 text-teal-400" />, bg: 'bg-teal-600/20', value: `${stats.avgScore}%`, label: 'Score quiz moy.' },
                             ].map(({ icon, bg, value, label }) => (
                                 <div key={label} className="text-center">
                                     <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center mx-auto mb-2`}>{icon}</div>

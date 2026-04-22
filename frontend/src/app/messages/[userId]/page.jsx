@@ -100,7 +100,7 @@ export default function ThreadPage() {
     if (loading) return (
         <Sidebar>
             <div className="flex justify-center py-24">
-                <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+                <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
             </div>
         </Sidebar>
     );
@@ -158,11 +158,11 @@ export default function ThreadPage() {
 
                             <div className={`relative max-w-[70%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed
                                 ${isMe
-                                    ? 'bg-gradient-to-br from-indigo-600 to-violet-600 text-white rounded-br-sm'
+                                    ? 'bg-gradient-to-br from-teal-600 to-violet-600 text-white rounded-br-sm'
                                     : 'bg-white/[0.07] text-slate-200 rounded-bl-sm'
                                 }`}>
                                 {msg.content}
-                                <span className={`block text-[10px] mt-1 ${isMe ? 'text-indigo-200' : 'text-slate-500'}`}>
+                                <span className={`block text-[10px] mt-1 ${isMe ? 'text-teal-200' : 'text-slate-500'}`}>
                                     {formatTimestamp(msg.createdAt)}
                                     {isMe && (msg.read ? ' · Lu' : '')}
                                 </span>

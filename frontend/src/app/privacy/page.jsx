@@ -1,26 +1,29 @@
 'use client';
 import Link from 'next/link';
 import { GraduationCap, Shield, ArrowLeft } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 export default function PrivacyPage() {
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-slate-200 relative overflow-hidden">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+            <Header />
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-teal-600/15 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/15 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="relative z-10 max-w-3xl mx-auto px-6 py-16">
+            <div className="relative z-10 max-w-3xl mx-auto px-6 pt-24 pb-16">
                 <div className="mb-10">
-                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-indigo-400 transition-colors mb-8">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-teal-400 transition-colors mb-8">
                         <ArrowLeft className="w-4 h-4" />
                         Retour à l'accueil
                     </Link>
 
                     <div className="flex items-center gap-4 mb-6">
                         <div className="w-12 h-12 rounded-xl bg-[#0f0f1a] border border-white/5 flex items-center justify-center shadow-xl">
-                            <Shield className="w-6 h-6 text-indigo-400" />
+                            <Shield className="w-6 h-6 text-teal-400" />
                         </div>
                         <div>
-                            <p className="text-xs text-indigo-400 font-semibold uppercase tracking-widest mb-1">EduAI</p>
+                            <p className="text-xs text-teal-400 font-semibold uppercase tracking-widest mb-1">EduAI</p>
                             <h1 className="text-3xl font-bold text-white">Politique de confidentialité</h1>
                         </div>
                     </div>
@@ -32,7 +35,7 @@ export default function PrivacyPage() {
 
                     <section>
                         <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                            <span className="w-1.5 h-5 bg-indigo-500 rounded-full inline-block" />
+                            <span className="w-1.5 h-5 bg-teal-500 rounded-full inline-block" />
                             1. Collecte des données
                         </h2>
                         <p className="text-slate-400 leading-relaxed text-sm">
@@ -46,7 +49,7 @@ export default function PrivacyPage() {
 
                     <section>
                         <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                            <span className="w-1.5 h-5 bg-indigo-500 rounded-full inline-block" />
+                            <span className="w-1.5 h-5 bg-teal-500 rounded-full inline-block" />
                             2. Utilisation des données
                         </h2>
                         <p className="text-slate-400 leading-relaxed text-sm mb-4">
@@ -60,7 +63,7 @@ export default function PrivacyPage() {
                                 'Support technique et réponse à vos demandes',
                             ].map((item, i) => (
                                 <li key={i} className="flex items-start gap-3 text-sm text-slate-400">
-                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
                                     {item}
                                 </li>
                             ))}
@@ -71,7 +74,7 @@ export default function PrivacyPage() {
 
                     <section>
                         <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                            <span className="w-1.5 h-5 bg-indigo-500 rounded-full inline-block" />
+                            <span className="w-1.5 h-5 bg-teal-500 rounded-full inline-block" />
                             3. Partage des données
                         </h2>
                         <p className="text-slate-400 leading-relaxed text-sm">
@@ -86,13 +89,13 @@ export default function PrivacyPage() {
 
                     <section>
                         <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                            <span className="w-1.5 h-5 bg-indigo-500 rounded-full inline-block" />
+                            <span className="w-1.5 h-5 bg-teal-500 rounded-full inline-block" />
                             4. Conservation des données
                         </h2>
                         <p className="text-slate-400 leading-relaxed text-sm">
                             Vos données sont conservées aussi longtemps que votre compte est actif sur la plateforme.
                             Vous pouvez demander la suppression de votre compte et de toutes vos données à tout moment
-                            en nous contactant à <a href="mailto:contact@eduai.com" className="text-indigo-400 hover:underline">contact@eduai.com</a>.
+                            en nous contactant à <a href="mailto:contact@eduai.com" className="text-teal-400 hover:underline">contact@eduai.com</a>.
                         </p>
                     </section>
 
@@ -100,29 +103,25 @@ export default function PrivacyPage() {
 
                     <section>
                         <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                            <span className="w-1.5 h-5 bg-indigo-500 rounded-full inline-block" />
+                            <span className="w-1.5 h-5 bg-teal-500 rounded-full inline-block" />
                             5. Vos droits
                         </h2>
                         <p className="text-slate-400 leading-relaxed text-sm">
                             Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression
                             et de portabilité de vos données. Pour exercer ces droits, contactez-nous via la{' '}
-                            <Link href="/contact" className="text-indigo-400 hover:underline">page de contact</Link>.
+                            <Link href="/contact" className="text-teal-400 hover:underline">page de contact</Link>.
                         </p>
                     </section>
 
                     <div className="mt-6 flex items-center gap-2 px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/5">
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         <p className="text-xs text-slate-500 font-medium">
-                            Authentification sécurisée par <span className="text-indigo-400 font-semibold">Keycloak</span>
+                            Authentification sécurisée par <span className="text-teal-400 font-semibold">Keycloak</span>
                         </p>
                     </div>
                 </div>
 
-                <div className="mt-8 flex items-center gap-3">
-                    <GraduationCap className="w-5 h-5 text-indigo-400" />
-                    <span className="text-slate-500 text-sm">© 2026 EduAI. Tous droits réservés.</span>
-                </div>
-            </div>
+            <Footer />
         </div>
     );
 }

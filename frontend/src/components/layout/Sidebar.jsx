@@ -52,7 +52,7 @@ function NotificationBell() {
                 style={{ background: 'rgba(124,58,237,0.08)', color: 'var(--text-secondary)' }}>
                 <Bell className="w-4 h-4" />
                 {notifications.length > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-indigo-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center">
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-teal-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center">
                         {notifications.length}
                     </span>
                 )}
@@ -77,7 +77,7 @@ function NotificationBell() {
                     </div>
                     <div className="px-4 py-2.5">
                         <Link href="/dashboard" onClick={() => setOpen(false)}
-                            className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
+                            className="text-xs text-teal-400 hover:text-teal-300 transition-colors">
                             Voir toute l'activité →
                         </Link>
                     </div>
@@ -248,7 +248,7 @@ export default function Sidebar({ children }) {
             {/* ── Logo ─── */}
             <div className="px-5 py-5 border-b" style={{ borderColor: 'var(--border-sidebar)' }}>
                 <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-lg shadow-violet-500/20 flex-shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-teal-700 flex items-center justify-center shadow-lg shadow-violet-500/20 flex-shrink-0">
                         <GraduationCap className="w-5 h-5 text-white" />
                     </div>
                     <div>
@@ -273,7 +273,7 @@ export default function Sidebar({ children }) {
                                 </span>
                                 <span>{label}</span>
                                 {isMessages && unreadMsgs > 0 && (
-                                    <span className="ml-auto w-5 h-5 bg-indigo-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+                                    <span className="ml-auto w-5 h-5 bg-teal-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
                                         {unreadMsgs > 9 ? '9+' : unreadMsgs}
                                     </span>
                                 )}

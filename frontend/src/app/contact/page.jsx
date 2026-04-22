@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { GraduationCap, Mail, MessageSquare, Send, ArrowLeft, MapPin, CheckCircle2 } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 export default function ContactPage() {
     const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -20,22 +22,23 @@ export default function ContactPage() {
 
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-slate-200 relative overflow-hidden">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+            <Header />
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-teal-600/15 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/15 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
+            <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16">
                 <div className="mb-10">
-                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-indigo-400 transition-colors mb-8">
+                    <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-teal-400 transition-colors mb-8">
                         <ArrowLeft className="w-4 h-4" />
                         Retour à l'accueil
                     </Link>
 
                     <div className="flex items-center gap-4 mb-3">
                         <div className="w-12 h-12 rounded-xl bg-[#0f0f1a] border border-white/5 flex items-center justify-center shadow-xl">
-                            <MessageSquare className="w-6 h-6 text-indigo-400" />
+                            <MessageSquare className="w-6 h-6 text-teal-400" />
                         </div>
                         <div>
-                            <p className="text-xs text-indigo-400 font-semibold uppercase tracking-widest mb-1">EduAI</p>
+                            <p className="text-xs text-teal-400 font-semibold uppercase tracking-widest mb-1">EduAI</p>
                             <h1 className="text-3xl font-bold text-white">Contactez-nous</h1>
                         </div>
                     </div>
@@ -46,22 +49,22 @@ export default function ContactPage() {
                     {/* Info cards */}
                     <div className="space-y-4">
                         <div className="backdrop-blur-xl bg-[#0f0f1a]/70 border border-white/5 rounded-2xl p-6 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.4)]">
-                            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
-                                <Mail className="w-5 h-5 text-indigo-400" />
+                            <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4">
+                                <Mail className="w-5 h-5 text-teal-400" />
                             </div>
                             <h3 className="text-white font-semibold mb-1">Email</h3>
                             <p className="text-slate-500 text-sm mb-3">Réponse sous 24h.</p>
                             <a
                                 href="mailto:contact@eduai.com"
-                                className="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition-colors"
+                                className="text-teal-400 text-sm font-medium hover:text-teal-300 transition-colors"
                             >
                                 contact@eduai.com
                             </a>
                         </div>
 
                         <div className="backdrop-blur-xl bg-[#0f0f1a]/70 border border-white/5 rounded-2xl p-6 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.4)]">
-                            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-4">
-                                <MapPin className="w-5 h-5 text-purple-400" />
+                            <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4">
+                                <MapPin className="w-5 h-5 text-teal-400" />
                             </div>
                             <h3 className="text-white font-semibold mb-1">Localisation</h3>
                             <p className="text-slate-500 text-sm">Tunisie</p>
@@ -70,7 +73,7 @@ export default function ContactPage() {
                         <div className="backdrop-blur-xl bg-[#0f0f1a]/70 border border-white/5 rounded-2xl p-6 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.4)]">
                             <p className="text-xs text-slate-600 leading-relaxed">
                                 Vos données de contact sont utilisées uniquement pour répondre à votre demande.{' '}
-                                <Link href="/privacy" className="text-indigo-400 hover:underline">Politique de confidentialité</Link>
+                                <Link href="/privacy" className="text-teal-400 hover:underline">Politique de confidentialité</Link>
                             </p>
                         </div>
                     </div>
@@ -89,7 +92,7 @@ export default function ContactPage() {
                                     </p>
                                     <button
                                         onClick={() => { setSent(false); setForm({ name: '', email: '', subject: '', message: '' }); }}
-                                        className="mt-2 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                                        className="mt-2 text-sm text-teal-400 hover:text-teal-300 transition-colors"
                                     >
                                         Envoyer un autre message
                                     </button>
@@ -106,7 +109,7 @@ export default function ContactPage() {
                                                 onChange={handleChange}
                                                 required
                                                 placeholder="Votre nom"
-                                                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+                                                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 transition-all"
                                             />
                                         </div>
                                         <div>
@@ -118,7 +121,7 @@ export default function ContactPage() {
                                                 onChange={handleChange}
                                                 required
                                                 placeholder="email@exemple.com"
-                                                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+                                                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 transition-all"
                                             />
                                         </div>
                                     </div>
@@ -132,7 +135,7 @@ export default function ContactPage() {
                                             onChange={handleChange}
                                             required
                                             placeholder="De quoi s'agit-il ?"
-                                            className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+                                            className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 transition-all"
                                         />
                                     </div>
 
@@ -145,14 +148,14 @@ export default function ContactPage() {
                                             required
                                             rows={5}
                                             placeholder="Décrivez votre demande..."
-                                            className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 transition-all resize-none"
+                                            className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/20 transition-all resize-none"
                                         />
                                     </div>
 
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:opacity-60 text-white rounded-xl font-semibold transition-all duration-200 shadow-[0_4px_20px_-5px_rgba(79,70,229,0.4)]"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 disabled:opacity-60 text-white rounded-xl font-semibold transition-all duration-200 shadow-[0_4px_20px_-5px_rgba(79,70,229,0.4)]"
                                     >
                                         {loading ? (
                                             <span className="flex items-center gap-2">
@@ -175,11 +178,8 @@ export default function ContactPage() {
                     </div>
                 </div>
 
-                <div className="mt-8 flex items-center gap-3">
-                    <GraduationCap className="w-5 h-5 text-indigo-400" />
-                    <span className="text-slate-500 text-sm">© 2026 EduAI. Tous droits réservés.</span>
-                </div>
             </div>
+            <Footer />
         </div>
     );
 }

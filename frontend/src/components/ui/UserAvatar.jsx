@@ -30,7 +30,7 @@ export default function UserAvatar({ user, size = 'md', className = '' }) {
                     }}
                 />
                 <div
-                    className={`w-full h-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center font-bold text-white ${text}`}
+                    className={`w-full h-full bg-gradient-to-br from-violet-400 to-teal-600 flex items-center justify-center font-bold text-white ${text}`}
                     style={{ display: 'none' }}
                 >
                     {initial}
@@ -42,7 +42,7 @@ export default function UserAvatar({ user, size = 'md', className = '' }) {
 
     return (
         <div
-            className={`${box} ${radius} bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center font-bold text-white flex-shrink-0 ${text} ${className}`}
+            className={`${box} ${radius} bg-gradient-to-br from-violet-400 to-teal-600 flex items-center justify-center font-bold text-white flex-shrink-0 ${text} ${className}`}
         >
             {initial}
         </div>

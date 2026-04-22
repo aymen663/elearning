@@ -48,7 +48,7 @@ export default function EditTeacherPage() {
         return (
             <Sidebar>
                 <div className="flex items-center justify-center h-64">
-                    <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+                    <Loader2 className="w-8 h-8 text-teal-400 animate-spin" />
                 </div>
             </Sidebar>
         );
@@ -63,7 +63,7 @@ export default function EditTeacherPage() {
                     </Link>
                     <div>
                         <h1 className="page-title flex items-center gap-2">
-                            <GraduationCap className="w-6 h-6 text-indigo-400" /> Modifier le professeur
+                            <GraduationCap className="w-6 h-6 text-teal-400" /> Modifier le professeur
                         </h1>
                         <p className="page-subtitle">{form.name}</p>
                     </div>
@@ -115,7 +115,7 @@ export default function EditTeacherPage() {
                 <div>
                     <div className="card">
                         <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-                            <BookOpen className="w-4 h-4 text-indigo-400" /> Cours ({courses.length})
+                            <BookOpen className="w-4 h-4 text-teal-400" /> Cours ({courses.length})
                         </h3>
                         {courses.length === 0 ? (
                             <p className="text-sm text-slate-500">Aucun cours créé</p>

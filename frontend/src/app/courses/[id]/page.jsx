@@ -48,7 +48,7 @@ export default function CourseDetailPage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-indigo-400 animate-spin" /></div></Sidebar>
+        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-teal-400 animate-spin" /></div></Sidebar>
     );
 
     if (!data) return <Sidebar><p className="text-slate-400">Cours introuvable</p></Sidebar>;
@@ -64,7 +64,7 @@ export default function CourseDetailPage() {
                     <ArrowLeft className="w-4 h-4" /> Retour au catalogue
                 </Link>
 
-                <div className="card mb-6 bg-gradient-to-br from-indigo-900/40 via-purple-900/30 to-transparent border-indigo-500/20 overflow-hidden relative">
+                <div className="card mb-6 bg-gradient-to-br from-teal-900/40 via-teal-900/30 to-transparent border-teal-500/20 overflow-hidden relative">
                     <div className="absolute inset-0 opacity-5 pointer-events-none"
                         style={{ backgroundImage: 'radial-gradient(circle at 70% 50%, #6366f1 0%, transparent 60%)' }} />
 
@@ -80,16 +80,16 @@ export default function CourseDetailPage() {
 
                         <div className="flex flex-wrap gap-5 text-sm text-slate-400 mb-6">
                             <span className="flex items-center gap-1.5">
-                                <Users className="w-4 h-4 text-indigo-400" />
+                                <Users className="w-4 h-4 text-teal-400" />
                                 {course.enrolledStudents?.length ?? 0} inscrits
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <BookOpen className="w-4 h-4 text-indigo-400" />
+                                <BookOpen className="w-4 h-4 text-teal-400" />
                                 {course.lessons?.length ?? 0} leçons
                             </span>
                             {totalDuration > 0 && (
                                 <span className="flex items-center gap-1.5">
-                                    <Clock className="w-4 h-4 text-indigo-400" />
+                                    <Clock className="w-4 h-4 text-teal-400" />
                                     {totalDuration} min
                                 </span>
                             )}
@@ -136,14 +136,14 @@ export default function CourseDetailPage() {
                     <div className="card mb-6">
                         <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
-                                <Award className="w-5 h-5 text-indigo-400" />
+                                <Award className="w-5 h-5 text-teal-400" />
                                 <span className="text-sm font-semibold text-white">Votre progression</span>
                             </div>
-                            <span className="text-indigo-400 font-bold">{completionPct}%</span>
+                            <span className="text-teal-400 font-bold">{completionPct}%</span>
                         </div>
                         <div className="w-full bg-white/10 rounded-full h-2.5 mb-2">
                             <div
-                                className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2.5 rounded-full transition-all duration-700"
+                                className="bg-gradient-to-r from-teal-500 to-teal-500 h-2.5 rounded-full transition-all duration-700"
                                 style={{ width: `${completionPct}%` }}
                             />
                         </div>
@@ -157,7 +157,7 @@ export default function CourseDetailPage() {
                     <div className="lg:col-span-2">
                         <div className="card">
                             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                                <BookOpen className="w-5 h-5 text-indigo-400" /> Programme ({course.lessons?.length ?? 0} leçons)
+                                <BookOpen className="w-5 h-5 text-teal-400" /> Programme ({course.lessons?.length ?? 0} leçons)
                             </h2>
                             {!course.lessons?.length ? (
                                 <p className="text-slate-500 text-sm">Aucune leçon disponible</p>
@@ -194,7 +194,7 @@ export default function CourseDetailPage() {
                             <div className="card">
                                 <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Instructeur</h3>
                                 <div className="flex items-center gap-3 mb-3">
-                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-600 to-teal-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                                         {course.instructor.name?.[0]?.toUpperCase()}
                                     </div>
                                     <div>
@@ -214,17 +214,17 @@ export default function CourseDetailPage() {
                             <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Ce cours inclut</h3>
                             <div className="space-y-2 text-sm text-slate-300">
                                 <div className="flex items-center gap-2">
-                                    <BookOpen className="w-4 h-4 text-indigo-400" />
+                                    <BookOpen className="w-4 h-4 text-teal-400" />
                                     {course.lessons?.length ?? 0} leçons
                                 </div>
                                 {totalDuration > 0 && (
                                     <div className="flex items-center gap-2">
-                                        <Clock className="w-4 h-4 text-indigo-400" />
+                                        <Clock className="w-4 h-4 text-teal-400" />
                                         {totalDuration} min de contenu
                                     </div>
                                 )}
                                 <div className="flex items-center gap-2">
-                                    <Brain className="w-4 h-4 text-purple-400" />
+                                    <Brain className="w-4 h-4 text-teal-400" />
                                     Quiz adaptatif IA
                                 </div>
                                 <div className="flex items-center gap-2">

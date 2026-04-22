@@ -50,8 +50,8 @@ function TagPill({ tag, onClick, active }) {
         <button
             onClick={() => onClick?.(tag)}
             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all border ${active
-                    ? 'bg-indigo-600 border-indigo-500 text-white'
-                    : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400 hover:bg-indigo-500/20'
+                    ? 'bg-teal-600 border-teal-500 text-white'
+                    : 'bg-teal-500/10 border-teal-500/20 text-teal-400 hover:bg-teal-500/20'
                 }`}
         >
             <Tag className="w-2.5 h-2.5" />{tag}
@@ -66,11 +66,11 @@ function VoteCluster({ votes, onUp, onDown }) {
             <motion.button
                 whileTap={{ scale: 0.85 }}
                 onClick={(e) => { e.preventDefault(); onUp?.(); }}
-                className="p-1 rounded-lg text-slate-500 hover:text-indigo-400 hover:bg-indigo-400/10 transition-colors"
+                className="p-1 rounded-lg text-slate-500 hover:text-teal-400 hover:bg-teal-400/10 transition-colors"
             >
                 <ChevronUp className="w-4 h-4" />
             </motion.button>
-            <span className={`text-sm font-bold tabular-nums ${votes > 0 ? 'text-indigo-400' : votes < 0 ? 'text-red-400' : 'text-slate-500'}`}>
+            <span className={`text-sm font-bold tabular-nums ${votes > 0 ? 'text-teal-400' : votes < 0 ? 'text-red-400' : 'text-slate-500'}`}>
                 {votes}
             </span>
             <motion.button
@@ -130,8 +130,8 @@ function QuestionCard({ post, onVote }) {
                         />
 
                         <div className="hidden sm:flex flex-col items-center justify-center gap-3 flex-shrink-0 w-16 text-center">
-                            <div className={`text-center px-2 py-1.5 rounded-xl border ${post.replyCount > 0 ? 'border-indigo-500/20 bg-indigo-500/10' : 'border-white/[0.06] bg-white/[0.03]'}`}>
-                                <p className={`text-sm font-bold ${post.replyCount > 0 ? 'text-indigo-400' : 'text-slate-500'}`}>{post.replyCount}</p>
+                            <div className={`text-center px-2 py-1.5 rounded-xl border ${post.replyCount > 0 ? 'border-teal-500/20 bg-teal-500/10' : 'border-white/[0.06] bg-white/[0.03]'}`}>
+                                <p className={`text-sm font-bold ${post.replyCount > 0 ? 'text-teal-400' : 'text-slate-500'}`}>{post.replyCount}</p>
                                 <p className="text-[9px] text-slate-600 mt-0.5">réponses</p>
                             </div>
                             <div className="text-center">
@@ -147,7 +147,7 @@ function QuestionCard({ post, onVote }) {
                                 {isNew(post.createdAt) && <Badge type="new_" />}
                             </div>
 
-                            <h3 className="font-semibold text-sm text-white group-hover:text-indigo-300 transition-colors leading-snug mb-1.5 line-clamp-2">
+                            <h3 className="font-semibold text-sm text-white group-hover:text-teal-300 transition-colors leading-snug mb-1.5 line-clamp-2">
                                 {post.title}
                             </h3>
 
@@ -189,8 +189,8 @@ function EmptyState({ search, sort, onReset }) {
             animate={{ opacity: 1, scale: 1 }}
             className="card text-center py-16"
         >
-            <div className="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-600/20 flex items-center justify-center">
-                <MessagesSquare className="w-12 h-12 text-indigo-400" />
+            <div className="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-teal-500/20 to-teal-600/20 flex items-center justify-center">
+                <MessagesSquare className="w-12 h-12 text-teal-400" />
             </div>
             <h3 className="text-lg font-bold text-white mb-2">
                 {search ? `Aucun résultat pour "${search}"` : 'Aucune question ici'}
@@ -233,7 +233,7 @@ function ForumSidebar({ stats }) {
                                         ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
                                         : <MessageCircle className="w-3.5 h-3.5 text-slate-600 flex-shrink-0 mt-0.5" />
                                     }
-                                    <p className="text-xs text-slate-400 group-hover:text-indigo-300 transition-colors line-clamp-2 leading-snug">
+                                    <p className="text-xs text-slate-400 group-hover:text-teal-300 transition-colors line-clamp-2 leading-snug">
                                         {p.title}
                                     </p>
                                 </div>
@@ -273,15 +273,15 @@ function ForumSidebar({ stats }) {
             {stats.popularTags?.length > 0 && (
                 <div className="card">
                     <div className="flex items-center gap-2 mb-3">
-                        <Tag className="w-4 h-4 text-indigo-400" />
+                        <Tag className="w-4 h-4 text-teal-400" />
                         <h3 className="text-sm font-semibold text-white">Tags populaires</h3>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                         {stats.popularTags.map(({ _id: tag, count }) => (
                             <span key={tag}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] bg-teal-500/10 text-teal-400 border border-teal-500/20">
                                 {tag}
-                                <span className="text-indigo-600 font-bold">{count}</span>
+                                <span className="text-teal-600 font-bold">{count}</span>
                             </span>
                         ))}
                     </div>
@@ -389,7 +389,7 @@ export default function ForumPage() {
                                 key={value}
                                 onClick={() => setSort(value)}
                                 className={`relative px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all border ${sort === value
-                                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-600/25'
+                                        ? 'bg-teal-600 border-teal-600 text-white shadow-lg shadow-teal-600/25'
                                         : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
                                     }`}
                             >
@@ -400,7 +400,7 @@ export default function ForumPage() {
                         {activeTag && (
                             <button
                                 onClick={() => setActiveTag('')}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs bg-indigo-600/20 border border-indigo-500/40 text-indigo-300"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs bg-teal-600/20 border border-teal-500/40 text-teal-300"
                             >
                                 <Tag className="w-3 h-3" />{activeTag}
                                 <X className="w-3 h-3" />
@@ -410,7 +410,7 @@ export default function ForumPage() {
 
                     {loading ? (
                         <div className="flex justify-center py-24">
-                            <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+                            <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
                         </div>
                     ) : posts.length === 0 ? (
                         <EmptyState search={search} sort={sort} onReset={() => { setSearch(''); setSort('newest'); setActiveTag(''); }} />
@@ -444,7 +444,7 @@ export default function ForumPage() {
                                     key={pg}
                                     onClick={() => loadPosts(pg)}
                                     className={`w-8 h-8 rounded-xl text-xs font-medium transition-all border ${pg === page
-                                            ? 'bg-indigo-600 border-indigo-600 text-white'
+                                            ? 'bg-teal-600 border-teal-600 text-white'
                                             : 'border-white/10 text-slate-400 hover:border-white/20'
                                         }`}
                                 >

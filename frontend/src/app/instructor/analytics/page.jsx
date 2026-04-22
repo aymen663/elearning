@@ -28,7 +28,7 @@ export default function InstructorAnalyticsPage() {
                     <Link href="/instructor" className="btn-ghost px-3 py-2"><ArrowLeft className="w-4 h-4" /></Link>
                     <div>
                         <h1 className="page-title flex items-center gap-2">
-                            <BarChart2 className="w-6 h-6 text-indigo-400" /> Analytics instructeur
+                            <BarChart2 className="w-6 h-6 text-teal-400" /> Analytics instructeur
                         </h1>
                         <p className="page-subtitle">Performance de vos cours</p>
                     </div>
@@ -37,10 +37,10 @@ export default function InstructorAnalyticsPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
                 {[
-                    { icon: BookOpen, label: 'Cours total', value: courses.length, color: 'bg-indigo-600' },
+                    { icon: BookOpen, label: 'Cours total', value: courses.length, color: 'bg-teal-600' },
                     { icon: CheckCircle, label: 'Publiés', value: totalPublished, color: 'bg-emerald-600' },
                     { icon: Users, label: 'Étudiants total', value: totalStudents, color: 'bg-amber-600' },
-                    { icon: TrendingUp, label: 'Moy. étudiants/cours', value: avgStudents, color: 'bg-purple-600' },
+                    { icon: TrendingUp, label: 'Moy. étudiants/cours', value: avgStudents, color: 'bg-teal-600' },
                 ].map(({ icon: Icon, label, value, color }) => (
                     <div key={label} className="stat-card">
                         <div className={`stat-icon ${color}`}><Icon className="w-5 h-5 text-white" /></div>
@@ -53,7 +53,7 @@ export default function InstructorAnalyticsPage() {
             </div>
 
             {loading ? (
-                <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 text-indigo-400 animate-spin" /></div>
+                <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 text-teal-400 animate-spin" /></div>
             ) : courses.length === 0 ? (
                 <div className="card text-center py-16">
                     <p className="text-slate-400">Aucun cours créé</p>
@@ -93,7 +93,7 @@ export default function InstructorAnalyticsPage() {
                                         <span>{barWidth}% du max</span>
                                     </div>
                                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                                        <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700"
+                                        <div className="h-full bg-gradient-to-r from-teal-500 to-teal-500 rounded-full transition-all duration-700"
                                             style={{ width: `${barWidth}%` }} />
                                     </div>
                                 </div>

@@ -37,7 +37,7 @@ export default function ChatHubPage() {
             <div className="page-header">
                 <div>
                     <h1 className="page-title flex items-center gap-2">
-                        <Sparkles className="w-7 h-7 text-indigo-400" />
+                        <Sparkles className="w-7 h-7 text-teal-400" />
                         Tuteur IA
                     </h1>
                     <p className="page-subtitle">
@@ -48,7 +48,7 @@ export default function ChatHubPage() {
 
             <div className="rounded-2xl p-4 mb-6 flex items-start gap-3"
                 style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)' }}>
-                <Zap className="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" />
+                <Zap className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-slate-300">
                     Le tuteur IA utilise le contenu de chaque cours pour répondre précisément à vos questions.
                     Sélectionnez un cours ci-dessous pour commencer une session.
@@ -69,12 +69,12 @@ export default function ChatHubPage() {
 
             {loading ? (
                 <div className="flex justify-center py-24">
-                    <Loader2 className="w-10 h-10 text-indigo-400 animate-spin" />
+                    <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
                 </div>
             ) : courses.length === 0 ? (
                 <div className="card text-center py-20 max-w-lg mx-auto">
-                    <div className="w-20 h-20 rounded-2xl bg-indigo-600/10 flex items-center justify-center mx-auto mb-5">
-                        <MessageSquare className="w-10 h-10 text-indigo-400/40" />
+                    <div className="w-20 h-20 rounded-2xl bg-teal-600/10 flex items-center justify-center mx-auto mb-5">
+                        <MessageSquare className="w-10 h-10 text-teal-400/40" />
                     </div>
                     <h2 className="text-white font-semibold text-lg mb-2">Aucun cours disponible</h2>
                     <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
@@ -103,10 +103,10 @@ function CourseCard({ course }) {
     const pct = course.completionPercentage || 0;
 
     return (
-        <div className="card group flex flex-col gap-4 hover:border-indigo-500/30 transition-all duration-200">
+        <div className="card group flex flex-col gap-4 hover:border-teal-500/30 transition-all duration-200">
             <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600/20 to-purple-600/20 flex items-center justify-center flex-shrink-0">
-                    <BookOpen className="w-6 h-6 text-indigo-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-600/20 to-teal-600/20 flex items-center justify-center flex-shrink-0">
+                    <BookOpen className="w-6 h-6 text-teal-400" />
                 </div>
                 <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-white text-sm line-clamp-2 mb-1">
@@ -130,7 +130,7 @@ function CourseCard({ course }) {
                 </div>
                 <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-teal-500 to-teal-500 rounded-full transition-all duration-500"
                         style={{ width: `${pct}%` }}
                     />
                 </div>

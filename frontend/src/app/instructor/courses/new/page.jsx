@@ -45,7 +45,7 @@ export default function NewCoursePage() {
                 <div className="flex items-center gap-4">
                     <Link href="/instructor" className="btn-ghost px-3 py-2"><ArrowLeft className="w-4 h-4" /></Link>
                     <div>
-                        <h1 className="page-title flex items-center gap-2"><BookOpen className="w-6 h-6 text-indigo-400" /> Nouveau cours</h1>
+                        <h1 className="page-title flex items-center gap-2"><BookOpen className="w-6 h-6 text-teal-400" /> Nouveau cours</h1>
                     </div>
                 </div>
             </div>
@@ -76,16 +76,7 @@ export default function NewCoursePage() {
                                 </select>
                             </div>
                         </div>
-                        <div className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${form.isPublished
-                            ? 'bg-emerald-500/10 border-emerald-500/30'
-                            : 'bg-white/[0.03] border-white/[0.05]'}`}>
-                            <input type="checkbox" id="publish" checked={form.isPublished}
-                                onChange={(e) => set('isPublished', e.target.checked)}
-                                className="w-4 h-4 rounded accent-indigo-500" />
-                            <label htmlFor="publish" className={`text-sm cursor-pointer font-medium ${form.isPublished ? 'text-emerald-400' : 'text-slate-400'}`}>
-                                {form.isPublished ? '✅ Publié — visible par les étudiants' : '🔒 Brouillon — invisible pour les étudiants'}
-                            </label>
-                        </div>
+
                     </div>
 
                     <div className="card space-y-4">
@@ -93,12 +84,12 @@ export default function NewCoursePage() {
                         {form.lessons.map((l, i) => (
                             <div key={i} className="rounded-xl bg-white/[0.03] border border-white/[0.05] overflow-hidden">
                                 <div className="flex items-center gap-3 p-3">
-                                    <div className="w-6 h-6 rounded-full bg-indigo-600/20 flex items-center justify-center text-xs text-indigo-400 flex-shrink-0 font-bold">{i + 1}</div>
+                                    <div className="w-6 h-6 rounded-full bg-teal-600/20 flex items-center justify-center text-xs text-teal-400 flex-shrink-0 font-bold">{i + 1}</div>
                                     <span className="flex-1 text-sm text-white">{l.title}</span>
                                     {l.content && <span className="text-xs text-emerald-400">✓ Contenu</span>}
                                     {l.duration > 0 && <span className="text-xs text-slate-500">{l.duration} min</span>}
                                     <button type="button" onClick={() => setExpandedLesson(expandedLesson === i ? null : i)}
-                                        className="text-slate-500 hover:text-indigo-400 text-xs transition-colors px-2">
+                                        className="text-slate-500 hover:text-teal-400 text-xs transition-colors px-2">
                                         {expandedLesson === i ? 'Fermer' : 'Contenu'}
                                     </button>
                                     <button type="button" onClick={() => removeLesson(i)} className="text-slate-600 hover:text-red-400 transition-colors"><X className="w-4 h-4" /></button>

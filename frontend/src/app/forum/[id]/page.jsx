@@ -24,10 +24,10 @@ function timeAgo(dateStr) {
 function VoteButtons({ votes, onUp, onDown, className = '' }) {
     return (
         <div className={`flex flex-col items-center gap-1 ${className}`}>
-            <button onClick={onUp} className="p-1 rounded-lg hover:bg-white/[0.08] text-slate-500 hover:text-indigo-400 transition-colors">
+            <button onClick={onUp} className="p-1 rounded-lg hover:bg-white/[0.08] text-slate-500 hover:text-teal-400 transition-colors">
                 <ChevronUp className="w-5 h-5" />
             </button>
-            <span className={`text-sm font-bold ${votes > 0 ? 'text-indigo-400' : votes < 0 ? 'text-red-400' : 'text-slate-500'}`}>
+            <span className={`text-sm font-bold ${votes > 0 ? 'text-teal-400' : votes < 0 ? 'text-red-400' : 'text-slate-500'}`}>
                 {votes}
             </span>
             <button onClick={onDown} className="p-1 rounded-lg hover:bg-white/[0.08] text-slate-500 hover:text-red-400 transition-colors">
@@ -127,7 +127,7 @@ export default function ForumThreadPage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-indigo-400 animate-spin" /></div></Sidebar>
+        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-teal-400 animate-spin" /></div></Sidebar>
     );
 
     if (!post) return (
@@ -172,7 +172,7 @@ export default function ForumThreadPage() {
                             {post.tags?.length > 0 && (
                                 <div className="flex flex-wrap gap-1.5 mb-4">
                                     {post.tags.map((t) => (
-                                        <span key={t} className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                                        <span key={t} className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md text-xs font-medium bg-teal-500/10 text-teal-400 border border-teal-500/20">
                                             <Tag className="w-2.5 h-2.5" />{t}
                                         </span>
                                     ))}

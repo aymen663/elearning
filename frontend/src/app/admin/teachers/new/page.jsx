@@ -41,7 +41,7 @@ export default function NewTeacherPage() {
                     </Link>
                     <div>
                         <h1 className="page-title flex items-center gap-2">
-                            <GraduationCap className="w-6 h-6 text-indigo-400" /> Nouveau professeur
+                            <GraduationCap className="w-6 h-6 text-teal-400" /> Nouveau professeur
                         </h1>
                         <p className="page-subtitle">Créer un compte instructeur</p>
                     </div>
@@ -55,7 +55,7 @@ export default function NewTeacherPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="input-label flex items-center gap-2">
-                                <User className="w-3.5 h-3.5 text-indigo-400" /> Prénom *
+                                <User className="w-3.5 h-3.5 text-teal-400" /> Prénom *
                             </label>
                             <input
                                 required
@@ -67,7 +67,7 @@ export default function NewTeacherPage() {
                         </div>
                         <div>
                             <label className="input-label flex items-center gap-2">
-                                <User className="w-3.5 h-3.5 text-indigo-400" /> Nom de famille *
+                                <User className="w-3.5 h-3.5 text-teal-400" /> Nom de famille *
                             </label>
                             <input
                                 required
@@ -82,7 +82,7 @@ export default function NewTeacherPage() {
                     {/* ── Email ── */}
                     <div>
                         <label className="input-label flex items-center gap-2">
-                            <Mail className="w-3.5 h-3.5 text-indigo-400" /> Adresse email *
+                            <Mail className="w-3.5 h-3.5 text-teal-400" /> Adresse email *
                         </label>
                         <input
                             required
@@ -100,7 +100,7 @@ export default function NewTeacherPage() {
                     {/* ── Spécialité ── */}
                     <div>
                         <label className="input-label flex items-center gap-2">
-                            <Lightbulb className="w-3.5 h-3.5 text-indigo-400" /> Spécialité
+                            <Lightbulb className="w-3.5 h-3.5 text-teal-400" /> Spécialité
                         </label>
                         <input
                             className="input"
@@ -113,7 +113,7 @@ export default function NewTeacherPage() {
                     {/* ── Biographie ── */}
                     <div>
                         <label className="input-label flex items-center gap-2">
-                            <BookText className="w-3.5 h-3.5 text-indigo-400" /> Biographie
+                            <BookText className="w-3.5 h-3.5 text-teal-400" /> Biographie
                         </label>
                         <textarea
                             rows={4}
