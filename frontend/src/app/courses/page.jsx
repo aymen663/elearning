@@ -1,237 +1,332 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { coursesAPI } from '@/lib/api';
+import { useAuthStore } from '@/lib/authStore';
 import Sidebar from '@/components/layout/Sidebar';
-import { Search, Users, BookOpen, ArrowRight, Star, Calendar } from 'lucide-react';
+import { Search, BookOpen, Users, ChevronDown, Loader2, Play } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-const CATEGORIES = ['Toutes', 'développement', 'intelligence artificielle', 'design', 'cybersécurité', 'programmation', 'marketing', 'mathématiques', 'langue'];
-const LEVELS = ['Tous', 'débutant', 'intermédiaire', 'avancé'];
-
-/* ── Soft per-category gradients ─────────────────────────────────────────── */
-const CAT_THEME = {
-    'développement': { from: '#0ea5e9', to: '#6366f1', emoji: '💻' },
-    'intelligence artificielle': { from: '#8b5cf6', to: '#3b82f6', emoji: '🤖' },
-    'design': { from: '#ec4899', to: '#a855f7', emoji: '🎨' },
-    'cybersécurité': { from: '#10b981', to: '#0ea5e9', emoji: '🔒' },
-    'programmation': { from: '#f59e0b', to: '#ef4444', emoji: '⚙️' },
-    'marketing': { from: '#3b82f6', to: '#06b6d4', emoji: '📊' },
-    'mathématiques': { from: '#6366f1', to: '#8b5cf6', emoji: '∑' },
-    'langue': { from: '#22c55e', to: '#0ea5e9', emoji: '🌍' },
-    default: { from: '#6366f1', to: '#8b5cf6', emoji: '📚' },
+/* ── Badge colors — rgba works in both dark & light ───────────────────── */
+const CAT_BADGE = {
+    'programmation':             { bg: 'rgba(34,197,94,0.12)',   color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
+    'intelligence artificielle': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
+    'data science':              { bg: 'rgba(59,130,246,0.12)',  color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
+    'design':                    { bg: 'rgba(236,72,153,0.12)',  color: '#f472b6', border: 'rgba(236,72,153,0.3)' },
+    'cybersécurité':             { bg: 'rgba(248,113,113,0.12)', color: '#f87171', border: 'rgba(248,113,113,0.3)' },
+    'développement web':         { bg: 'rgba(96,165,250,0.12)',  color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
+    'développement':             { bg: 'rgba(96,165,250,0.12)',  color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
+    'marketing':                 { bg: 'rgba(251,146,60,0.12)',  color: '#fb923c', border: 'rgba(251,146,60,0.3)' },
+    'business':                  { bg: 'rgba(251,191,36,0.12)',  color: '#fbbf24', border: 'rgba(251,191,36,0.3)' },
 };
-const getTheme = (cat = '') => CAT_THEME[cat.toLowerCase()] || CAT_THEME.default;
-
-const LEVEL_TAG = {
-    débutant: { bg: 'rgba(34,197,94,0.15)', color: '#86efac', border: 'rgba(34,197,94,0.25)' },
-    intermédiaire: { bg: 'rgba(234,179,8,0.15)', color: '#fde047', border: 'rgba(234,179,8,0.25)' },
-    avancé: { bg: 'rgba(239,68,68,0.15)', color: '#fca5a5', border: 'rgba(239,68,68,0.25)' },
+const LVL_BADGE = {
+    'débutant':      { bg: 'rgba(34,197,94,0.12)',   color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
+    'intermédiaire': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
+    'avancé':        { bg: 'rgba(59,130,246,0.12)',  color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
 };
-const getLvl = (l = '') => LEVEL_TAG[l.toLowerCase()] || { bg: 'rgba(148,163,184,0.12)', color: '#94a3b8', border: 'rgba(148,163,184,0.2)' };
+const ICON_COLORS = [
+    ['#3b82f6','#1d4ed8'], ['#8b5cf6','#6d28d9'], ['#ec4899','#be185d'],
+    ['#f59e0b','#b45309'], ['#10b981','#047857'], ['#ef4444','#b91c1c'],
+    ['#06b6d4','#0e7490'], ['#84cc16','#4d7c0f'],
+];
 
-/* ── CourseCard ───────────────────────────────────────────────────────────── */
-function CourseCard({ course }) {
-    const theme = getTheme(course.category);
-    const lvl = getLvl(course.level);
-    const lessons = course.lessons?.length ?? 0;
-    const students = course.enrolledStudents?.length ?? 0;
-    const rating = course.rating ?? (4.2 + Math.random() * 0.7).toFixed(1);
-    const createdAt = course.createdAt
-        ? new Date(course.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })
-        : null;
-
+/* ── Sub-components ────────────────────────────────────────────────────── */
+function CourseIcon({ title, index }) {
+    const [a, b] = ICON_COLORS[index % ICON_COLORS.length];
     return (
-        <Link href={`/courses/${course._id}`} className="cc-card group block">
-            {/* Thumbnail */}
-            <div className="cc-img-wrap">
-                {course.thumbnail ? (
-                    <img src={course.thumbnail} alt={course.title} className="cc-img" />
-                ) : (
-                    <div className="cc-placeholder"
-                        style={{ background: `linear-gradient(135deg, ${theme.from}26 0%, ${theme.to}40 100%)` }}>
-                        <div className="cc-grid-pattern"
-                            style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.06) 1px,transparent 1px)` }} />
-                        <span className="cc-emoji">{theme.emoji}</span>
-                        {/* Accent dot glow */}
-                        <div className="cc-glow-dot"
-                            style={{ background: `radial-gradient(circle, ${theme.from}55 0%, transparent 70%)` }} />
-                    </div>
-                )}
-                {/* Subtle bottom fade */}
-                <div className="cc-overlay" />
-                {/* Badges */}
-                <div className="cc-badges">
-                    <span className="cc-badge-cat">{course.category}</span>
-                    <span className="cc-badge-lvl" style={{ background: lvl.bg, color: lvl.color, borderColor: lvl.border }}>
-                        {course.level}
-                    </span>
-                </div>
-            </div>
-
-            {/* Body */}
-            <div className="cc-body">
-                {course.instructor?.name && (
-                    <p className="cc-instructor">{course.instructor.name}</p>
-                )}
-                <h3 className="cc-title">{course.title}</h3>
-                {course.description && (
-                    <p className="cc-desc">{course.description}</p>
-                )}
-
-                {/* Meta row */}
-                <div className="cc-meta">
-                    <span className="cc-meta-item cc-rating">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        {Number(rating).toFixed(1)}
-                    </span>
-                    <span className="cc-dot">·</span>
-                    <span className="cc-meta-item">
-                        <Users className="w-3 h-3" /> {students.toLocaleString()}
-                    </span>
-                    <span className="cc-dot">·</span>
-                    <span className="cc-meta-item">
-                        <BookOpen className="w-3 h-3" /> {lessons} leçons
-                    </span>
-                    {createdAt && (
-                        <>
-                            <span className="cc-dot">·</span>
-                            <span className="cc-meta-item">
-                                <Calendar className="w-3 h-3" /> {createdAt}
-                            </span>
-                        </>
-                    )}
-                </div>
-
-                {/* CTA */}
-                <div className="cc-cta">
-                    <span>Voir le cours</span>
-                    <ArrowRight className="cc-arrow w-4 h-4" />
-                </div>
-            </div>
-
-            {/* Hover border accent */}
-            <div className="cc-accent-border"
-                style={{ '--c1': theme.from, '--c2': theme.to }} />
-        </Link>
+        <div style={{
+            width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+            background: `linear-gradient(135deg, ${a}, ${b})`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 15, fontWeight: 800, color: '#fff',
+            boxShadow: `0 3px 8px ${a}44`,
+        }}>
+            {title?.[0]?.toUpperCase() || '?'}
+        </div>
     );
 }
 
-/* ── Skeleton ─────────────────────────────────────────────────────────────── */
-function CardSkeleton() {
+function Bdg({ label, bg, color, border }) {
     return (
-        <div className="cc-skeleton">
-            <div className="cc-skeleton-img" />
-            <div className="cc-skeleton-body">
-                {[33, 100, 75, 50].map((w, i) => (
-                    <div key={i} className="cc-skeleton-line" style={{ width: `${w}%` }} />
-                ))}
+        <span style={{
+            display: 'inline-block', padding: '3px 10px', borderRadius: 6,
+            fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap',
+            background: bg, color, border: `1px solid ${border}`,
+        }}>{label}</span>
+    );
+}
+
+/* ── Table Row ─────────────────────────────────────────────────────────── */
+function CourseRow({ course, index, enrolledIds, onEnroll, enrollingId }) {
+    const [hover, setHover] = useState(false);
+    const isEnrolled  = enrolledIds.has(course._id);
+    const isEnrolling = enrollingId === course._id;
+    const cat  = course.category?.toLowerCase();
+    const lvl  = course.level?.toLowerCase();
+    const cBdg = CAT_BADGE[cat]  || { bg: 'rgba(255,255,255,0.08)', color: 'var(--text-muted)', border: 'rgba(255,255,255,0.1)' };
+    const lBdg = LVL_BADGE[lvl]  || { bg: 'rgba(255,255,255,0.08)', color: 'var(--text-muted)', border: 'rgba(255,255,255,0.1)' };
+    const students = course.enrolledStudents?.length ?? 0;
+    const date = course.createdAt
+        ? new Date(course.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })
+        : '—';
+
+    return (
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: '2.5fr 140px 130px 90px 105px 115px 160px',
+                alignItems: 'center',
+                padding: '15px 20px',
+                borderBottom: '1px solid var(--border)',
+                background: hover ? 'var(--bg-hover)' : 'var(--bg-card)',
+                transition: 'background 0.15s ease',
+            }}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+        >
+            {/* COURS */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+                <CourseIcon title={course.title} index={index} />
+                <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {course.title}
+                    </p>
+                    <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{course.instructor?.name || '—'}</p>
+                </div>
+            </div>
+
+            {/* CATÉGORIE */}
+            <div><Bdg label={course.category || '—'} {...cBdg} /></div>
+
+            {/* NIVEAU */}
+            <div>
+                {course.level
+                    ? <Bdg label={course.level.charAt(0).toUpperCase() + course.level.slice(1)} {...lBdg} />
+                    : <span style={{ color: 'var(--text-muted)', fontSize: 13 }}>—</span>
+                }
+            </div>
+
+            {/* ÉTUDIANTS */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, color: 'var(--text-secondary)' }}>
+                <Users size={14} style={{ color: 'var(--text-muted)' }} />{students}
+            </div>
+
+            {/* STATUT */}
+            <div>
+                {course.isPublished
+                    ? <Bdg label="● Publié"    bg="var(--success-bg)" color="var(--success)" border="rgba(34,197,94,0.3)" />
+                    : <Bdg label="● Brouillon" bg="var(--warning-bg)" color="var(--warning)" border="rgba(251,191,36,0.3)" />
+                }
+            </div>
+
+            {/* CRÉÉ LE */}
+            <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{date}</div>
+
+            {/* ACTIONS */}
+            <div>
+                {isEnrolled ? (
+                    <Link href={`/courses/${course._id}`} style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                        background: 'var(--accent-dim)', color: 'var(--accent)',
+                        border: '1px solid var(--accent)', textDecoration: 'none',
+                        whiteSpace: 'nowrap', transition: 'all 0.15s',
+                    }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'var(--accent)'; e.currentTarget.style.color = '#fff'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'var(--accent-dim)'; e.currentTarget.style.color = 'var(--accent)'; }}
+                    >
+                        <Play size={11} /> Continuer
+                    </Link>
+                ) : (
+                    <button onClick={() => onEnroll(course._id)} disabled={isEnrolling} style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                        background: 'var(--accent-dim)', color: 'var(--accent)',
+                        border: '1px solid var(--accent)',
+                        whiteSpace: 'nowrap', cursor: isEnrolling ? 'wait' : 'pointer', transition: 'all 0.15s',
+                    }}
+                        onMouseEnter={e => { if (!isEnrolling) { e.currentTarget.style.background = 'var(--accent)'; e.currentTarget.style.color = '#fff'; } }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'var(--accent-dim)'; e.currentTarget.style.color = 'var(--accent)'; }}
+                    >
+                        {isEnrolling
+                            ? <><Loader2 size={11} className="animate-spin" /> Inscription…</>
+                            : <><Play size={11} /> Ouvrir le cours</>
+                        }
+                    </button>
+                )}
             </div>
         </div>
     );
 }
 
-const PAGE_SIZE = 9;
+/* ── Page ──────────────────────────────────────────────────────────────── */
+export default function CoursesListPage() {
+    const { user } = useAuthStore();
+    const router   = useRouter();
+    const [courses, setCourses]         = useState([]);
+    const [loading, setLoading]         = useState(true);
+    const [search, setSearch]           = useState('');
+    const [filterCat, setFilterCat]     = useState('');
+    const [filterLvl, setFilterLvl]     = useState('');
+    const [enrolledIds, setEnrolledIds] = useState(new Set());
+    const [enrollingId, setEnrollingId] = useState(null);
 
-/* ── Page ─────────────────────────────────────────────────────────────────── */
-export default function CoursesPage() {
-    const [courses, setCourses] = useState([]);
-    const [search, setSearch] = useState('');
-    const [category, setCategory] = useState('Toutes');
-    const [level, setLevel] = useState('Tous');
-    const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
+    useEffect(() => {
+        if (user?.role === 'admin')      router.replace('/admin');
+        if (user?.role === 'instructor') router.replace('/instructor');
+    }, [user, router]);
 
-    const fetchCourses = async () => {
-        setLoading(true);
+    useEffect(() => {
+        coursesAPI.getAll({ published: true })
+            .then(({ data }) => {
+                const list = Array.isArray(data) ? data : (data.courses || []);
+                setCourses(list.filter(c => c.isPublished));
+            })
+            .catch(() => toast.error('Erreur chargement des cours'))
+            .finally(() => setLoading(false));
+    }, []);
+
+    useEffect(() => {
+        if (!user || !courses.length) return;
+        const uid = user.id || user._id;
+        setEnrolledIds(new Set(
+            courses.filter(c => c.enrolledStudents?.some(s => (s._id || s) === uid)).map(c => c._id)
+        ));
+    }, [courses, user]);
+
+    const categories = useMemo(() => [...new Set(courses.map(c => c.category).filter(Boolean))], [courses]);
+    const levels     = useMemo(() => [...new Set(courses.map(c => c.level).filter(Boolean))],    [courses]);
+
+    const filtered = useMemo(() => {
+        const q = search.toLowerCase();
+        return courses.filter(c => {
+            if (q && !c.title?.toLowerCase().includes(q) && !c.instructor?.name?.toLowerCase().includes(q)) return false;
+            if (filterCat && c.category !== filterCat) return false;
+            if (filterLvl && c.level     !== filterLvl) return false;
+            return true;
+        });
+    }, [courses, search, filterCat, filterLvl]);
+
+    const handleEnroll = async (courseId) => {
+        if (!user) { toast.error('Connectez-vous pour vous inscrire'); return; }
+        setEnrollingId(courseId);
         try {
-            const params = {};
-            if (search && search !== '') params.search = search;
-            if (category && category !== 'Toutes') params.category = category;
-            if (level && level !== 'Tous') params.level = level;
-            const { data } = await coursesAPI.getAll(params);
-            setCourses(data.courses);
-        } catch { toast.error('Erreur chargement des cours'); }
-        finally { setLoading(false); }
+            await coursesAPI.enroll(courseId);
+            toast.success('Inscription réussie ! 🎉');
+            setEnrolledIds(prev => new Set([...prev, courseId]));
+            router.push(`/courses/${courseId}`);
+        } catch (err) {
+            const msg = err.response?.data?.message;
+            if (msg === 'Déjà inscrit') { setEnrolledIds(prev => new Set([...prev, courseId])); router.push(`/courses/${courseId}`); }
+            else toast.error(msg || "Erreur lors de l'inscription");
+        } finally { setEnrollingId(null); }
     };
 
-    useEffect(() => { fetchCourses(); setPage(1); }, [category, level]);
-
-    const paginated = courses.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    const totalPages = Math.ceil(courses.length / PAGE_SIZE);
+    const inputStyle = {
+        background: 'var(--bg-input)', border: '1px solid var(--border)',
+        color: 'var(--text-primary)', borderRadius: 8, fontSize: 13, outline: 'none',
+    };
+    const selStyle = {
+        ...inputStyle, padding: '9px 32px 9px 12px',
+        cursor: 'pointer', appearance: 'none', minWidth: 150,
+        color: 'var(--text-secondary)',
+    };
 
     return (
         <Sidebar>
-            {/* Header */}
-            <div className="page-header">
-                <div>
-                    <h1 className="page-title">Catalogue des cours</h1>
-                    <p className="page-subtitle">Découvrez votre prochain apprentissage</p>
-                </div>
-                <span className="text-xs font-semibold px-3 py-1.5 rounded-full"
-                    style={{ background: 'rgba(99,102,241,0.1)', color: 'var(--text-muted)', border: '1px solid rgba(99,102,241,0.2)' }}>
-                    {courses.length} cours
-                </span>
-            </div>
+            <div style={{ maxWidth: 1150, margin: '0 auto' }}>
 
-            {/* Search */}
-            <form onSubmit={(e) => { e.preventDefault(); fetchCourses(); }} className="flex gap-2 mb-6 max-w-lg">
-                <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                    <input className="input pl-10" placeholder="Rechercher un cours..." value={search}
-                        onChange={(e) => setSearch(e.target.value)} />
+                {/* ── Header ── */}
+                <div style={{ marginBottom: 24 }}>
+                    <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4 }}>
+                        Liste de cours
+                    </h1>
+                    <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
+                        {loading ? '…' : `${filtered.length} cours disponibles`}
+                    </p>
                 </div>
-                <button type="submit" className="btn-secondary px-5">Chercher</button>
-            </form>
 
-            {/* Categories */}
-            <div className="flex gap-2 mb-3 overflow-x-auto pb-1">
-                {CATEGORIES.map((c) => (
-                    <button key={c} onClick={() => setCategory(c)}
-                        className="catalog-pill whitespace-nowrap capitalize" data-active={category === c}>
-                        {c}
-                    </button>
-                ))}
-            </div>
-
-            {/* Levels */}
-            <div className="flex gap-2 mb-8">
-                {LEVELS.map((l) => (
-                    <button key={l} onClick={() => setLevel(l)}
-                        className="catalog-pill-sm capitalize" data-active={level === l}>
-                        {l}
-                    </button>
-                ))}
-            </div>
-
-            {/* Grid */}
-            {loading ? (
-                <div className="cc-grid">
-                    {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
-                </div>
-            ) : courses.length === 0 ? (
-                <div className="card text-center py-16">
-                    <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                    <p style={{ color: 'var(--text-muted)' }}>Aucun cours trouvé</p>
-                </div>
-            ) : (
-                <>
-                    <div className="cc-grid">
-                        {paginated.map((c) => <CourseCard key={c._id} course={c} />)}
+                {/* ── Filters ── */}
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 20 }}>
+                    <div style={{ position: 'relative', flex: '1 1 260px', minWidth: 220 }}>
+                        <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                        <input
+                            type="text" placeholder="Rechercher un cours, instructeur…"
+                            value={search} onChange={e => setSearch(e.target.value)}
+                            style={{ ...inputStyle, width: '100%', padding: '9px 12px 9px 36px' }}
+                            onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-dim)'; }}
+                            onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
+                        />
                     </div>
-                    {courses.length > PAGE_SIZE && (
-                        <div className="flex items-center justify-center gap-3 mt-10">
-                            <button onClick={() => setPage((p) => Math.max(1, p - 1))}
-                                disabled={page === 1} className="btn-secondary disabled:opacity-40">← Précédent</button>
-                            <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                                Page <strong style={{ color: 'var(--text-primary)' }}>{page}</strong> / {totalPages}
-                            </span>
-                            <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                                disabled={page === totalPages} className="btn-secondary disabled:opacity-40">Suivant →</button>
-                        </div>
+                    <div style={{ position: 'relative' }}>
+                        <select value={filterCat} onChange={e => setFilterCat(e.target.value)} style={{ ...selStyle, minWidth: 165 }}>
+                            <option value="">Toutes catégories</option>
+                            {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                        <ChevronDown size={13} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                    </div>
+                    <div style={{ position: 'relative' }}>
+                        <select value={filterLvl} onChange={e => setFilterLvl(e.target.value)} style={{ ...selStyle, minWidth: 140 }}>
+                            <option value="">Tous niveaux</option>
+                            {levels.map(l => <option key={l} value={l}>{l.charAt(0).toUpperCase() + l.slice(1)}</option>)}
+                        </select>
+                        <ChevronDown size={13} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                    </div>
+                    {(search || filterCat || filterLvl) && (
+                        <button onClick={() => { setSearch(''); setFilterCat(''); setFilterLvl(''); }} style={{
+                            padding: '9px 14px', borderRadius: 8, fontSize: 12, fontWeight: 500,
+                            background: 'var(--danger-bg)', color: 'var(--danger)',
+                            border: '1px solid var(--danger)', cursor: 'pointer',
+                        }}>
+                            Réinitialiser
+                        </button>
                     )}
-                </>
-            )}
+                </div>
+
+                {/* ── Table ── */}
+                <div style={{
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-strong)',
+                    borderRadius: 12,
+                    overflow: 'hidden',
+                    boxShadow: 'var(--card-shadow)',
+                }}>
+                    {/* Header */}
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '2.5fr 140px 130px 90px 105px 115px 160px',
+                        padding: '10px 20px',
+                        background: 'var(--bg-secondary)',
+                        borderBottom: '1px solid var(--border-strong)',
+                    }}>
+                        {['COURS', 'CATÉGORIE', 'NIVEAU', 'ÉTUDIANTS', 'STATUT', 'CRÉÉ LE', 'ACTIONS'].map(h => (
+                            <span key={h} style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{h}</span>
+                        ))}
+                    </div>
+
+                    {/* Rows */}
+                    {loading ? (
+                        <div style={{ padding: '60px 0', textAlign: 'center' }}>
+                            <Loader2 size={28} className="animate-spin" style={{ color: 'var(--accent)', margin: '0 auto 10px', display: 'block' }} />
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Chargement…</p>
+                        </div>
+                    ) : filtered.length === 0 ? (
+                        <div style={{ padding: '60px 0', textAlign: 'center' }}>
+                            <BookOpen size={40} style={{ color: 'var(--text-muted)', margin: '0 auto 12px', display: 'block' }} />
+                            <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>Aucun cours trouvé</p>
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Modifiez vos filtres</p>
+                        </div>
+                    ) : (
+                        filtered.map((course, i) => (
+                            <CourseRow
+                                key={course._id} course={course} index={i}
+                                enrolledIds={enrolledIds} onEnroll={handleEnroll} enrollingId={enrollingId}
+                            />
+                        ))
+                    )}
+                </div>
+            </div>
         </Sidebar>
     );
 }

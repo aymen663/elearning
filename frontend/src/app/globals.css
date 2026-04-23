@@ -33,74 +33,172 @@
    🎨 EduAI — Dark Mode (default)
    ============================================================ */
 :root {
-  /* Arrière-plans */
-  --bg-base: #0B0F1A;
-  --bg-primary: #0B0F1A;
-  --bg-secondary: #0D1120;
-  --bg-sidebar: #0D1422;
-  --bg-header: #0D1422;
-  --bg-card: #0F1724;
-  --bg-card-hover: #131d2e;
-  --bg-hover: rgba(43, 108, 176, 0.1);
-  --bg-input: #0D1422;
-  --input-bg: #0D1422;
+  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     🌑 NAVY DARK — Premium SaaS Glassmorphism Theme
+     Navy gradient + neon green accent + glass cards
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-  /* Bordures */
-  --border: #1A2436;
-  --border-sidebar: #1A2436;
-  --border-strong: #2A3A50;
+  /* Backgrounds — exact user colors */
+  --bg-base: #0B0F19;
+  --bg-primary: #0B0F19;
+  --bg-secondary: #0E1322;
+  --bg-sidebar: #0A0E18;
+  --bg-header: rgba(11, 15, 25, 0.90);
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-card-hover: rgba(255, 255, 255, 0.06);
+  --bg-hover: rgba(34, 197, 94, 0.08);
+  --bg-input: rgba(255, 255, 255, 0.04);
+  --input-bg: rgba(255, 255, 255, 0.04);
 
-  /* Accent */
-  --accent: #2B6CB0;
-  --accent-light: #63B3ED;
-  --accent-hover: #3a7dc4;
-  --accent-dim: rgba(43, 108, 176, 0.15);
+  /* Body gradient — main: #0B0F19 → #0E1322 */
+  --body-bg-image: linear-gradient(160deg, #0B0F19 0%, #0E1322 100%);
+  /* Sidebar gradient — alt: #0A0E18 → #0D1220 */
+  --bg-sidebar-gradient: linear-gradient(180deg, #0A0E18 0%, #0D1220 100%);
 
-  /* Boutons */
-  --btn-primary-bg: linear-gradient(135deg, #2B6CB0, #1A4B7A);
-  --btn-primary-text: #FFFFFF;
-  --btn-secondary-bg: rgba(43, 108, 176, 0.15);
-  --btn-secondary-text: #63B3ED;
+  /* Borders — glass effect */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-sidebar: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.22);
+
+  /* ── Neon Green Accent ── */
+  --accent: #22c55e;
+  --accent-light: #4ade80;
+  --accent-hover: #16a34a;
+  --accent-dim: rgba(34, 197, 94, 0.15);
+
+  /* Buttons */
+  --btn-primary-bg: linear-gradient(135deg, #22c55e, #16a34a);
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: rgba(34, 197, 94, 0.12);
+  --btn-secondary-text: #4ade80;
 
   /* Tags */
-  --tag-bg: rgba(43, 108, 176, 0.15);
-  --tag-text: #63B3ED;
-  --tag-published-bg: #064E3B;
-  --tag-published-text: #10B981;
+  --tag-bg: rgba(34, 197, 94, 0.12);
+  --tag-text: #4ade80;
+  --tag-published-bg: rgba(34, 197, 94, 0.15);
+  --tag-published-text: #22c55e;
 
-  /* Icônes stats */
-  --icon-courses: #5B5EF5;
-  --icon-courses-bg: rgba(91, 94, 245, 0.2);
-  --icon-published: #10B981;
-  --icon-published-bg: rgba(16, 185, 129, 0.2);
-  --icon-students: #F59E0B;
-  --icon-students-bg: rgba(245, 158, 11, 0.2);
-  --icon-lessons: #8B5CF6;
-  --icon-lessons-bg: rgba(139, 92, 246, 0.2);
+  /* Stat icon colors — glowing */
+  --icon-courses: #22c55e;
+  --icon-courses-bg: rgba(34, 197, 94, 0.15);
+  --icon-published: #a78bfa;
+  --icon-published-bg: rgba(167, 139, 250, 0.15);
+  --icon-students: #60a5fa;
+  --icon-students-bg: rgba(96, 165, 250, 0.15);
+  --icon-lessons: #fb923c;
+  --icon-lessons-bg: rgba(251, 146, 60, 0.15);
 
-  /* Textes */
-  --text-primary: #E4E8F0;
-  --text-secondary: #5A6A80;
-  --text-muted: #3A4A5C;
-  --text-logo: #E4E8F0;
+  /* Typography — high contrast */
+  --text-primary: #f0fdf4;
+  --text-secondary: #86efac;
+  --text-muted: rgba(134, 239, 172, 0.4);
+  --text-logo: #f0fdf4;
 
-  /* États */
-  --success: #48BB78;
-  --success-bg: rgba(72, 187, 120, 0.15);
-  --warning: #ECC94B;
-  --warning-bg: rgba(236, 201, 75, 0.15);
-  --danger: #F56565;
-  --danger-bg: rgba(245, 101, 101, 0.15);
+  /* Status */
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #fbbf24;
+  --warning-bg: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
 
   /* Thumbnail */
-  --thumb-gradient: linear-gradient(135deg, #1A3A5C, #0D2240);
+  --thumb-gradient: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(6, 27, 20, 0.8));
 
-  /* Ombres */
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.5);
-  --shadow-accent: 0 4px 16px rgba(43, 108, 176, 0.35);
-  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(43, 108, 176, 0.2);
+  /* Shadows — soft green glow */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-accent: 0 0 15px rgba(34, 197, 94, 0.3);
+  --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --card-shadow-hover: 0 0 15px rgba(34, 197, 94, 0.3), 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* Radii */
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --radius-full: 9999px;
+
+  /* Misc */
+  --scrollbar-track: #0B0F19;
+  --glow-bg1: rgba(34, 197, 94, 0.06);
+  --glow-bg2: rgba(34, 197, 94, 0.03);
+}
+
+/* ============================================================
+   ☀️ EduAI — Light Mode
+   ============================================================ */
+html.light {
+  /* ─── Backgrounds ───────────────────────────────────────────────────────
+     PROBLÈME IDENTIFIÉ : fond blanc + cards blanches = bordures invisibles.
+     FIX : fond gris clair #eef0f4, cards restent #ffffff → contraste net.
+  ──────────────────────────────────────────────────────────────────────── */
+  --bg-base: #e8ebf0;
+  --bg-primary: #e8ebf0;
+  --bg-secondary: #dde1e8;
+  --bg-sidebar: #ffffff;
+  --bg-header: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8f9fb;
+  --bg-hover: rgba(22, 163, 74, 0.07);
+  --bg-input: #ffffff;
+  --input-bg: #ffffff;
+
+  /* Bordures — style SaaS subtil (ne pas modifier) */
+  --border:         #e2e8f0;
+  --border-sidebar: #e8edf2;
+  --border-strong:  #b0bcc8;
+
+  /* Accent */
+  --accent: #16a34a;
+  --accent-light: #22c55e;
+  --accent-hover: #15803d;
+  --accent-dim: rgba(34, 197, 94, 0.1);
+
+  /* Boutons */
+  --btn-primary-bg: linear-gradient(135deg, #22c55e, #16a34a);
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: rgba(34, 197, 94, 0.08);
+  --btn-secondary-text: #16a34a;
+
+  /* Tags */
+  --tag-bg: rgba(34, 197, 94, 0.08);
+  --tag-text: #16a34a;
+  --tag-published-bg: #dcfce7;
+  --tag-published-text: #16a34a;
+
+  /* Icônes stats */
+  --icon-courses: #3b82f6;
+  --icon-courses-bg: rgba(59, 130, 246, 0.1);
+  --icon-published: #22c55e;
+  --icon-published-bg: rgba(34, 197, 94, 0.1);
+  --icon-students: #f59e0b;
+  --icon-students-bg: rgba(245, 158, 11, 0.1);
+  --icon-lessons: #8b5cf6;
+  --icon-lessons-bg: rgba(139, 92, 246, 0.1);
+
+  /* Textes */
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-logo: #0f172a;
+
+  /* États */
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+
+  /* Thumbnail */
+  --thumb-gradient: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+
+  /* Ombres — bien marquées */
+  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.10), 0 4px 20px rgba(0, 0, 0, 0.10);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.14);
+  --shadow-accent: 0 4px 14px rgba(34, 197, 94, 0.2);
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.10), 0 4px 20px rgba(0, 0, 0, 0.10);
+  --card-shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.10);
 
   /* Rayons */
   --radius-lg: 16px;
@@ -109,95 +207,9 @@
   --radius-full: 9999px;
 
   /* Scrollbar / body */
-  --scrollbar-track: #0D1120;
-  --glow-bg1: rgba(43, 108, 176, 0.06);
-  --glow-bg2: rgba(99, 179, 237, 0.03);
-  --body-bg-image: none;
-}
-
-/* ============================================================
-   ☀️ EduAI — Light Mode (nouvelle palette acier)
-   ============================================================ */
-html.light {
-  /* Arrière-plans */
-  --bg-base: #D0D4D8;
-  --bg-primary: #D0D4D8;
-  --bg-secondary: #C8CDD2;
-  --bg-sidebar: #FFFFFF;
-  --bg-header: #FFFFFF;
-  --bg-card: #FFFFFF;
-  --bg-card-hover: #F8F9FB;
-  --bg-hover: #E8ECEF;
-  --bg-input: #EDF0F3;
-  --input-bg: #EDF0F3;
-
-  /* Bordures */
-  --border: #E4E8EC;
-  --border-sidebar: #E4E8EC;
-  --border-strong: #C4C9CE;
-
-  /* Accent */
-  --accent: #2E4A6E;
-  --accent-light: #4A7AAE;
-  --accent-hover: #243c5a;
-  --accent-dim: rgba(46, 74, 110, 0.1);
-
-  /* Boutons */
-  --btn-primary-bg: linear-gradient(135deg, #2E4A6E, #1e3350);
-  --btn-primary-text: #FFFFFF;
-  --btn-secondary-bg: rgba(46, 74, 110, 0.1);
-  --btn-secondary-text: #2E4A6E;
-
-  /* Tags */
-  --tag-bg: rgba(74, 122, 174, 0.12);
-  --tag-text: #2E4A6E;
-  --tag-published-bg: #DCFCE7;
-  --tag-published-text: #16A34A;
-
-  /* Icônes stats */
-  --icon-courses: #2E4A6E;
-  --icon-courses-bg: rgba(46, 74, 110, 0.12);
-  --icon-published: #10B981;
-  --icon-published-bg: rgba(16, 185, 129, 0.12);
-  --icon-students: #F59E0B;
-  --icon-students-bg: rgba(245, 158, 11, 0.12);
-  --icon-lessons: #4A7AAE;
-  --icon-lessons-bg: rgba(74, 122, 174, 0.12);
-
-  /* Textes */
-  --text-primary: #1A1D23;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
-  --text-logo: #1A1D23;
-
-  /* États */
-  --success: #38A169;
-  --success-bg: rgba(56, 161, 105, 0.1);
-  --warning: #D69E2E;
-  --warning-bg: rgba(214, 158, 46, 0.1);
-  --danger: #E53E3E;
-  --danger-bg: rgba(229, 62, 62, 0.1);
-
-  /* Thumbnail */
-  --thumb-gradient: linear-gradient(135deg, #c8d8ec, #a8c0dc);
-
-  /* Ombres */
-  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(46, 74, 110, 0.07);
-  --shadow-elevated: 0 8px 32px rgba(46, 74, 110, 0.15);
-  --shadow-accent: 0 4px 14px rgba(46, 74, 110, 0.3);
-  --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(46, 74, 110, 0.07);
-  --card-shadow-hover: 0 4px 20px rgba(46, 74, 110, 0.14), 0 8px 24px rgba(0, 0, 0, 0.06);
-
-  /* Rayons (inchangés) */
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
-  --radius-full: 9999px;
-
-  /* Scrollbar / body */
-  --scrollbar-track: #E8ECEF;
-  --glow-bg1: rgba(46, 74, 110, 0.04);
-  --glow-bg2: rgba(74, 122, 174, 0.02);
+  --scrollbar-track: #e6e9ef;
+  --glow-bg1: rgba(34, 197, 94, 0.04);
+  --glow-bg2: rgba(59, 130, 246, 0.02);
   --body-bg-image: none;
 }
 
@@ -230,7 +242,7 @@ html.light {
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #2B6CB0, #63B3ED);
+    background: linear-gradient(to bottom, #22c55e, #4ade80);
     border-radius: 10px;
   }
 }
@@ -240,21 +252,29 @@ html.light {
   /* ─── Cards ─────────────────────────────────────────────────────────────── */
   .card {
     background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.5rem;
-    transition: all 0.2s ease;
-    box-shadow: var(--card-shadow, 0 2px 8px rgba(0, 0, 0, 0.25));
+    border-radius: var(--radius-md, 14px);
+    padding: 1rem 1.125rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
   }
 
   .card:hover {
     background: var(--bg-card-hover);
-    box-shadow: var(--card-shadow-hover, 0 8px 24px rgba(0, 0, 0, 0.35));
-    transform: translateY(-3px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  html.light .card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   html.light .card:hover {
-    box-shadow: 0 8px 28px rgba(43, 108, 176, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 8px 28px rgba(34, 197, 94, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
   }
 
   /* ─── Buttons ────────────────────────────────────────────────────────────── */
@@ -267,7 +287,7 @@ html.light {
 
   .btn-primary:hover:not(:disabled) {
     background: linear-gradient(135deg, var(--accent-hover), var(--accent));
-    box-shadow: 0 6px 24px rgba(43, 108, 176, 0.45);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
     transform: translateY(-1px);
   }
 
@@ -277,19 +297,15 @@ html.light {
 
   .btn-secondary {
     background: var(--btn-secondary-bg);
-    border: 1px solid rgba(43, 108, 176, 0.3);
+    border: 1px solid rgba(34, 197, 94, 0.25);
     color: var(--btn-secondary-text);
-    @apply font-medium px-5 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-2;
+    @apply font-medium px-5 py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2;
   }
 
   .btn-secondary:hover {
     background: var(--accent-dim);
-    border-color: rgba(43, 108, 176, 0.5);
-  }
-
-  html.light .btn-secondary:hover {
-    background: rgba(43, 108, 176, 0.15);
-    border-color: rgba(43, 108, 176, 0.45);
+    border-color: rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.2);
   }
 
   /* ─── Nav button (Précédente / Suivante / Mode focus) ─────────────────────── */
@@ -359,8 +375,8 @@ html.light {
   }
 
   .input:focus {
-    border-color: #2B6CB0;
-    box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
   }
 
   .input-label {
@@ -473,12 +489,12 @@ html.light {
 
   /* ─── Stat cards ─────────────────────────────────────────────────────────── */
   .stat-card {
-    @apply card flex items-center gap-4;
+    @apply card flex items-center gap-3;
   }
 
   .stat-icon {
-    @apply w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    @apply w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   /* ─── Lordicon stat cards (admin dashboard) ──────────────────────────────── */
@@ -495,8 +511,8 @@ html.light {
   }
 
   .stat-card-lordicon:hover {
-    transform: translateY(-5px) scale(1.015);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     border-color: rgba(255, 255, 255, 0.16) !important;
   }
 
@@ -535,8 +551,8 @@ html.light {
 
   html.light .stat-card-lordicon:hover {
     border-color: rgba(43, 108, 176, 0.3) !important;
-    box-shadow: 0 8px 28px rgba(43, 108, 176, 0.14), 0 12px 36px rgba(0, 0, 0, 0.08) !important;
-    transform: translateY(-5px) scale(1.015);
+    box-shadow: 0 4px 16px rgba(43, 108, 176, 0.1), 0 6px 20px rgba(0, 0, 0, 0.06) !important;
+    transform: translateY(-2px) scale(1.01);
   }
 
   html.light .stat-card-lordicon .text-white {
@@ -553,32 +569,26 @@ html.light {
 
   /* ─── Page layout ────────────────────────────────────────────────────────── */
   .page-header {
-    @apply flex items-center justify-between mb-8;
+    @apply flex items-center justify-between mb-5;
   }
 
   .page-title {
-    @apply text-2xl font-bold;
-    background: linear-gradient(135deg, var(--text-primary) 40%, #a78bfa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    @apply text-xl font-bold;
+    color: var(--text-primary);
   }
 
   html.light .page-title {
-    background: linear-gradient(135deg, #1e1b4b 40%, #7c3aed 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #0f172a;
   }
 
   .page-subtitle {
-    @apply text-sm mt-1;
+    @apply text-[13px] mt-0.5;
     color: var(--text-muted);
   }
 
   /* ─── Sidebar link ───────────────────────────────────────────────────────── */
   .sidebar-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer w-full;
+    @apply flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 cursor-pointer w-full;
     color: var(--text-secondary);
     position: relative;
     overflow: hidden;
@@ -586,49 +596,48 @@ html.light {
 
   /* ─── Topbar icon button ─────────────────────────────────────────────────── */
   .topbar-icon-btn {
-    @apply w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 flex-shrink-0;
+    @apply w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 flex-shrink-0;
     color: var(--text-secondary);
-    background: rgba(124, 58, 237, 0.06);
+    background: transparent;
     border: 1px solid transparent;
   }
 
   .topbar-icon-btn:hover {
-    background: rgba(124, 58, 237, 0.12);
+    background: var(--bg-hover);
     color: var(--text-primary);
-    border-color: rgba(124, 58, 237, 0.2);
   }
 
   html.light .topbar-icon-btn {
-    background: rgba(124, 58, 237, 0.04);
+    background: transparent;
   }
 
   html.light .topbar-icon-btn:hover {
-    background: rgba(124, 58, 237, 0.1);
-    color: #5b21b6;
+    background: rgba(0, 0, 0, 0.04);
+    color: #0f172a;
   }
 
   /* Icon wrapper — provides the bounce container */
   .sidebar-link-icon {
-    @apply w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200;
-    background: rgba(124, 58, 237, 0.07);
+    @apply w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 transition-all duration-200;
+    background: rgba(34, 197, 94, 0.07);
   }
 
   .sidebar-link:hover .sidebar-link-icon {
-    background: rgba(124, 58, 237, 0.15);
+    background: rgba(34, 197, 94, 0.15);
     transform: scale(1.08) rotate(-3deg);
   }
 
   .sidebar-link:hover {
-    color: #c4b5fd;
-    background: rgba(124, 58, 237, 0.1);
+    color: #86efac;
+    background: rgba(34, 197, 94, 0.08);
   }
 
   /* Active state — gradient background + left bar */
   .sidebar-link.active {
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.18) 0%, rgba(109, 40, 217, 0.12) 100%);
-    color: #a78bfa;
-    border: 1px solid rgba(124, 58, 237, 0.25);
-    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.12) 100%);
+    color: #86efac;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.12);
   }
 
   /* Active left indicator bar */
@@ -639,19 +648,18 @@ html.light {
     top: 20%;
     bottom: 20%;
     width: 3px;
-    background: linear-gradient(180deg, #7c3aed, #a78bfa);
+    background: linear-gradient(180deg, #22c55e, #86efac);
     border-radius: 0 3px 3px 0;
-    animation: indicatorPulse 2s ease-in-out infinite;
   }
 
   /* Active icon */
   .sidebar-link.active .sidebar-link-icon {
-    background: rgba(124, 58, 237, 0.25);
+    background: rgba(34, 197, 94, 0.25);
     transform: scale(1.05);
   }
 
   .sidebar-link.active .sidebar-link-icon svg {
-    color: #a78bfa;
+    color: #86efac;
   }
 
   /* Logout button */
@@ -684,43 +692,7 @@ html.light {
     background: rgba(124, 58, 237, 0.1);
   }
 
-  /* ── Light mode overrides ── */
-  html.light .sidebar-link.active {
-    background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
-    color: #ffffff !important;
-    border: 1px solid transparent !important;
-    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35) !important;
-  }
-
-  html.light .sidebar-link.active::before {
-    display: none;
-  }
-
-  html.light .sidebar-link.active .sidebar-link-icon {
-    background: rgba(255, 255, 255, 0.2) !important;
-  }
-
-  html.light .sidebar-link.active .sidebar-link-icon svg {
-    color: #ffffff !important;
-  }
-
-  html.light .sidebar-link:not(.active):hover {
-    background: rgba(109, 40, 217, 0.08) !important;
-    color: #5b21b6 !important;
-  }
-
-  html.light .sidebar-link:not(.active):hover .sidebar-link-icon {
-    background: rgba(109, 40, 217, 0.14) !important;
-  }
-
-  html.light .sidebar-user-card {
-    background: rgba(124, 58, 237, 0.05) !important;
-    border-color: rgba(124, 58, 237, 0.15) !important;
-  }
-
-  html.light .sidebar-logout {
-    color: #dc2626 !important;
-  }
+  /* Sidebar is always dark — no light mode overrides needed */
 
   /* ─── Glass ──────────────────────────────────────────────────────────────── */
   .glass {
@@ -2040,7 +2012,7 @@ html.light .prose-invert {
    Override component-level styles that should look different in light mode.
 ────────────────────────────────────────────────────────────────────────────── */
 
-/* Cards: clean white with soft shadow instead of glassmorphism */
+/* Cards: clean white with soft shadow */
 html.light .card {
   background: #ffffff !important;
   border: 1px solid #e5e7eb !important;
@@ -2049,44 +2021,30 @@ html.light .card {
 }
 
 html.light .card:hover {
-  border-color: rgba(43, 108, 176, 0.3) !important;
-  box-shadow: 0 4px 20px rgba(43, 108, 176, 0.1), 0 8px 32px rgba(0, 0, 0, 0.07) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.1), 0 8px 32px rgba(0, 0, 0, 0.07) !important;
   transform: translateY(-1px);
-}
-
-/* Sidebar active item: solid blue with white text */
-html.light .sidebar-link.active {
-  background: linear-gradient(135deg, #2B6CB0, #1a4f8a) !important;
-  color: #ffffff !important;
-  border: 1px solid transparent !important;
-  box-shadow: 0 4px 14px rgba(43, 108, 176, 0.35) !important;
-}
-
-/* Sidebar hover */
-html.light .sidebar-link:hover {
-  background: rgba(43, 108, 176, 0.08) !important;
-  color: #1a4f8a !important;
 }
 
 /* Input: clean white with gray border */
 html.light .input {
   background: #FFFFFF !important;
-  border: 1px solid #D8E2EE !important;
-  color: #1A2436 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
 }
 
 html.light .input:focus {
-  border-color: #2B6CB0 !important;
-  box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.12) !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12) !important;
 }
 
 /* Table rows */
 html.light .table tbody tr:hover {
-  background: rgba(43, 108, 176, 0.04) !important;
+  background: rgba(34, 197, 94, 0.04) !important;
 }
 
 html.light .table thead tr {
-  border-color: #e5e7eb !important;
+  border-color: #e2e8f0 !important;
 }
 
 html.light .table tbody tr {
@@ -2095,10 +2053,10 @@ html.light .table tbody tr {
 
 /* Stat icon shadow */
 html.light .stat-icon {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Background overrides for dark inline backgrounds in components */
+/* Background overrides for dark inline backgrounds */
 html.light .bg-white\/\[0\.02\] {
   background-color: #f9fafb !important;
 }

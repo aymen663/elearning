@@ -1,0 +1,387 @@
+'use client';
+import { useEffect, useState, useMemo } from 'react';
+import { adminAPI, coursesAPI } from '@/lib/api';
+import { useAuthStore } from '@/lib/authStore';
+import Sidebar from '@/components/layout/Sidebar';
+import {
+    Search, BookOpen, Users, ChevronDown,
+    Loader2, Eye, Trash2, ToggleLeft, ToggleRight,
+    Plus, Filter, AlertTriangle
+} from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+
+/* ── Design tokens ─────────────────────────────────────────────────────── */
+const T = {
+    card: {
+        bg:     'var(--bg-card)',
+        border: '1px solid var(--border)',
+        radius: '14px',
+        shadow: 'var(--card-shadow)',
+    },
+    text: {
+        primary:   'var(--text-primary)',
+        secondary: 'var(--text-secondary)',
+        muted:     'var(--text-muted)',
+        accent:    'var(--accent)',
+    },
+};
+
+/* ── Badge helpers ─────────────────────────────────────────────────────── */
+const CAT_COLORS = {
+    'programmation':             { bg: 'rgba(34,197,94,0.12)',   color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
+    'intelligence artificielle': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
+    'data science':              { bg: 'rgba(59,130,246,0.12)',  color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
+    'design':                    { bg: 'rgba(236,72,153,0.12)',  color: '#f472b6', border: 'rgba(236,72,153,0.3)' },
+    'développement web':         { bg: 'rgba(96,165,250,0.12)',  color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
+    'développement':             { bg: 'rgba(96,165,250,0.12)',  color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
+    'marketing':                 { bg: 'rgba(251,146,60,0.12)',  color: '#fb923c', border: 'rgba(251,146,60,0.3)' },
+    'business':                  { bg: 'rgba(251,191,36,0.12)',  color: '#fbbf24', border: 'rgba(251,191,36,0.3)' },
+    'cybersécurité':             { bg: 'rgba(248,113,113,0.12)', color: '#f87171', border: 'rgba(248,113,113,0.3)' },
+};
+const LVL_COLORS = {
+    'débutant':      { bg: 'rgba(34,197,94,0.12)',   color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
+    'intermédiaire': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
+    'avancé':        { bg: 'rgba(59,130,246,0.12)',  color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
+};
+const ICON_COLORS = [
+    ['#3b82f6','#1d4ed8'], ['#8b5cf6','#6d28d9'], ['#ec4899','#be185d'],
+    ['#f59e0b','#b45309'], ['#10b981','#047857'], ['#ef4444','#b91c1c'],
+    ['#06b6d4','#0e7490'], ['#84cc16','#4d7c0f'],
+];
+
+function Badge({ label, bg, color, border }) {
+    return (
+        <span style={{
+            display: 'inline-block', padding: '3px 10px', borderRadius: 6,
+            fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap',
+            background: bg, color, border: `1px solid ${border}`,
+        }}>{label}</span>
+    );
+}
+
+function CourseIcon({ title, index }) {
+    const [a, b] = ICON_COLORS[index % ICON_COLORS.length];
+    return (
+        <div style={{
+            width: 36, height: 36, borderRadius: 9, flexShrink: 0,
+            background: `linear-gradient(135deg, ${a}, ${b})`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 14, fontWeight: 800, color: '#fff',
+        }}>
+            {title?.[0]?.toUpperCase() || '?'}
+        </div>
+    );
+}
+
+/* ── Delete Confirm Modal ───────────────────────────────────────────────── */
+function DeleteModal({ course, onConfirm, onCancel, loading }) {
+    return (
+        <div style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+            <div style={{
+                background: T.card.bg, border: T.card.border, borderRadius: 16,
+                boxShadow: '0 20px 60px rgba(0,0,0,0.3)', padding: 28, maxWidth: 400, width: '90%',
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                    <div style={{
+                        width: 40, height: 40, borderRadius: 10, background: 'rgba(239,68,68,0.1)',
+                        border: '1px solid rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}>
+                        <AlertTriangle style={{ width: 18, height: 18, color: '#ef4444' }} />
+                    </div>
+                    <div>
+                        <h3 style={{ fontSize: 15, fontWeight: 700, color: T.text.primary }}>Supprimer le cours ?</h3>
+                        <p style={{ fontSize: 12, color: T.text.muted, marginTop: 2 }}>Cette action est irréversible</p>
+                    </div>
+                </div>
+                <p style={{ fontSize: 13, color: T.text.secondary, marginBottom: 20, padding: '12px 14px', background: 'rgba(239,68,68,0.05)', borderRadius: 8, border: '1px solid rgba(239,68,68,0.1)' }}>
+                    <strong style={{ color: T.text.primary }}>{course?.title}</strong> sera définitivement supprimé avec toutes ses leçons et progressions.
+                </p>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                    <button onClick={onCancel} style={{
+                        padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                        background: T.card.bg, border: T.card.border, color: T.text.secondary, cursor: 'pointer',
+                    }}>Annuler</button>
+                    <button onClick={onConfirm} disabled={loading} style={{
+                        padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                        background: '#ef4444', color: '#fff', border: 'none', cursor: loading ? 'wait' : 'pointer',
+                        display: 'flex', alignItems: 'center', gap: 6,
+                    }}>
+                        {loading ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                        Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ── Course Row ─────────────────────────────────────────────────────────── */
+function CourseRow({ course, index, onToggle, onDelete, togglingId, deletingId }) {
+    const [hover, setHover] = useState(false);
+    const cat = course.category?.toLowerCase();
+    const lvl = course.level?.toLowerCase();
+    const cBdg = CAT_COLORS[cat]  || { bg: 'rgba(99,102,241,0.1)', color: '#818cf8', border: 'rgba(99,102,241,0.2)' };
+    const lBdg = LVL_COLORS[lvl]  || { bg: 'rgba(156,163,175,0.1)', color: '#9ca3af', border: 'rgba(156,163,175,0.2)' };
+    const students = course.enrolledStudents?.length ?? 0;
+    const date = course.createdAt
+        ? new Date(course.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })
+        : '—';
+
+    return (
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: '2.5fr 150px 130px 90px 110px 110px',
+                alignItems: 'center',
+                padding: '14px 20px',
+                borderBottom: '1px solid var(--border)',
+                background: hover ? 'var(--bg-card-hover)' : 'var(--bg-card)',
+                transition: 'background 0.12s',
+            }}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+        >
+            {/* COURS */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                <CourseIcon title={course.title} index={index} />
+                <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: T.text.primary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {course.title}
+                    </p>
+                    <p style={{ fontSize: 11, color: T.text.muted }}>
+                        {course.instructor?.name || course.instructor?.firstName || '—'}
+                    </p>
+                </div>
+            </div>
+
+            {/* CATÉGORIE */}
+            <div><Badge label={course.category || '—'} {...cBdg} /></div>
+
+            {/* NIVEAU */}
+            <div>
+                {course.level
+                    ? <Badge label={course.level.charAt(0).toUpperCase() + course.level.slice(1)} {...lBdg} />
+                    : <span style={{ color: T.text.muted, fontSize: 12 }}>—</span>
+                }
+            </div>
+
+            {/* ÉTUDIANTS */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, color: T.text.secondary }}>
+                <Users size={13} style={{ color: T.text.muted }} />{students}
+            </div>
+
+            {/* STATUT */}
+            <div>
+                {course.isPublished
+                    ? <Badge label="● Publié"    bg="rgba(34,197,94,0.1)"  color="#22c55e" border="rgba(34,197,94,0.25)" />
+                    : <Badge label="● Brouillon" bg="rgba(251,191,36,0.1)" color="#fbbf24" border="rgba(251,191,36,0.25)" />
+                }
+            </div>
+
+            {/* CRÉÉ LE */}
+            <div style={{ fontSize: 12, color: T.text.muted }}>{date}</div>
+        </div>
+    );
+}
+
+/* ── Page ───────────────────────────────────────────────────────────────── */
+export default function AdminCoursesPage() {
+    const { user } = useAuthStore();
+    const router   = useRouter();
+    const [courses, setCourses]       = useState([]);
+    const [loading, setLoading]       = useState(true);
+    const [search, setSearch]         = useState('');
+    const [filterCat, setFilterCat]   = useState('');
+    const [filterLvl, setFilterLvl]   = useState('');
+    const [filterStatus, setFilterStatus] = useState('');
+    const [togglingId, setTogglingId] = useState(null);
+    const [deleteTarget, setDeleteTarget] = useState(null);
+    const [deletingId, setDeletingId] = useState(null);
+
+    useEffect(() => {
+        if (user && user.role !== 'admin') router.replace('/dashboard');
+    }, [user, router]);
+
+    const load = () => {
+        setLoading(true);
+        adminAPI.getAdminCourses()
+            .then(({ data }) => setCourses(Array.isArray(data) ? data : (data.courses || [])))
+            .catch(() => toast.error('Erreur chargement des cours'))
+            .finally(() => setLoading(false));
+    };
+    useEffect(() => { load(); }, []);
+
+    const categories = useMemo(() => [...new Set(courses.map(c => c.category).filter(Boolean))], [courses]);
+    const levels     = useMemo(() => [...new Set(courses.map(c => c.level).filter(Boolean))],    [courses]);
+
+    const filtered = useMemo(() => {
+        const q = search.toLowerCase();
+        return courses.filter(c => {
+            if (q && !c.title?.toLowerCase().includes(q) && !c.instructor?.name?.toLowerCase().includes(q)) return false;
+            if (filterCat && c.category !== filterCat) return false;
+            if (filterLvl && c.level     !== filterLvl) return false;
+            if (filterStatus === 'published' && !c.isPublished) return false;
+            if (filterStatus === 'draft'     &&  c.isPublished) return false;
+            return true;
+        });
+    }, [courses, search, filterCat, filterLvl, filterStatus]);
+
+    const handleToggle = async (id, isPublished) => {
+        setTogglingId(id);
+        try {
+            await adminAPI.togglePublish(id);
+            setCourses(prev => prev.map(c => c._id === id ? { ...c, isPublished: !c.isPublished } : c));
+            toast.success(isPublished ? 'Cours dépublié' : 'Cours publié ✅');
+        } catch {
+            toast.error('Erreur lors du changement de statut');
+        } finally { setTogglingId(null); }
+    };
+
+    const handleDelete = async () => {
+        if (!deleteTarget) return;
+        setDeletingId(deleteTarget._id);
+        try {
+            await coursesAPI.delete(deleteTarget._id);
+            setCourses(prev => prev.filter(c => c._id !== deleteTarget._id));
+            toast.success('Cours supprimé');
+            setDeleteTarget(null);
+        } catch {
+            toast.error('Erreur lors de la suppression');
+        } finally { setDeletingId(null); }
+    };
+
+    const published = courses.filter(c => c.isPublished).length;
+    const drafts    = courses.length - published;
+
+    const inputStyle = {
+        background: T.card.bg, border: '1px solid var(--border)',
+        color: T.text.primary, borderRadius: 8, fontSize: 13, outline: 'none',
+    };
+    const selStyle = {
+        ...inputStyle, padding: '8px 30px 8px 12px', cursor: 'pointer',
+        appearance: 'none', color: T.text.secondary,
+    };
+
+    return (
+        <Sidebar>
+            <div style={{ maxWidth: 1150, margin: '0 auto' }}>
+
+                {/* ── Header ── */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+                    <div>
+                        <h1 style={{ fontSize: 20, fontWeight: 700, color: T.text.primary, letterSpacing: '-0.02em' }}>
+                            Gestion des cours
+                        </h1>
+                        <p style={{ fontSize: 13, color: T.text.muted, marginTop: 3 }}>
+                            {loading ? '…' : `${courses.length} cours — ${published} publiés, ${drafts} brouillons`}
+                        </p>
+                    </div>
+                    <Link href="/instructor/courses/new" style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 16px',
+                        borderRadius: 9, fontSize: 13, fontWeight: 600,
+                        background: 'var(--btn-primary-bg)', color: '#fff',
+                        textDecoration: 'none', boxShadow: '0 4px 12px rgba(34,197,94,0.25)',
+                    }}>
+                        <Plus style={{ width: 15, height: 15 }} /> Nouveau cours
+                    </Link>
+                </div>
+
+
+                {/* ── Filters ── */}
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 16 }}>
+                    <div style={{ position: 'relative', flex: '1 1 240px', minWidth: 200 }}>
+                        <Search size={14} style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', color: T.text.muted, pointerEvents: 'none' }} />
+                        <input type="text" placeholder="Rechercher cours, instructeur…" value={search}
+                            onChange={e => setSearch(e.target.value)}
+                            style={{ ...inputStyle, width: '100%', padding: '8px 12px 8px 33px' }}
+                        />
+                    </div>
+                    {[
+                        { val: filterCat, set: setFilterCat, placeholder: 'Toutes catégories', items: categories },
+                        { val: filterLvl, set: setFilterLvl, placeholder: 'Tous niveaux',     items: levels },
+                    ].map(({ val, set, placeholder, items }, i) => (
+                        <div key={i} style={{ position: 'relative' }}>
+                            <select value={val} onChange={e => set(e.target.value)} style={{ ...selStyle, minWidth: 155 }}>
+                                <option value="">{placeholder}</option>
+                                {items.map(it => <option key={it} value={it}>{it}</option>)}
+                            </select>
+                            <ChevronDown size={12} style={{ position: 'absolute', right: 9, top: '50%', transform: 'translateY(-50%)', color: T.text.muted, pointerEvents: 'none' }} />
+                        </div>
+                    ))}
+                    <div style={{ position: 'relative' }}>
+                        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={{ ...selStyle, minWidth: 140 }}>
+                            <option value="">Tous statuts</option>
+                            <option value="published">Publié</option>
+                            <option value="draft">Brouillon</option>
+                        </select>
+                        <ChevronDown size={12} style={{ position: 'absolute', right: 9, top: '50%', transform: 'translateY(-50%)', color: T.text.muted, pointerEvents: 'none' }} />
+                    </div>
+                    {(search || filterCat || filterLvl || filterStatus) && (
+                        <button onClick={() => { setSearch(''); setFilterCat(''); setFilterLvl(''); setFilterStatus(''); }}
+                            style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: 'rgba(239,68,68,0.08)', color: '#f87171', border: '1px solid rgba(239,68,68,0.2)', cursor: 'pointer' }}>
+                            Réinitialiser
+                        </button>
+                    )}
+                </div>
+
+                {/* ── Table ── */}
+                <div style={{ background: T.card.bg, border: '1px solid var(--border-strong)', borderRadius: T.card.radius, overflow: 'hidden', boxShadow: T.card.shadow }}>
+
+                    {/* Header */}
+                    <div style={{
+                        display: 'grid', gridTemplateColumns: '2.5fr 150px 130px 90px 110px 110px',
+                        padding: '10px 20px', background: 'var(--bg-secondary)',
+                        borderBottom: '1px solid var(--border-strong)',
+                    }}>
+                        {['COURS','CATÉGORIE','NIVEAU','ÉTUDIANTS','STATUT','CRÉÉ LE'].map(h => (
+                            <span key={h} style={{ fontSize: 10, fontWeight: 700, color: T.text.muted, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{h}</span>
+                        ))}
+                    </div>
+
+                    {/* Body */}
+                    {loading ? (
+                        <div style={{ padding: '60px 0', textAlign: 'center' }}>
+                            <Loader2 size={26} className="animate-spin" style={{ color: 'var(--accent)', margin: '0 auto 10px', display: 'block' }} />
+                            <p style={{ fontSize: 13, color: T.text.muted }}>Chargement des cours…</p>
+                        </div>
+                    ) : filtered.length === 0 ? (
+                        <div style={{ padding: '60px 0', textAlign: 'center' }}>
+                            <BookOpen size={36} style={{ color: T.text.muted, margin: '0 auto 12px', display: 'block' }} />
+                            <p style={{ fontSize: 14, fontWeight: 600, color: T.text.primary, marginBottom: 4 }}>Aucun cours trouvé</p>
+                            <p style={{ fontSize: 13, color: T.text.muted }}>Modifiez vos filtres ou créez un premier cours</p>
+                        </div>
+                    ) : (
+                        filtered.map((course, i) => (
+                            <CourseRow key={course._id} course={course} index={i}
+                                onToggle={handleToggle} onDelete={setDeleteTarget}
+                                togglingId={togglingId} deletingId={deletingId}
+                            />
+                        ))
+                    )}
+                </div>
+
+                {/* Result count */}
+                {!loading && filtered.length > 0 && (
+                    <p style={{ fontSize: 12, color: T.text.muted, marginTop: 12, textAlign: 'right' }}>
+                        {filtered.length} cours affichés sur {courses.length}
+                    </p>
+                )}
+            </div>
+
+            {/* ── Delete Modal ── */}
+            {deleteTarget && (
+                <DeleteModal
+                    course={deleteTarget}
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteTarget(null)}
+                    loading={deletingId === deleteTarget._id}
+                />
+            )}
+        </Sidebar>
+    );
+}

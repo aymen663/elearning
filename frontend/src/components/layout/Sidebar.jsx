@@ -48,11 +48,11 @@ function NotificationBell() {
     return (
         <div className="relative" ref={ref}>
             <button onClick={() => setOpen(!open)}
-                className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors relative"
-                style={{ background: 'rgba(124,58,237,0.08)', color: 'var(--text-secondary)' }}>
+                className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors relative topbar-icon-btn"
+                style={{ color: 'var(--text-secondary)' }}>
                 <Bell className="w-4 h-4" />
                 {notifications.length > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-teal-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center">
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center">
                         {notifications.length}
                     </span>
                 )}
@@ -104,7 +104,7 @@ function CalendarDropdown() {
     const daysInMonth = new Date(current.year, current.month + 1, 0).getDate();
     const firstDay = new Date(current.year, current.month, 1).getDay();
     const DAYS = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
-    const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+    const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
     const prev = () => setCurrent(c => c.month === 0 ? { year: c.year - 1, month: 11 } : { ...c, month: c.month - 1 });
     const next = () => setCurrent(c => c.month === 11 ? { year: c.year + 1, month: 0 } : { ...c, month: c.month + 1 });
@@ -167,7 +167,8 @@ function CalendarDropdown() {
 
 
 const adminNav = [
-    { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/admin', icon: LayoutDashboard, label: 'Tableau de bord' },
+    { href: '/admin/courses', icon: BookOpen, label: 'Cours' },
     { href: '/admin/teachers', icon: GraduationCap, label: 'Professeurs' },
     { href: '/admin/students', icon: Users, label: 'Étudiants' },
 ];
@@ -182,7 +183,7 @@ const instructorNav = [
 
 const studentNav = [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Mon espace' },
-    { href: '/courses', icon: BookOpen, label: 'Catalogue' },
+    { href: '/courses', icon: BookOpen, label: 'Liste de cours' },
     { href: '/forum', icon: MessagesSquare, label: 'Forum' },
     { href: '/messages', icon: MessageSquare, label: 'Messages' },
     { href: '/chat', icon: MessageSquare, label: 'Tuteur IA' },
@@ -195,7 +196,7 @@ export default function Sidebar({ children }) {
     const { user, logout } = useAuthStore();
     const { initialized } = useKeycloak();
     const [open, setOpen] = useState(false);
-    const [dark, setDark] = useState(true);
+    const [dark, setDark] = useState(false);
     const [unreadMsgs, setUnreadMsgs] = useState(0);
     const [searchOpen, setSearchOpen] = useState(false);
 
@@ -225,8 +226,14 @@ export default function Sidebar({ children }) {
 
 
     useEffect(() => {
+        // Force dark mode as new default — reset old 'light' saved preference
+        const v = localStorage.getItem('theme_v');
+        if (v !== '3') {
+            localStorage.setItem('theme', 'dark');
+            localStorage.setItem('theme_v', '3');
+        }
         const saved = localStorage.getItem('theme');
-        const isDark = saved ? saved === 'dark' : true;
+        const isDark = saved !== 'light';
         setDark(isDark);
         document.documentElement.classList.toggle('light', !isDark);
     }, []);
@@ -246,21 +253,23 @@ export default function Sidebar({ children }) {
     const SidebarContent = () => (
         <div className="flex flex-col h-full">
             {/* ── Logo ─── */}
-            <div className="px-5 py-5 border-b" style={{ borderColor: 'var(--border-sidebar)' }}>
+            <div className="px-5 py-5 border-b flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
                 <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-teal-700 flex items-center justify-center shadow-lg shadow-violet-500/20 flex-shrink-0">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 4px 12px rgba(34,197,94,0.3)' }}>
                         <GraduationCap className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <p className="font-bold text-sm tracking-tight" style={{ color: 'var(--text-logo)' }}>EduAI</p>
-                        <p className="text-[10px] capitalize font-medium" style={{ color: 'var(--text-muted)' }}>{user?.role || '...'}</p>
+                        <p className="font-bold text-sm tracking-tight" style={{ color: '#ffffff' }}>EduAI</p>
                     </div>
                 </div>
+                <button className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                    <Menu className="w-4 h-4" />
+                </button>
             </div>
 
             {/* ── Navigation ── */}
             <nav className="flex-1 px-3 py-4 overflow-y-auto">
-                <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)', opacity: 0.5 }}>Général</p>
+                <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>Général</p>
                 <div className="space-y-0.5">
                     {nav.map(({ href, icon: Icon, label }) => {
                         const active = pathname === href || (href !== '/admin' && href !== '/dashboard' && href !== '/instructor' && pathname.startsWith(href));
@@ -284,20 +293,22 @@ export default function Sidebar({ children }) {
             </nav>
 
             {/* ── Bottom section ── */}
-            <div className="border-t px-3 py-2 space-y-0.5" style={{ borderColor: 'var(--border-sidebar)' }}>
-                <p className="px-2 mb-1 mt-1 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)', opacity: 0.5 }}>Compte</p>
+            <div className="border-t px-3 py-2 space-y-0.5" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+                <p className="px-2 mb-1 mt-1 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>Compte</p>
 
                 {/* User card */}
                 {user && (
                     <div className="sidebar-user-card rounded-lg px-2 py-1.5 flex items-center gap-2 mb-0.5">
                         <div className="relative flex-shrink-0">
-                            <UserAvatar user={user} size="sm" />
-                            <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full border-2" style={{ borderColor: 'var(--bg-sidebar)' }} />
+                            <UserAvatar user={user} size="sm" variant="green" />
                         </div>
                         <div className="min-w-0 flex-1">
-                            <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{user.name}</p>
-                            <p className="text-[10px] truncate" style={{ color: 'var(--text-muted)' }}>{user.email}</p>
+                            <p className="text-xs font-semibold truncate" style={{ color: '#e2e8f0' }}>{user.name}</p>
+                            <p className="text-[10px] truncate" style={{ color: 'rgba(255,255,255,0.4)' }}>{user.email}</p>
                         </div>
+                        <button className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8L2 4h8L6 8z" /></svg>
+                        </button>
                     </div>
                 )}
 
@@ -313,9 +324,26 @@ export default function Sidebar({ children }) {
     );
 
     return (
-        <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
-            <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 border-r"
-                style={{ background: 'var(--bg-sidebar)', borderColor: 'var(--border-sidebar)' }}>
+        <div className="flex h-screen overflow-hidden" style={{ background: dark ? 'linear-gradient(160deg, #0B0F19 0%, #0E1322 100%)' : '#ffffff', position: 'relative' }}>
+            {/* Animated Background Orbs — only in dark mode */}
+            {dark && (
+                <>
+                    <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+                        <div style={{ position: 'absolute', width: 500, height: 500, top: '-12%', left: '-8%', background: 'radial-gradient(circle, #1a2744 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', opacity: 0.6, animation: 'drift 20s ease-in-out infinite' }} />
+                        <div style={{ position: 'absolute', width: 400, height: 400, bottom: '-8%', right: '-6%', background: 'radial-gradient(circle, #0e2038 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', opacity: 0.5, animation: 'drift 25s ease-in-out infinite reverse' }} />
+                        <div style={{ position: 'absolute', width: 300, height: 300, top: '40%', left: '50%', background: 'radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)', opacity: 1, animation: 'drift 18s ease-in-out infinite 5s' }} />
+                        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(34,197,94,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.015) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent)' }} />
+                    </div>
+                    <style>{`@keyframes drift{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-20px)}50%{transform:translate(-20px,30px)}75%{transform:translate(20px,20px)}}`}</style>
+                </>
+            )}
+
+            <aside className="hidden lg:flex flex-col w-56 flex-shrink-0 border-r"
+                style={{
+                    background: 'linear-gradient(180deg, #0A0E18 0%, #0D1220 100%)',
+                    borderColor: 'rgba(255,255,255,0.07)',
+                    position: 'relative', zIndex: 1
+                }}>
                 <SidebarContent />
             </aside>
 
@@ -323,21 +351,29 @@ export default function Sidebar({ children }) {
                 <div className="fixed inset-0 z-50 lg:hidden">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
                     <aside className="absolute left-0 top-0 bottom-0 w-72 border-r"
-                        style={{ background: 'var(--bg-sidebar)', borderColor: 'var(--border-sidebar)' }}>
+                        style={{
+                            background: 'linear-gradient(180deg, #0A0E18 0%, #0D1220 100%)',
+                            borderColor: 'rgba(255,255,255,0.07)'
+                        }}>
                         <SidebarContent />
                     </aside>
                 </div>
             )}
 
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden" style={{ position: 'relative', zIndex: 1 }}>
                 {/* Thin loading bar while Keycloak initializes */}
                 {!initialized && (
                     <div className="h-0.5 w-full overflow-hidden flex-shrink-0" style={{ background: 'transparent' }}>
-                        <div className="h-0.5 animate-pulse" style={{ background: 'linear-gradient(90deg, #6366f1, #a855f7, #6366f1)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
+                        <div className="h-0.5 animate-pulse" style={{ background: dark ? 'linear-gradient(90deg, #D4E157, #4CAF50, #D4E157)' : 'linear-gradient(90deg, #22c55e, #16a34a, #22c55e)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
                     </div>
                 )}
-                <header className="h-14 border-b flex items-center gap-3 px-4 lg:px-6 flex-shrink-0"
-                    style={{ background: 'var(--bg-header)', borderColor: 'var(--border-sidebar)' }}>
+                <header className="h-12 border-b flex items-center gap-2.5 px-4 lg:px-5 flex-shrink-0"
+                    style={{
+                        background: dark ? 'rgba(9,24,18,0.8)' : '#ffffff',
+                        backdropFilter: dark ? 'blur(16px)' : 'none',
+                        WebkitBackdropFilter: dark ? 'blur(16px)' : 'none',
+                        borderColor: dark ? 'var(--border-sidebar)' : '#e2e8f0'
+                    }}>
 
                     {/* Mobile menu trigger */}
                     <button className="lg:hidden flex-shrink-0" style={{ color: 'var(--text-secondary)' }} onClick={() => setOpen(true)}>
@@ -348,7 +384,7 @@ export default function Sidebar({ children }) {
                     <button
                         onClick={() => setSearchOpen(true)}
                         className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs flex-1 max-w-sm text-left transition-all"
-                        style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid var(--border)', color: 'var(--text-muted)' }}
+                        style={{ background: dark ? 'rgba(255,255,255,0.06)' : '#eef2f6', border: dark ? '1px solid var(--border)' : '1px solid #dde3ea', color: 'var(--text-muted)' }}
                     >
                         <Search className="w-3.5 h-3.5" />
                         <span className="flex-1">Rechercher des cours, leçons...</span>
@@ -366,6 +402,7 @@ export default function Sidebar({ children }) {
                         {/* Calendar */}
                         <CalendarDropdown />
 
+
                         {/* Notifications */}
                         <NotificationBell />
 
@@ -376,8 +413,8 @@ export default function Sidebar({ children }) {
                             title={dark ? 'Passer en mode clair' : 'Passer en mode sombre'}
                         >
                             {dark
-                                ? <Sun className="w-4 h-4 text-amber-400" />
-                                : <Moon className="w-4 h-4 text-violet-400" />}
+                                ? <Sun className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} />
+                                : <Moon className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} />}
                         </button>
 
                         {/* User avatar */}
@@ -389,7 +426,8 @@ export default function Sidebar({ children }) {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto p-6 animate-fade-in">
+                <main className="flex-1 overflow-y-auto p-4 lg:p-5 animate-fade-in"
+                    style={{ background: dark ? 'transparent' : '#f0f2f5' }}>
                     {children}
                 </main>
             </div>

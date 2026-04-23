@@ -43,8 +43,18 @@ export default function HomePage() {
     const login = () => { const kc = getKeycloak(); if (!kc) return toast.error("Connexion en cours..."); kc.login({ redirectUri: window.location.origin + '/auth/callback' }); };
 
     return (
-        <div className="min-h-screen overflow-x-hidden" style={{ background: G }}>
+        <div className="min-h-screen overflow-x-hidden" style={{ background: '#060e0a', position: 'relative' }}>
 
+            {/* Animated Background Orbs */}
+            <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+                <div style={{ position: 'absolute', width: 600, height: 600, top: '-15%', left: '-10%', background: '#0d4a30', borderRadius: '50%', filter: 'blur(120px)', opacity: 0.5, animation: 'drift 20s ease-in-out infinite' }} />
+                <div style={{ position: 'absolute', width: 500, height: 500, bottom: '-10%', right: '-10%', background: '#1a6b42', borderRadius: '50%', filter: 'blur(120px)', opacity: 0.3, animation: 'drift 25s ease-in-out infinite reverse' }} />
+                <div style={{ position: 'absolute', width: 300, height: 300, top: '40%', left: '50%', background: '#D4E157', borderRadius: '50%', filter: 'blur(120px)', opacity: 0.04, animation: 'drift 18s ease-in-out infinite 5s' }} />
+                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(212,225,87,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,225,87,.03) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent)' }} />
+            </div>
+            <style>{`@keyframes drift{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-20px)}50%{transform:translate(-20px,30px)}75%{transform:translate(20px,20px)}}`}</style>
+
+            <div style={{ position: 'relative', zIndex: 1 }}>
             <Header />
 
             {/* HERO */}
@@ -101,7 +111,7 @@ export default function HomePage() {
                 </div>
             </section>
             {/* FEATURES */}
-            <section id="fonctionnalités" className="py-16 relative" style={{ background: '#0E4534' }}>
+            <section id="fonctionnalités" className="py-16 relative">
                 <div className="absolute top-0 left-1/4 w-[400px] h-[400px] rounded-full opacity-[0.06]" style={{ background: 'radial-gradient(circle, #D4E157, transparent 70%)' }} />
                 <div className="absolute bottom-10 right-[10%] w-[300px] h-[300px] rounded-full opacity-[0.04]" style={{ background: 'radial-gradient(circle, #81C784, transparent 70%)' }} />
 
@@ -182,12 +192,12 @@ export default function HomePage() {
             </section>
 
             {/* HOW IT WORKS */}
-            <section id="cours" className="py-16 relative overflow-hidden" style={{ background: '#f7f9f4' }}>
+            <section id="cours" className="py-16 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold mb-4" style={{ background: G, color: Y }}><Sparkles className="w-3.5 h-3.5" /> Simple & efficace</div>
-                        <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3">Comment ça marche ?</h2>
-                        <p className="text-gray-500 text-sm max-w-md mx-auto">De l'inscription à la certification, un parcours fluide en trois étapes.</p>
+                        <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">Comment ça marche ?</h2>
+                        <p className="text-white/40 text-sm max-w-md mx-auto">De l'inscription à la certification, un parcours fluide en trois étapes.</p>
                     </motion.div>
 
                     {/* Steps */}
@@ -205,18 +215,18 @@ export default function HomePage() {
                             <motion.div key={step} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                                 transition={{ delay: i * 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="relative text-center px-6">
                                 <motion.div whileHover={{ scale: 1.08, rotate: 3 }} transition={{ type: 'spring', stiffness: 300 }}
-                                    className="relative z-10 mx-auto w-24 h-24 rounded-3xl flex items-center justify-center mb-6 shadow-lg border border-gray-100 cursor-pointer"
-                                    style={{ background: i === 1 ? G : 'white' }}>
-                                    <SIcon className="w-10 h-10" style={{ color: i === 1 ? Y : G }} />
+                                    className="relative z-10 mx-auto w-24 h-24 rounded-3xl flex items-center justify-center mb-6 shadow-lg border border-white/10 cursor-pointer"
+                                    style={{ background: i === 1 ? G : 'rgba(255,255,255,0.06)' }}>
+                                    <SIcon className="w-10 h-10" style={{ color: i === 1 ? Y : '#D4E157' }} />
                                     <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }}
                                         transition={{ delay: 0.4 + i * 0.2, type: 'spring', stiffness: 400 }}
                                         className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-black shadow-md"
                                         style={{ background: Y, color: G }}>{step}</motion.div>
                                 </motion.div>
                                 <motion.h3 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-                                    transition={{ delay: 0.3 + i * 0.2 }} className="text-gray-900 font-bold text-base mb-2">{title}</motion.h3>
+                                    transition={{ delay: 0.3 + i * 0.2 }} className="text-white font-bold text-base mb-2">{title}</motion.h3>
                                 <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-                                    transition={{ delay: 0.4 + i * 0.2 }} className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">{desc}</motion.p>
+                                    transition={{ delay: 0.4 + i * 0.2 }} className="text-white/40 text-sm leading-relaxed max-w-xs mx-auto">{desc}</motion.p>
                             </motion.div>
                         ))}
                     </div>
@@ -224,7 +234,7 @@ export default function HomePage() {
                     {/* Dashboard Preview */}
                     <motion.div initial={{ opacity: 0, y: 50, scale: 0.95 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                        className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200 max-w-4xl mx-auto" style={{ background: G }}>
+                        className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 max-w-4xl mx-auto" style={{ background: 'rgba(11,61,46,0.8)', backdropFilter: 'blur(20px)' }}>
                         {/* Browser chrome */}
                         <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10">
                             <div className="flex gap-1.5">
@@ -290,7 +300,7 @@ export default function HomePage() {
                 </div>
             </section>
             {/* AMAZING COURSES */}
-            <section className="py-12" style={{ background: G }}>
+            <section className="py-12">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
                     <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative flex justify-center">
                         <div className="w-[360px] h-[360px] rounded-full overflow-hidden relative" style={{ background: 'radial-gradient(circle at 40% 40%, #1B5E40, #0D4A35)' }}>
@@ -313,7 +323,7 @@ export default function HomePage() {
             </section>
 
             {/* TESTIMONIALS */}
-            <section id="témoignages" className="py-16 relative" style={{ background: '#0E4534' }}>
+            <section id="témoignages" className="py-16 relative">
                 <div className="absolute top-20 right-[5%] w-[350px] h-[350px] rounded-full opacity-[0.04]" style={{ background: 'radial-gradient(circle, #D4E157, transparent 70%)' }} />
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
@@ -371,6 +381,7 @@ export default function HomePage() {
             </section>
 
             <Footer />
+            </div>
         </div>
     );
 }

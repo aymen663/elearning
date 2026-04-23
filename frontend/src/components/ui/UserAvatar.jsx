@@ -11,10 +11,11 @@ const SIZES = {
     xl: { box: 'w-20 h-20', text: 'text-3xl', radius: 'rounded-2xl' },
 };
 
-export default function UserAvatar({ user, size = 'md', className = '' }) {
+export default function UserAvatar({ user, size = 'md', className = '', variant = 'default' }) {
     const { box, text, radius } = SIZES[size] || SIZES.md;
-    const initial = user?.name?.[0]?.toUpperCase() || '?';
+    const initials = user?.name ? user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '?';
     const src = user?.avatar;
+    const bg = variant === 'green' ? '#16a34a' : '#1e293b';
 
     if (src) {
         return (
@@ -30,10 +31,10 @@ export default function UserAvatar({ user, size = 'md', className = '' }) {
                     }}
                 />
                 <div
-                    className={`w-full h-full bg-gradient-to-br from-violet-400 to-teal-600 flex items-center justify-center font-bold text-white ${text}`}
-                    style={{ display: 'none' }}
+                    className={`w-full h-full flex items-center justify-center font-bold text-white ${text}`}
+                    style={{ display: 'none', background: bg }}
                 >
-                    {initial}
+                    {initials}
                 </div>
             </div>
         );
@@ -42,9 +43,10 @@ export default function UserAvatar({ user, size = 'md', className = '' }) {
 
     return (
         <div
-            className={`${box} ${radius} bg-gradient-to-br from-violet-400 to-teal-600 flex items-center justify-center font-bold text-white flex-shrink-0 ${text} ${className}`}
+            className={`${box} ${radius} flex items-center justify-center font-bold text-white flex-shrink-0 ${text} ${className}`}
+            style={{ background: bg }}
         >
-            {initial}
+            {initials}
         </div>
     );
 }
