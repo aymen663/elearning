@@ -50,7 +50,7 @@ export default function SetPasswordPage() {
       await authAPI.setPassword({ token, password: form.password, confirmPassword: form.confirm });
       setDone(true);
       toast.success('Compte activé ! Vous pouvez maintenant vous connecter.');
-      setTimeout(() => router.push('/login'), 2500);
+      setTimeout(() => router.push('/'), 2500);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Erreur lors de la définition du mot de passe');
     } finally {

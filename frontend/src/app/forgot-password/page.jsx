@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
                         <div className="text-center py-4">
                             <CheckCircle className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
                             <p className="text-slate-300 mb-6">Votre mot de passe a été modifié avec succès.</p>
-                            <Link href="/login" className="btn-primary w-full justify-center">
+                            <Link href="/" className="btn-primary w-full justify-center">
                                 Se connecter
                             </Link>
                         </div>
@@ -148,8 +148,8 @@ export default function ForgotPasswordPage() {
 
                     {!done && (
                         <div className="mt-5 text-center">
-                            <Link href="/login" className="text-sm text-slate-500 hover:text-white transition-colors flex items-center justify-center gap-1">
-                                <ArrowLeft className="w-4 h-4" /> Retour à la connexion
+                            <Link href="/" className="text-sm text-slate-500 hover:text-white transition-colors flex items-center justify-center gap-1">
+                                <ArrowLeft className="w-4 h-4" /> Retour à l'accueil
                             </Link>
                         </div>
                     )}

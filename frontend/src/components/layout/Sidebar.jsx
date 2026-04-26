@@ -7,9 +7,9 @@ import UserAvatar from '@/components/ui/UserAvatar';
 import SearchModal from '@/components/ui/SearchModal';
 import {
     LayoutDashboard, Users, BookOpen, GraduationCap,
-    LogOut, Menu, Bell, User, Award, Sun, Moon, MessageSquare,
+    LogOut, Menu, Bell, User, Sun, Moon, MessageSquare,
     CheckCircle, BarChart2, MessagesSquare, Search,
-    Calendar, ChevronLeft, ChevronRight
+    Calendar, ChevronLeft, ChevronRight, Gamepad2
 } from 'lucide-react';
 import Link from 'next/link';
 import { progressAPI, messagesAPI } from '@/lib/api';
@@ -176,6 +176,8 @@ const adminNav = [
 const instructorNav = [
     { href: '/instructor', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/instructor/courses/new', icon: BookOpen, label: 'Nouveau cours' },
+    { href: '/instructor/students', icon: Users, label: 'Mes Étudiants' },
+    { href: '/instructor/requests', icon: CheckCircle, label: "Demandes d'accès" },
     { href: '/instructor/analytics', icon: BarChart2, label: 'Analytics' },
     { href: '/messages', icon: MessageSquare, label: 'Messages' },
     { href: '/forum', icon: MessagesSquare, label: 'Forum' },
@@ -187,7 +189,7 @@ const studentNav = [
     { href: '/forum', icon: MessagesSquare, label: 'Forum' },
     { href: '/messages', icon: MessageSquare, label: 'Messages' },
     { href: '/chat', icon: MessageSquare, label: 'Tuteur IA' },
-    { href: '/certificates', icon: Award, label: 'Mes certifications' },
+    { href: '/games', icon: Gamepad2, label: 'Jeux' },
     { href: '/profile', icon: User, label: 'Mon profil' },
 ];
 
@@ -300,7 +302,7 @@ export default function Sidebar({ children }) {
                 {user && (
                     <div className="sidebar-user-card rounded-lg px-2 py-1.5 flex items-center gap-2 mb-0.5">
                         <div className="relative flex-shrink-0">
-                            <UserAvatar user={user} size="sm" variant="green" />
+                            <UserAvatar user={user} size="sm" variant="green" showStatus isOnline />
                         </div>
                         <div className="min-w-0 flex-1">
                             <p className="text-xs font-semibold truncate" style={{ color: '#e2e8f0' }}>{user.name}</p>
@@ -369,7 +371,7 @@ export default function Sidebar({ children }) {
                 )}
                 <header className="h-12 border-b flex items-center gap-2.5 px-4 lg:px-5 flex-shrink-0"
                     style={{
-                        background: dark ? 'rgba(9,24,18,0.8)' : '#ffffff',
+                        background: dark ? 'var(--bg-header)' : '#ffffff',
                         backdropFilter: dark ? 'blur(16px)' : 'none',
                         WebkitBackdropFilter: dark ? 'blur(16px)' : 'none',
                         borderColor: dark ? 'var(--border-sidebar)' : '#e2e8f0'
@@ -384,11 +386,11 @@ export default function Sidebar({ children }) {
                     <button
                         onClick={() => setSearchOpen(true)}
                         className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs flex-1 max-w-sm text-left transition-all"
-                        style={{ background: dark ? 'rgba(255,255,255,0.06)' : '#eef2f6', border: dark ? '1px solid var(--border)' : '1px solid #dde3ea', color: 'var(--text-muted)' }}
+                        style={{ background: dark ? 'rgba(255,255,255,0.06)' : '#eef2f6', border: dark ? '1px solid var(--border)' : '1.5px solid var(--border-strong)', color: 'var(--text-muted)' }}
                     >
                         <Search className="w-3.5 h-3.5" />
                         <span className="flex-1">Rechercher des cours, leçons...</span>
-                        <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] border" style={{ borderColor: 'var(--border)' }}>⌘K</kbd>
+                        <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] border" style={{ borderColor: 'var(--border-strong)' }}>⌘K</kbd>
                     </button>
 
                     {/* Right-side icons */}
@@ -420,7 +422,7 @@ export default function Sidebar({ children }) {
                         {/* User avatar */}
                         {user && (
                             <div className="flex-shrink-0 ml-1">
-                                <UserAvatar user={user} size="sm" />
+                                <UserAvatar user={user} size="sm" showStatus isOnline />
                             </div>
                         )}
                     </div>

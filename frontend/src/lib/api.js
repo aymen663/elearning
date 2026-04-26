@@ -93,6 +93,17 @@ export const coursesAPI = {
     });
   },
   getMyCourses: () => api.get('/courses/instructor/my'),
+
+  // ── Secure join system ──
+  joinByCode:     (code)        => api.post('/courses/join-by-code', { code }),
+  regenerateCode: (courseId)    => api.post(`/courses/${courseId}/regenerate-code`),
+  inviteStudent:  (courseId, email) => api.post(`/courses/${courseId}/invite`, { email }),
+  getMyStudents:  ()             => api.get('/courses/instructor/my-students'),
+  requestAccess:  (courseId, message) => api.post(`/courses/${courseId}/request-access`, { message }),
+  getMyRequests:  ()             => api.get('/courses/my-requests'),
+  getAccessRequests: (status)    => api.get(`/courses/instructor/access-requests${status ? `?status=${status}` : ''}`),
+  approveRequest: (requestId)    => api.put(`/courses/access-requests/${requestId}/approve`),
+  rejectRequest:  (requestId)    => api.put(`/courses/access-requests/${requestId}/reject`),
 };
 
 export const chatAPI = {
@@ -117,7 +128,6 @@ export const studentAPI = {
   updateProfile: (data)          => api.put('/students/me', data),
   uploadAvatar:  (avatarDataUrl) => api.put('/students/me', { avatar: avatarDataUrl }),
   getStats:      ()              => api.get('/students/me/stats'),
-  getCertificates: ()            => api.get('/students/me/certificates'),
 };
 
 export const adminAPI = {

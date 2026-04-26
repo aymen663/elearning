@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import crypto from 'crypto';
 
 const lessonSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -22,9 +23,23 @@ const courseSchema = new mongoose.Schema(
     enrolledStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     isPublished: { type: Boolean, default: false },
 
+    // ── Secure enrollment code system ──
+    enrollmentCode: { type: String, unique: true, sparse: true },
+    requireCode: { type: Boolean, default: true },
+    invitedStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+
     vectorIds: [{ type: String }],
   },
   { timestamps: true }
 );
 
+// Auto-generate a unique 8-char enrollment code if not set
+courseSchema.pre('save', function (next) {
+  if (!this.enrollmentCode) {
+    this.enrollmentCode = crypto.randomBytes(4).toString('hex').toUpperCase();
+  }
+  next();
+});
+
 export default mongoose.model('Course', courseSchema);
+

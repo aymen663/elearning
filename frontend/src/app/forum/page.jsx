@@ -50,8 +50,8 @@ function TagPill({ tag, onClick, active }) {
         <button
             onClick={() => onClick?.(tag)}
             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all border ${active
-                    ? 'bg-teal-600 border-teal-500 text-white'
-                    : 'bg-teal-500/10 border-teal-500/20 text-teal-400 hover:bg-teal-500/20'
+                ? 'bg-teal-600 border-teal-500 text-white'
+                : 'bg-teal-500/10 border-teal-500/20 text-teal-400 hover:bg-teal-500/20'
                 }`}
         >
             <Tag className="w-2.5 h-2.5" />{tag}
@@ -389,8 +389,8 @@ export default function ForumPage() {
                                 key={value}
                                 onClick={() => setSort(value)}
                                 className={`relative px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all border ${sort === value
-                                        ? 'bg-teal-600 border-teal-600 text-white shadow-lg shadow-teal-600/25'
-                                        : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
+                                    ? 'bg-teal-600 border-teal-600 text-white shadow-lg shadow-teal-600/25'
+                                    : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
                                     }`}
                             >
                                 <Icon className="w-3.5 h-3.5" />
@@ -444,8 +444,8 @@ export default function ForumPage() {
                                     key={pg}
                                     onClick={() => loadPosts(pg)}
                                     className={`w-8 h-8 rounded-xl text-xs font-medium transition-all border ${pg === page
-                                            ? 'bg-teal-600 border-teal-600 text-white'
-                                            : 'border-white/10 text-slate-400 hover:border-white/20'
+                                        ? 'bg-teal-600 border-teal-600 text-white'
+                                        : 'border-white/10 text-slate-400 hover:border-white/20'
                                         }`}
                                 >
                                     {pg}

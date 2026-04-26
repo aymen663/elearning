@@ -1,7 +1,10 @@
 import express from 'express';
+import crypto from 'crypto';
 import Course from '../models/Course.js';
 import Progress from '../models/Progress.js';
 import User from '../models/User.js';
+import Message from '../models/Message.js';
+import AccessRequest from '../models/AccessRequest.js';
 import { protect, restrictTo } from '../middleware/auth.js';
 import { ingestCourseContent } from '../services/rag/tutorService.js';
 import { uploadPDF } from '../middleware/upload.js';
@@ -216,6 +219,109 @@ router.get('/instructor/my', protect, restrictTo('instructor', 'admin'), async (
 });
 
 
+/**
+ * GET /courses/instructor/my-students
+ * Returns all unique students enrolled in any of the instructor's courses.
+ * Each student includes: their info, which courses they're in, and progress.
+ * Strict access control: only returns students from the requesting instructor's courses.
+ */
+router.get('/instructor/my-students', protect, restrictTo('instructor', 'admin'), async (req, res) => {
+  try {
+    // 1. Get all courses belonging to this instructor
+    const instructorCourses = await Course.find({ instructor: req.user._id })
+      .populate('enrolledStudents', 'name email avatar createdAt')
+      .select('title enrolledStudents lessons isPublished category')
+      .lean();
+
+    // 2. Build a map of unique students with their course enrollments
+    const studentMap = new Map();
+
+    for (const course of instructorCourses) {
+      for (const student of (course.enrolledStudents || [])) {
+        const sid = student._id.toString();
+        if (!studentMap.has(sid)) {
+          studentMap.set(sid, {
+            ...student,
+            courses: [],
+            totalProgress: 0,
+            courseCount: 0,
+          });
+        }
+        studentMap.get(sid).courses.push({
+          courseId: course._id,
+          title: course.title,
+          category: course.category,
+          isPublished: course.isPublished,
+          totalLessons: course.lessons?.length || 0,
+        });
+        studentMap.get(sid).courseCount++;
+      }
+    }
+
+    // 3. Fetch progress for all these students across instructor's courses
+    const courseIds = instructorCourses.map(c => c._id);
+    const studentIds = [...studentMap.keys()];
+
+    if (studentIds.length > 0) {
+      const allProgress = await Progress.find({
+        course: { $in: courseIds },
+        student: { $in: studentIds },
+      }).lean();
+
+      // Attach progress to each student's course entry
+      for (const prog of allProgress) {
+        const sid = prog.student.toString();
+        const entry = studentMap.get(sid);
+        if (!entry) continue;
+
+        const courseEntry = entry.courses.find(
+          c => c.courseId.toString() === prog.course.toString()
+        );
+        if (courseEntry) {
+          courseEntry.completedLessons = prog.completedLessons?.length || 0;
+          courseEntry.completionPct = courseEntry.totalLessons > 0
+            ? Math.round((courseEntry.completedLessons / courseEntry.totalLessons) * 100)
+            : 0;
+          courseEntry.lastAccessed = prog.lastAccessed;
+        }
+      }
+
+      // Calculate average progress per student
+      for (const [, student] of studentMap) {
+        const withProgress = student.courses.filter(c => c.completionPct != null);
+        student.avgProgress = withProgress.length > 0
+          ? Math.round(withProgress.reduce((s, c) => s + c.completionPct, 0) / withProgress.length)
+          : 0;
+      }
+    }
+
+    const students = [...studentMap.values()].sort((a, b) => b.courseCount - a.courseCount);
+
+    res.json({
+      students,
+      total: students.length,
+      courseCount: instructorCourses.length,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
+
+/** GET /courses/my-requests — Student checks their own request statuses */
+router.get('/my-requests', protect, async (req, res) => {
+  try {
+    const requests = await AccessRequest.find({ student: req.user._id })
+      .populate('course', 'title category thumbnail')
+      .populate('instructor', 'name')
+      .sort({ createdAt: -1 })
+      .lean();
+    res.json({ requests });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
 
 router.get('/:id', protect, async (req, res) => {
   try {
@@ -265,6 +371,14 @@ router.post('/:id/enroll', protect, async (req, res) => {
     if (!course) return res.status(404).json({ message: 'Cours non trouvé' });
     if (!course.isPublished) return res.status(400).json({ message: 'Cours non disponible' });
 
+    // If course requires a code, block direct enrollment
+    if (course.requireCode) {
+      return res.status(403).json({
+        message: 'Ce cours nécessite un code d\'inscription. Utilisez "Rejoindre avec un code".',
+        requireCode: true,
+      });
+    }
+
     if (course.enrolledStudents.includes(req.user._id)) {
       return res.status(400).json({ message: 'Déjà inscrit' });
     }
@@ -309,6 +423,334 @@ router.delete('/:id/unenroll', protect, async (req, res) => {
 });
 
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECURE JOIN SYSTEM — Code-based enrollment with relationship verification
+═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * POST /courses/join-by-code
+ * Student submits { code }. The server:
+ *   1. Finds the course matching the enrollmentCode
+ *   2. Verifies the student has a prior relationship with the instructor
+ *      (enrolled in another of their courses OR has an active message thread)
+ *   3. Enrolls the student if verified
+ */
+router.post('/join-by-code', protect, async (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code?.trim()) {
+      return res.status(400).json({ message: 'Le code d\'inscription est requis' });
+    }
+
+    const course = await Course.findOne({ enrollmentCode: code.trim().toUpperCase() })
+      .populate('instructor', 'name email');
+    if (!course) {
+      return res.status(404).json({ message: 'Code invalide — aucun cours trouvé' });
+    }
+    if (!course.isPublished) {
+      return res.status(400).json({ message: 'Ce cours n\'est pas encore disponible' });
+    }
+
+    // Already enrolled?
+    const studentId = req.user._id.toString();
+    if (course.enrolledStudents.some(s => s.toString() === studentId)) {
+      return res.status(400).json({ message: 'Déjà inscrit', courseId: course._id });
+    }
+
+    const instructorId = course.instructor._id.toString();
+
+    // ── Relationship verification ──
+    // Check 1: Student is enrolled in another course by the same instructor
+    const hasOtherCourse = await Course.exists({
+      instructor: instructorId,
+      _id: { $ne: course._id },
+      enrolledStudents: req.user._id,
+    });
+
+    // Check 2: Student has exchanged messages with the instructor
+    let hasMessageThread = false;
+    if (!hasOtherCourse) {
+      hasMessageThread = await Message.exists({
+        $or: [
+          { sender: req.user._id, receiver: instructorId },
+          { sender: instructorId, receiver: req.user._id },
+        ],
+      });
+    }
+
+    // Check 3: Student was directly invited (stored in course.invitedStudents)
+    const wasInvited = course.invitedStudents?.some(s => s.toString() === studentId);
+
+    if (!hasOtherCourse && !hasMessageThread && !wasInvited) {
+      return res.status(403).json({
+        message: 'Accès refusé — Vous devez être lié à cet instructeur pour rejoindre ce cours. Contactez-le d\'abord par message ou faites-vous inviter.',
+        instructorName: course.instructor.name,
+      });
+    }
+
+    // ── Enroll the student ──
+    course.enrolledStudents.push(req.user._id);
+    // Remove from invitedStudents if present
+    if (course.invitedStudents) {
+      course.invitedStudents = course.invitedStudents.filter(s => s.toString() !== studentId);
+    }
+    await course.save();
+
+    await Progress.create({ student: req.user._id, course: course._id });
+    await User.findByIdAndUpdate(req.user._id, {
+      $addToSet: { enrolledCourses: course._id },
+    });
+
+    res.json({
+      message: 'Inscription réussie via code',
+      courseId: course._id,
+      courseTitle: course.title,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
+
+/**
+ * POST /courses/:id/regenerate-code
+ * Instructor regenerates the enrollment code for their course
+ */
+router.post('/:id/regenerate-code', protect, restrictTo('instructor', 'admin'), async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).json({ message: 'Cours non trouvé' });
+
+    if (
+      req.user.role !== 'admin' &&
+      course.instructor.toString() !== req.user._id.toString()
+    ) {
+      return res.status(403).json({ message: 'Non autorisé' });
+    }
+
+    course.enrollmentCode = crypto.randomBytes(4).toString('hex').toUpperCase();
+    await course.save();
+
+    res.json({ enrollmentCode: course.enrollmentCode });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
+
+/**
+ * POST /courses/:id/invite
+ * Instructor invites a student by email — adds them to invitedStudents
+ */
+router.post('/:id/invite', protect, restrictTo('instructor', 'admin'), async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email?.trim()) return res.status(400).json({ message: 'Email requis' });
+
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).json({ message: 'Cours non trouvé' });
+
+    if (
+      req.user.role !== 'admin' &&
+      course.instructor.toString() !== req.user._id.toString()
+    ) {
+      return res.status(403).json({ message: 'Non autorisé' });
+    }
+
+    const student = await User.findOne({ email: email.trim().toLowerCase(), role: 'student' });
+    if (!student) return res.status(404).json({ message: 'Aucun étudiant trouvé avec cet email' });
+
+    if (course.enrolledStudents.some(s => s.toString() === student._id.toString())) {
+      return res.status(400).json({ message: 'Cet étudiant est déjà inscrit' });
+    }
+
+    if (course.invitedStudents?.some(s => s.toString() === student._id.toString())) {
+      return res.status(400).json({ message: 'Cet étudiant est déjà invité' });
+    }
+
+    if (!course.invitedStudents) course.invitedStudents = [];
+    course.invitedStudents.push(student._id);
+    await course.save();
+
+    res.json({
+      message: `Invitation envoyée à ${student.name}`,
+      studentName: student.name,
+      studentEmail: student.email,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCESS REQUEST SYSTEM — Students can request access, instructors approve/reject
+═══════════════════════════════════════════════════════════════════════════ */
+
+/** POST /courses/:id/request-access — Student requests access to a course */
+router.post('/:id/request-access', protect, async (req, res) => {
+  try {
+    const { message } = req.body;
+    const course = await Course.findById(req.params.id).populate('instructor', 'name');
+    if (!course) return res.status(404).json({ message: 'Cours non trouvé' });
+    if (!course.isPublished) return res.status(400).json({ message: 'Cours non disponible' });
+
+    // Already enrolled?
+    if (course.enrolledStudents.some(s => s.toString() === req.user._id.toString())) {
+      return res.status(400).json({ message: 'Vous êtes déjà inscrit à ce cours' });
+    }
+
+    // Check for existing request
+    const existing = await AccessRequest.findOne({ student: req.user._id, course: course._id });
+    if (existing) {
+      if (existing.status === 'pending') {
+        return res.status(400).json({ message: 'Vous avez déjà une demande en attente pour ce cours' });
+      }
+      if (existing.status === 'rejected') {
+        // Allow re-request after rejection
+        existing.status = 'pending';
+        existing.message = message || '';
+        existing.reviewedAt = null;
+        await existing.save();
+        return res.json({ message: 'Demande renvoyée avec succès', request: existing });
+      }
+    }
+
+    const request = await AccessRequest.create({
+      student: req.user._id,
+      course: course._id,
+      instructor: course.instructor._id,
+      message: message || '',
+    });
+
+    // Send notification message to instructor
+    await Message.create({
+      sender: req.user._id,
+      receiver: course.instructor._id,
+      content: `📩 Demande d'accès au cours "${course.title}"\n\n${message ? `Message: ${message}` : 'Aucun message joint.'}\n\nRendez-vous dans "Demandes d'accès" pour approuver ou refuser.`,
+    });
+
+    res.status(201).json({ message: 'Demande envoyée avec succès', request });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Demande déjà envoyée' });
+    }
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
+
+
+
+/** GET /courses/instructor/access-requests — Instructor sees pending requests */
+router.get('/instructor/access-requests', protect, restrictTo('instructor', 'admin'), async (req, res) => {
+  try {
+    const courseIds = await Course.find({ instructor: req.user._id }).distinct('_id');
+
+    const requests = await AccessRequest.find({
+      course: { $in: courseIds },
+      ...(req.query.status ? { status: req.query.status } : {}),
+    })
+      .populate('student', 'name email avatar createdAt')
+      .populate('course', 'title category')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    const counts = {
+      pending: requests.filter(r => r.status === 'pending').length,
+      approved: requests.filter(r => r.status === 'approved').length,
+      rejected: requests.filter(r => r.status === 'rejected').length,
+    };
+
+    res.json({ requests, counts });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
+
+/** PUT /courses/access-requests/:requestId/approve — Instructor approves */
+router.put('/access-requests/:requestId/approve', protect, restrictTo('instructor', 'admin'), async (req, res) => {
+  try {
+    const request = await AccessRequest.findById(req.params.requestId)
+      .populate('student', 'name email')
+      .populate('course', 'title');
+    if (!request) return res.status(404).json({ message: 'Demande non trouvée' });
+
+    // Verify ownership
+    if (req.user.role !== 'admin' && request.instructor.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Non autorisé' });
+    }
+
+    if (request.status !== 'pending') {
+      return res.status(400).json({ message: `Demande déjà ${request.status === 'approved' ? 'approuvée' : 'refusée'}` });
+    }
+
+    // Approve
+    request.status = 'approved';
+    request.reviewedAt = new Date();
+    await request.save();
+
+    // Auto-enroll the student
+    const course = await Course.findById(request.course._id);
+    if (course && !course.enrolledStudents.some(s => s.toString() === request.student._id.toString())) {
+      course.enrolledStudents.push(request.student._id);
+      if (!course.invitedStudents) course.invitedStudents = [];
+      course.invitedStudents.push(request.student._id); // So join-by-code also works
+      await course.save();
+      await Progress.create({ student: request.student._id, course: course._id });
+      await User.findByIdAndUpdate(request.student._id, {
+        $addToSet: { enrolledCourses: course._id },
+      });
+    }
+
+    // Notify student
+    await Message.create({
+      sender: req.user._id,
+      receiver: request.student._id,
+      content: `✅ Votre demande d'accès au cours "${request.course.title}" a été approuvée ! Vous pouvez maintenant y accéder.`,
+    });
+
+    res.json({ message: `Accès approuvé pour ${request.student.name}`, request });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
+
+
+/** PUT /courses/access-requests/:requestId/reject — Instructor rejects */
+router.put('/access-requests/:requestId/reject', protect, restrictTo('instructor', 'admin'), async (req, res) => {
+  try {
+    const request = await AccessRequest.findById(req.params.requestId)
+      .populate('student', 'name email')
+      .populate('course', 'title');
+    if (!request) return res.status(404).json({ message: 'Demande non trouvée' });
+
+    if (req.user.role !== 'admin' && request.instructor.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Non autorisé' });
+    }
+
+    if (request.status !== 'pending') {
+      return res.status(400).json({ message: `Demande déjà ${request.status === 'approved' ? 'approuvée' : 'refusée'}` });
+    }
+
+    request.status = 'rejected';
+    request.reviewedAt = new Date();
+    await request.save();
+
+    // Notify student
+    await Message.create({
+      sender: req.user._id,
+      receiver: request.student._id,
+      content: `❌ Votre demande d'accès au cours "${request.course.title}" a été refusée. Vous pouvez contacter l'instructeur pour plus d'informations.`,
+    });
+
+    res.json({ message: `Demande refusée pour ${request.student.name}`, request });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+});
 
 
 router.post('/', protect, restrictTo('instructor', 'admin'), async (req, res) => {
@@ -541,15 +983,15 @@ router.get('/:id/lessons/:lessonId/pdf', async (req, res) => {
   try {
     const token = req.query.token
       || (req.headers.authorization?.startsWith('Bearer ')
-          ? req.headers.authorization.split(' ')[1]
-          : null);
+        ? req.headers.authorization.split(' ')[1]
+        : null);
 
     if (!token) return res.status(401).json({ message: 'Non autorisé – Token manquant' });
 
     const { default: jwt } = await import('jsonwebtoken');
     const jwksClient = (await import('jwks-rsa')).default;
 
-    const KC_URL   = process.env.KEYCLOAK_URL   || 'http://localhost:8080';
+    const KC_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080';
     const KC_REALM = process.env.KEYCLOAK_REALM || 'elearning';
 
     const client = jwksClient({

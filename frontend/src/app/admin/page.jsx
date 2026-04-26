@@ -295,7 +295,7 @@ export default function AdminDashboard() {
                         {/* ── Welcome Banner ── */}
                         <div
                             style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                display: 'flex', alignItems: 'center',
                                 padding: '16px 20px', borderRadius: T.card.radius,
                                 background: '#f0fdf4',
                                 border: '1px solid #a7f3d0',
@@ -310,21 +310,6 @@ export default function AdminDashboard() {
                                     <p style={{ fontSize: 12, color: '#059669', marginTop: 1 }}>Gérez votre plateforme éducative en toute simplicité</p>
                                 </div>
                             </div>
-                            <a href="/courses"
-                                style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: 6,
-                                    padding: '8px 16px', borderRadius: 8,
-                                    fontSize: 12, fontWeight: 600, color: 'white',
-                                    background: '#059669',
-                                    boxShadow: '0 1px 3px rgba(5,150,105,0.3)',
-                                    textDecoration: 'none',
-                                    transition: 'all 0.15s',
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.background = '#047857'; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = '#059669'; }}
-                            >
-                                Commencer <ArrowRight style={{ width: 14, height: 14 }} />
-                            </a>
                         </div>
                     </>
                 )}

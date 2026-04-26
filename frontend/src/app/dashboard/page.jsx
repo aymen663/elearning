@@ -14,17 +14,17 @@ import toast from 'react-hot-toast';
 /* ── Design tokens — same as admin ─────────────────────────────────────── */
 const T = {
     card: {
-        bg:          'var(--bg-card)',
-        border:      '1.5px solid var(--border-strong)',
-        radius:      '14px',
-        shadow:      '0 2px 10px rgba(0,0,0,0.12), 0 4px 24px rgba(0,0,0,0.10)',
+        bg: 'var(--bg-card)',
+        border: '1.5px solid var(--border-strong)',
+        radius: '14px',
+        shadow: '0 2px 10px rgba(0,0,0,0.12), 0 4px 24px rgba(0,0,0,0.10)',
         shadowHover: '0 8px 32px rgba(0,0,0,0.16), 0 2px 10px rgba(0,0,0,0.10)',
     },
     text: {
-        primary:   'var(--text-primary)',
+        primary: 'var(--text-primary)',
         secondary: 'var(--text-secondary)',
-        muted:     'var(--text-muted)',
-        accent:    'var(--accent)',
+        muted: 'var(--text-muted)',
+        accent: 'var(--accent)',
     },
 };
 
@@ -168,10 +168,10 @@ function PillButton({ children }) {
 
 /* ── Page ───────────────────────────────────────────────────────────────── */
 export default function DashboardPage() {
-    const { user }                    = useAuthStore();
-    const [progress, setProgress]     = useState([]);
-    const [stats, setStats]           = useState(null);
-    const [loading, setLoading]       = useState(true);
+    const { user } = useAuthStore();
+    const [progress, setProgress] = useState([]);
+    const [stats, setStats] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!user) return;
@@ -186,7 +186,7 @@ export default function DashboardPage() {
     }, [user]);
 
     const inProgress = progress.filter(p => p.completionPercentage > 0 && p.completionPercentage < 100);
-    const completed  = progress.filter(p => p.completionPercentage === 100);
+    const completed = progress.filter(p => p.completionPercentage === 100);
 
     /* Build chart data from progress percentages */
     const chartData = progress.length
@@ -325,7 +325,7 @@ export default function DashboardPage() {
 
                         {/* ── Welcome Banner ── */}
                         <div style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            display: 'flex', alignItems: 'center',
                             padding: '16px 20px', borderRadius: T.card.radius,
                             background: '#f0fdf4', border: '1px solid #a7f3d0',
                         }}>
@@ -345,17 +345,6 @@ export default function DashboardPage() {
                                     </p>
                                 </div>
                             </div>
-                            <Link href="/courses" style={{
-                                display: 'inline-flex', alignItems: 'center', gap: 6,
-                                padding: '8px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                                color: 'white', background: '#059669',
-                                boxShadow: '0 1px 3px rgba(5,150,105,0.3)', textDecoration: 'none',
-                            }}
-                                onMouseEnter={e => e.currentTarget.style.background = '#047857'}
-                                onMouseLeave={e => e.currentTarget.style.background = '#059669'}
-                            >
-                                {progress.length > 0 ? 'Continuer' : 'Explorer'} <ArrowRight style={{ width: 14, height: 14 }} />
-                            </Link>
                         </div>
                     </>
                 )}

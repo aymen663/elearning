@@ -68,11 +68,11 @@ export const useAuthStore = create((set, get) => ({
     set({ user: null, token: null });
     if (kc?.authenticated) {
       kc.logout({
-        redirectUri: window.location.origin + '/login',
+        redirectUri: window.location.origin + '/',
         ...(idToken ? { id_token_hint: idToken } : {}),
       });
     } else {
-      window.location.href = '/login';
+      window.location.href = '/';
     }
   },
 
