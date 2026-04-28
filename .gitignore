@@ -41,3 +41,6 @@ infra/keycloak/data/
 *.tmp
 *.bak
 keycloak_logs_*.txt
+
+.vercel
+.env*.local

@@ -471,7 +471,7 @@ export default function ThreadPage() {
 
                                 {showEmojiPicker && (
                                     <div className="absolute bottom-12 left-0 z-50 shadow-2xl rounded-2xl overflow-hidden">
-                                        <EmojiPicker 
+                                        <EmojiPicker
                                             onEmojiClick={(emojiObject) => {
                                                 setContent(prev => prev + emojiObject.emoji);
                                             }}

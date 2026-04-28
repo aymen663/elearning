@@ -4,6 +4,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Anti-flicker: default to dark bg before JS applies theme class ── */
+html:not(.dark):not(.light) {
+  background-color: #0B0F19;
+  color: #E5E7EB;
+}
+
+/* Disable all transitions on initial page load to prevent theme flash */
+html:not(.dark):not(.light) *,
+html:not(.dark):not(.light) *::before,
+html:not(.dark):not(.light) *::after {
+  transition: none !important;
+}
+
 @keyframes shimmer {
   0% {
     background-position: 200% 0;
@@ -46,7 +59,7 @@
   --bg-header: rgba(11, 15, 25, 0.90);
   --bg-card: rgba(255, 255, 255, 0.03);
   --bg-card-hover: rgba(255, 255, 255, 0.06);
-  --bg-hover: rgba(34, 197, 94, 0.08);
+  --bg-hover: rgba(148, 163, 184, 0.12);
   --bg-input: rgba(255, 255, 255, 0.04);
   --input-bg: rgba(255, 255, 255, 0.04);
 
@@ -88,11 +101,11 @@
   --icon-lessons: #fb923c;
   --icon-lessons-bg: rgba(251, 146, 60, 0.15);
 
-  /* Typography — high contrast */
-  --text-primary: #f0fdf4;
-  --text-secondary: #86efac;
-  --text-muted: rgba(134, 239, 172, 0.4);
-  --text-logo: #f0fdf4;
+  /* Typography hierarchy */
+  --text-primary: #E5E7EB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --text-logo: #E5E7EB;
 
   /* Status */
   --success: #22c55e;
@@ -612,7 +625,7 @@ html.light {
 
   .topbar-icon-btn:hover {
     background: var(--bg-hover);
-    color: var(--text-primary);
+    color: #ffffff;
   }
 
   html.light .topbar-icon-btn {
@@ -1907,25 +1920,25 @@ html.light .text-white {
   color: #1e1b4b !important;
 }
 
-/* Slate grays → readable dark tones */
-html.light .text-slate-100,
-html.light .text-slate-200 {
+/* Slate grays → readable dark tones (excluding sidebar) */
+html.light :not(aside *).text-slate-100,
+html.light :not(aside *).text-slate-200 {
   color: #1e293b !important;
 }
 
-html.light .text-slate-300 {
+html.light :not(aside *).text-slate-300 {
   color: #334155 !important;
 }
 
-html.light .text-slate-400 {
+html.light :not(aside *).text-slate-400 {
   color: #475569 !important;
 }
 
-html.light .text-slate-500 {
+html.light :not(aside *).text-slate-500 {
   color: #64748b !important;
 }
 
-html.light .text-slate-600 {
+html.light :not(aside *).text-slate-600 {
   color: #475569 !important;
 }
 
@@ -1945,9 +1958,9 @@ html.light .text-purple-400 {
   color: #7c3aed !important;
 }
 
-/* Emerald/green */
-html.light .text-emerald-300,
-html.light .text-emerald-400 {
+/* Emerald/green (excluding sidebar) */
+html.light :not(aside *).text-emerald-300,
+html.light :not(aside *).text-emerald-400 {
   color: #059669 !important;
 }
 

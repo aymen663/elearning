@@ -9,7 +9,8 @@ import {
     LayoutDashboard, Users, BookOpen, GraduationCap,
     LogOut, Menu, Bell, User, Sun, Moon, MessageSquare,
     CheckCircle, BarChart2, MessagesSquare, Search,
-    Calendar, ChevronLeft, ChevronRight, Gamepad2
+    Calendar, ChevronLeft, ChevronRight, Gamepad2,
+    Home, Book, ClipboardList, Megaphone, Bot, Sparkles, Folder, Settings
 } from 'lucide-react';
 import Link from 'next/link';
 import { progressAPI, messagesAPI } from '@/lib/api';
@@ -77,7 +78,7 @@ function NotificationBell() {
                     </div>
                     <div className="px-4 py-2.5">
                         <Link href="/dashboard" onClick={() => setOpen(false)}
-                            className="text-xs text-teal-400 hover:text-teal-300 transition-colors">
+                            className="text-xs text-slate-300 hover:text-white transition-colors">
                             Voir toute l'activité →
                         </Link>
                     </div>
@@ -167,30 +168,75 @@ function CalendarDropdown() {
 
 
 const adminNav = [
-    { href: '/admin', icon: LayoutDashboard, label: 'Tableau de bord' },
-    { href: '/admin/courses', icon: BookOpen, label: 'Cours' },
-    { href: '/admin/teachers', icon: GraduationCap, label: 'Professeurs' },
-    { href: '/admin/students', icon: Users, label: 'Étudiants' },
+    {
+        title: 'GÉNÉRAL',
+        items: [
+            { href: '/admin', icon: LayoutDashboard, label: 'Tableau de bord' },
+            { href: '/admin/courses', icon: BookOpen, label: 'Cours' },
+        ]
+    },
+    {
+        title: 'GESTION',
+        items: [
+            { href: '/admin/teachers', icon: GraduationCap, label: 'Professeurs' },
+            { href: '/admin/students', icon: Users, label: 'Étudiants' },
+        ]
+    }
 ];
 
 const instructorNav = [
-    { href: '/instructor', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/instructor/courses/new', icon: BookOpen, label: 'Nouveau cours' },
-    { href: '/instructor/students', icon: Users, label: 'Mes Étudiants' },
-    { href: '/instructor/requests', icon: CheckCircle, label: "Demandes d'accès" },
-    { href: '/instructor/analytics', icon: BarChart2, label: 'Analytics' },
-    { href: '/messages', icon: MessageSquare, label: 'Messages' },
-    { href: '/forum', icon: MessagesSquare, label: 'Forum' },
+    {
+        title: 'GÉNÉRAL',
+        items: [
+            { href: '/instructor', icon: LayoutDashboard, label: 'Tableau de bord' },
+            { href: '/instructor/courses/new', icon: BookOpen, label: 'Nouveau cours' },
+            { href: '/instructor/students', icon: Users, label: 'Mes Étudiants' },
+        ]
+    },
+    {
+        title: 'GESTION',
+        items: [
+            { href: '/instructor/requests', icon: CheckCircle, label: "Demandes d'accès" },
+            { href: '/instructor/analytics', icon: BarChart2, label: 'Analytics' },
+        ]
+    },
+    {
+        title: 'COMMUNICATION',
+        items: [
+            { href: '/messages', icon: MessageSquare, label: 'Messages' },
+            { href: '/forum', icon: MessagesSquare, label: 'Forum' },
+        ]
+    }
 ];
 
 const studentNav = [
-    { href: '/dashboard', icon: LayoutDashboard, label: 'Mon espace' },
-    { href: '/courses', icon: BookOpen, label: 'Liste de cours' },
-    { href: '/forum', icon: MessagesSquare, label: 'Forum' },
-    { href: '/messages', icon: MessageSquare, label: 'Messages' },
-    { href: '/chat', icon: MessageSquare, label: 'Tuteur IA' },
-    { href: '/games', icon: Gamepad2, label: 'Jeux' },
-    { href: '/profile', icon: User, label: 'Mon profil' },
+    {
+        title: 'GÉNÉRAL',
+        items: [
+            { href: '/dashboard', icon: Home, label: 'Mon espace' },
+            { href: '/courses', icon: Book, label: 'Liste de cours' },
+        ]
+    },
+    {
+        title: 'COMMUNICATION',
+        items: [
+            { href: '/messages', icon: MessageSquare, label: 'Messages' },
+            { href: '/forum', icon: User, label: 'Forum' },
+        ]
+    },
+    {
+        title: 'IA & OUTILS',
+        items: [
+            { href: '/chat', icon: Bot, label: 'Tuteur IA' },
+        ]
+    },
+    {
+        title: 'AUTRE',
+        items: [
+            { href: '/games', icon: Gamepad2, label: 'Jeux' },
+            { href: '/profile', icon: Settings, label: 'Paramètres' },
+        ]
+    }
 ];
 
 export default function Sidebar({ children }) {
@@ -198,9 +244,14 @@ export default function Sidebar({ children }) {
     const { user, logout } = useAuthStore();
     const { initialized } = useKeycloak();
     const [open, setOpen] = useState(false);
-    const [dark, setDark] = useState(false);
+    const [dark, setDark] = useState(() => {
+        if (typeof window === 'undefined') return true;
+        return !document.documentElement.classList.contains('light');
+    });
     const [unreadMsgs, setUnreadMsgs] = useState(0);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [sidebarPinnedExpanded, setSidebarPinnedExpanded] = useState(false);
+    const [sidebarHoverExpanded, setSidebarHoverExpanded] = useState(false);
 
 
 
@@ -228,7 +279,9 @@ export default function Sidebar({ children }) {
 
 
     useEffect(() => {
-        // Force dark mode as new default — reset old 'light' saved preference
+        // The blocking script in layout.js already set the correct class on <html>.
+        // We just sync React state with what's already applied.
+        const html = document.documentElement;
         const v = localStorage.getItem('theme_v');
         if (v !== '3') {
             localStorage.setItem('theme', 'dark');
@@ -237,13 +290,18 @@ export default function Sidebar({ children }) {
         const saved = localStorage.getItem('theme');
         const isDark = saved !== 'light';
         setDark(isDark);
-        document.documentElement.classList.toggle('light', !isDark);
+        // Ensure classes are correct (in case of client-side navigation)
+        if (!html.classList.contains(isDark ? 'dark' : 'light')) {
+            html.classList.add(isDark ? 'dark' : 'light');
+            html.classList.remove(isDark ? 'light' : 'dark');
+        }
     }, []);
 
     const toggleTheme = () => {
         const next = !dark;
         setDark(next);
         document.documentElement.classList.toggle('light', !next);
+        document.documentElement.classList.toggle('dark', next);
         localStorage.setItem('theme', next ? 'dark' : 'light');
     };
 
@@ -251,113 +309,121 @@ export default function Sidebar({ children }) {
         user?.role === 'admin' ? adminNav :
             user?.role === 'instructor' ? instructorNav :
                 studentNav;
+    const isChatPage = pathname?.startsWith('/chat');
+    const isDesktopCompact = isChatPage && !sidebarPinnedExpanded && !sidebarHoverExpanded;
 
-    const SidebarContent = () => (
-        <div className="flex flex-col h-full">
+    useEffect(() => {
+        if (!isChatPage) {
+            setSidebarPinnedExpanded(true);
+            setSidebarHoverExpanded(false);
+        } else {
+            setSidebarPinnedExpanded(false);
+            setSidebarHoverExpanded(false);
+        }
+    }, [isChatPage]);
+
+    const SidebarContent = ({ compact = false }) => (
+        <div
+            className="flex flex-col h-full text-slate-300"
+            style={{
+                background: 'var(--bg-sidebar-gradient, linear-gradient(180deg, #0A0E18 0%, #0D1220 100%))',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+            }}
+        >
             {/* ── Logo ─── */}
-            <div className="px-5 py-5 border-b flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-                <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 4px 12px rgba(34,197,94,0.3)' }}>
-                        <GraduationCap className="w-5 h-5 text-white" />
+            <div className={`py-6 flex items-center justify-between ${compact ? 'px-3' : 'px-6'}`}>
+                <div className={`flex items-center ${compact ? 'justify-center w-full' : 'gap-3'}`}>
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center border bg-slate-800/70 text-slate-100 border-slate-700/70 shadow-[0_6px_16px_rgba(0,0,0,0.25)]">
+                        <GraduationCap className="w-5 h-5" />
                     </div>
-                    <div>
-                        <p className="font-bold text-sm tracking-tight" style={{ color: '#ffffff' }}>EduAI</p>
-                    </div>
+                    {!compact && <p className="font-bold text-lg tracking-tight text-[#E5E7EB]">EduAI</p>}
                 </div>
-                <button className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                    <Menu className="w-4 h-4" />
+                <button className="lg:hidden text-slate-400 hover:text-white" onClick={() => setOpen(false)}>
+                    <ChevronLeft className="w-5 h-5" />
                 </button>
             </div>
 
             {/* ── Navigation ── */}
-            <nav className="flex-1 px-3 py-4 overflow-y-auto">
-                <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>Général</p>
-                <div className="space-y-0.5">
-                    {nav.map(({ href, icon: Icon, label }) => {
-                        const active = pathname === href || (href !== '/admin' && href !== '/dashboard' && href !== '/instructor' && pathname.startsWith(href));
-                        const isMessages = href === '/messages';
-                        return (
-                            <Link key={href} href={href} onClick={() => setOpen(false)}
-                                className={`sidebar-link ${active ? 'active' : ''}`}>
-                                <span className="sidebar-link-icon">
-                                    <Icon className="w-4 h-4 flex-shrink-0" />
-                                </span>
-                                <span>{label}</span>
-                                {isMessages && unreadMsgs > 0 && (
-                                    <span className="ml-auto w-5 h-5 bg-teal-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
-                                        {unreadMsgs > 9 ? '9+' : unreadMsgs}
-                                    </span>
-                                )}
-                            </Link>
-                        );
-                    })}
-                </div>
+            <nav className={`flex-1 py-2 overflow-y-auto ${compact ? 'px-2' : 'px-4'}`}>
+                {nav.map((group, idx) => (
+                    <div key={idx} className="mb-6">
+                        {!compact && <p className="px-3 mb-2 text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-[0.14em]">{group.title}</p>}
+                        <div className="space-y-1">
+                            {group.items.map(({ href, icon: Icon, label }) => {
+                                const active = pathname === href || (href !== '/admin' && href !== '/dashboard' && href !== '/instructor' && pathname.startsWith(href));
+                                const isMessages = href === '/messages';
+                                return (
+                                    <Link key={href} href={href} onClick={() => setOpen(false)} title={compact ? label : undefined}
+                                        className={`flex items-center ${compact ? 'justify-center' : 'gap-3'} px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-300 group relative overflow-hidden ${active
+                                            ? 'bg-emerald-500/12 text-[#E5E7EB] border border-emerald-400/25 shadow-[0_0_0_1px_rgba(16,185,129,0.18),0_8px_22px_rgba(16,185,129,0.16)]'
+                                            : 'text-slate-400 hover:bg-slate-700/35 hover:text-slate-200 hover:translate-x-0.5'
+                                            }`}
+                                    >
+                                        {active && (
+                                            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.8)]"></div>
+                                        )}
+                                        <Icon className={`w-[18px] h-[18px] flex-shrink-0 transition-colors duration-300 ${active ? 'text-emerald-300' : 'text-slate-400 group-hover:text-slate-200'}`} />
+                                        {!compact && <span>{label}</span>}
+                                        {!compact && isMessages && unreadMsgs > 0 && (
+                                            <span className="ml-auto w-5 h-5 bg-slate-700/90 text-white rounded-full text-[10px] font-bold flex items-center justify-center border border-slate-600/70">
+                                                {unreadMsgs > 9 ? '9+' : unreadMsgs}
+                                            </span>
+                                        )}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
             </nav>
 
             {/* ── Bottom section ── */}
-            <div className="border-t px-3 py-2 space-y-0.5" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-                <p className="px-2 mb-1 mt-1 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>Compte</p>
-
+            <div className={`mt-auto space-y-2 ${compact ? 'p-2' : 'p-4'}`}>
                 {/* User card */}
                 {user && (
-                    <div className="sidebar-user-card rounded-lg px-2 py-1.5 flex items-center gap-2 mb-0.5">
+                    <div className={`rounded-xl p-2.5 flex items-center ${compact ? 'justify-center' : 'gap-3'} border transition-all duration-300 bg-slate-900/35 border-slate-700/40 hover:bg-slate-800/45`} title={compact ? `${user.name} (${user.email})` : undefined}>
                         <div className="relative flex-shrink-0">
-                            <UserAvatar user={user} size="sm" variant="green" showStatus isOnline />
+                            <UserAvatar user={user} size="sm" showStatus isOnline />
                         </div>
-                        <div className="min-w-0 flex-1">
-                            <p className="text-xs font-semibold truncate" style={{ color: '#e2e8f0' }}>{user.name}</p>
-                            <p className="text-[10px] truncate" style={{ color: 'rgba(255,255,255,0.4)' }}>{user.email}</p>
-                        </div>
-                        <button className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8L2 4h8L6 8z" /></svg>
-                        </button>
+                        {!compact && <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium truncate text-[#E5E7EB]">{user.name}</p>
+                            <p className="text-xs truncate text-[#9CA3AF]">{user.email}</p>
+                        </div>}
                     </div>
                 )}
 
                 {/* Logout */}
-                <button onClick={logout} className="sidebar-link sidebar-link-compact w-full sidebar-logout">
-                    <span className="sidebar-link-icon sidebar-link-icon-sm">
-                        <LogOut className="w-3.5 h-3.5" />
-                    </span>
-                    <span className="text-xs">Déconnexion</span>
+                <button onClick={logout} title={compact ? 'Déconnexion' : undefined} className={`flex items-center ${compact ? 'justify-center' : 'gap-3'} px-3 py-2.5 w-full rounded-lg text-sm font-medium transition-all duration-300 hover:translate-x-0.5 text-slate-400 hover:bg-slate-800/50 hover:text-red-300`}>
+                    <LogOut className="w-5 h-5" />
+                    {!compact && <span>Déconnexion</span>}
                 </button>
             </div>
         </div>
     );
 
     return (
-        <div className="flex h-screen overflow-hidden" style={{ background: dark ? 'linear-gradient(160deg, #0B0F19 0%, #0E1322 100%)' : '#ffffff', position: 'relative' }}>
-            {/* Animated Background Orbs — only in dark mode */}
-            {dark && (
-                <>
-                    <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-                        <div style={{ position: 'absolute', width: 500, height: 500, top: '-12%', left: '-8%', background: 'radial-gradient(circle, #1a2744 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', opacity: 0.6, animation: 'drift 20s ease-in-out infinite' }} />
-                        <div style={{ position: 'absolute', width: 400, height: 400, bottom: '-8%', right: '-6%', background: 'radial-gradient(circle, #0e2038 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(80px)', opacity: 0.5, animation: 'drift 25s ease-in-out infinite reverse' }} />
-                        <div style={{ position: 'absolute', width: 300, height: 300, top: '40%', left: '50%', background: 'radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)', opacity: 1, animation: 'drift 18s ease-in-out infinite 5s' }} />
-                        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(34,197,94,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.015) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent)' }} />
-                    </div>
-                    <style>{`@keyframes drift{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-20px)}50%{transform:translate(-20px,30px)}75%{transform:translate(20px,20px)}}`}</style>
-                </>
-            )}
-
-            <aside className="hidden lg:flex flex-col w-56 flex-shrink-0 border-r"
+        <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-primary)', position: 'relative' }}>
+            <aside
+                onMouseEnter={() => isChatPage && setSidebarHoverExpanded(true)}
+                onMouseLeave={() => isChatPage && setSidebarHoverExpanded(false)}
+                className="hidden lg:flex flex-col flex-shrink-0 border-r transition-[width] duration-300 ease-in-out"
                 style={{
-                    background: 'linear-gradient(180deg, #0A0E18 0%, #0D1220 100%)',
-                    borderColor: 'rgba(255,255,255,0.07)',
+                    width: isDesktopCompact ? 76 : 256,
+                    borderColor: 'rgba(148,163,184,0.2)',
                     position: 'relative', zIndex: 1
                 }}>
-                <SidebarContent />
+                <SidebarContent compact={isDesktopCompact} />
             </aside>
 
             {open && (
                 <div className="fixed inset-0 z-50 lg:hidden">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-                    <aside className="absolute left-0 top-0 bottom-0 w-72 border-r"
+                    <aside className="absolute left-0 top-0 bottom-0 w-64 border-r transition-colors"
                         style={{
-                            background: 'linear-gradient(180deg, #0A0E18 0%, #0D1220 100%)',
-                            borderColor: 'rgba(255,255,255,0.07)'
+                            borderColor: 'rgba(255,255,255,0.05)'
                         }}>
-                        <SidebarContent />
+                        <SidebarContent compact={false} />
                     </aside>
                 </div>
             )}
@@ -366,7 +432,7 @@ export default function Sidebar({ children }) {
                 {/* Thin loading bar while Keycloak initializes */}
                 {!initialized && (
                     <div className="h-0.5 w-full overflow-hidden flex-shrink-0" style={{ background: 'transparent' }}>
-                        <div className="h-0.5 animate-pulse" style={{ background: dark ? 'linear-gradient(90deg, #D4E157, #4CAF50, #D4E157)' : 'linear-gradient(90deg, #22c55e, #16a34a, #22c55e)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
+                        <div className="h-0.5 animate-pulse" style={{ background: dark ? 'linear-gradient(90deg, #475569, #94a3b8, #475569)' : 'linear-gradient(90deg, #94a3b8, #64748b, #94a3b8)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
                     </div>
                 )}
                 <header className="h-12 border-b flex items-center gap-2.5 px-4 lg:px-5 flex-shrink-0"
@@ -428,7 +494,7 @@ export default function Sidebar({ children }) {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto p-4 lg:p-5 animate-fade-in"
+                <main className={`flex-1 overflow-y-auto animate-fade-in ${isChatPage ? 'p-0' : 'p-4 lg:p-5'}`}
                     style={{ background: dark ? 'transparent' : '#f0f2f5' }}>
                     {children}
                 </main>

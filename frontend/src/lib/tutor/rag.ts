@@ -160,3 +160,33 @@ Contenu :
 ${content.slice(0, 6000)}`
   return await groqChat(prompt)
 }
+
+export async function generateFlashcards(): Promise<string> {
+  const chunks = await getAllChunks()
+  if (chunks.length === 0) throw new Error('Aucun contenu trouvé.')
+  const content = chunks.join('\n\n')
+  const prompt = `Tu es un expert en apprentissage actif.
+Génère des flashcards basées STRICTEMENT sur le contenu fourni.
+
+Format de sortie obligatoire :
+## Flashcards
+
+1) Q: [Question courte]
+   A: [Réponse claire et concise]
+
+2) Q: [Question courte]
+   A: [Réponse claire et concise]
+
+...
+
+Contraintes :
+- Génère exactement 10 flashcards
+- Questions simples, précises, orientées révision
+- Réponses courtes (1 à 3 phrases max)
+- Pas d'informations hors contenu
+
+Contenu :
+${content.slice(0, 6000)}`
+
+  return await groqChat(prompt)
+}

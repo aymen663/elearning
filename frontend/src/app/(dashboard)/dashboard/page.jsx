@@ -327,17 +327,19 @@ export default function DashboardPage() {
                         <div style={{
                             display: 'flex', alignItems: 'center',
                             padding: '16px 20px', borderRadius: T.card.radius,
-                            background: '#f0fdf4', border: '1px solid #a7f3d0',
+                            background: 'linear-gradient(135deg, rgba(34,197,94,0.12), rgba(34,197,94,0.04))',
+                            border: '1px solid rgba(34,197,94,0.22)',
+                            backdropFilter: 'blur(6px)',
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(5,150,105,0.1)', border: '1px solid rgba(5,150,105,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(34,197,94,0.14)', border: '1px solid rgba(34,197,94,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <Sparkles style={{ width: 17, height: 17, color: '#059669' }} />
                                 </div>
                                 <div>
-                                    <h3 style={{ fontWeight: 600, color: '#064e3b', fontSize: 13 }}>
+                                    <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: 13 }}>
                                         {progress.length > 0 ? 'Continuez votre apprentissage !' : 'Bienvenue sur EduAI !'}
                                     </h3>
-                                    <p style={{ fontSize: 12, color: '#059669', marginTop: 1 }}>
+                                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 1 }}>
                                         {progress.length > 0
                                             ? `${inProgress.length} cours en cours — ${completed.length} terminé(s)`
                                             : 'Inscrivez-vous à votre premier cours et commencez dès maintenant'

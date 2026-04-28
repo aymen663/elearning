@@ -50,8 +50,8 @@ function TagPill({ tag, onClick, active }) {
         <button
             onClick={() => onClick?.(tag)}
             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all border ${active
-                ? 'bg-teal-600 border-teal-500 text-white'
-                : 'bg-teal-500/10 border-teal-500/20 text-teal-400 hover:bg-teal-500/20'
+                ? 'bg-slate-700 border-slate-500 text-slate-100 shadow-md shadow-black/20'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700/80 hover:border-slate-600'
                 }`}
         >
             <Tag className="w-2.5 h-2.5" />{tag}
@@ -66,11 +66,11 @@ function VoteCluster({ votes, onUp, onDown }) {
             <motion.button
                 whileTap={{ scale: 0.85 }}
                 onClick={(e) => { e.preventDefault(); onUp?.(); }}
-                className="p-1 rounded-lg text-slate-500 hover:text-teal-400 hover:bg-teal-400/10 transition-colors"
+                className="p-1 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-slate-700/60 transition-colors"
             >
                 <ChevronUp className="w-4 h-4" />
             </motion.button>
-            <span className={`text-sm font-bold tabular-nums ${votes > 0 ? 'text-teal-400' : votes < 0 ? 'text-red-400' : 'text-slate-500'}`}>
+            <span className={`text-sm font-bold tabular-nums ${votes > 0 ? 'text-emerald-400' : votes < 0 ? 'text-red-400' : 'text-slate-500'}`}>
                 {votes}
             </span>
             <motion.button
@@ -87,9 +87,9 @@ function VoteCluster({ votes, onUp, onDown }) {
 
 function Badge({ type }) {
     const cfg = {
-        solved: { text: 'Résolu', cls: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30', icon: CheckCircle2 },
-        hot: { text: 'Populaire', cls: 'bg-orange-500/15 text-orange-400 border-orange-500/30', icon: Flame },
-        new_: { text: 'Nouveau', cls: 'bg-blue-500/15 text-blue-400 border-blue-500/30', icon: Star },
+        solved: { text: 'Résolu', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', icon: CheckCircle2 },
+        hot: { text: 'Populaire', cls: 'bg-slate-700/70 text-slate-200 border-slate-600/80', icon: Flame },
+        new_: { text: 'Nouveau', cls: 'bg-slate-700/70 text-slate-200 border-slate-600/80', icon: Star },
     }[type];
     if (!cfg) return null;
     const Icon = cfg.icon;
@@ -108,10 +108,10 @@ function QuestionCard({ post, onVote }) {
                 href={`/forum/${post._id}`}
                 className="block group"
             >
-                <div className="relative overflow-hidden rounded-2xl border transition-all duration-200"
+                <div className="relative overflow-hidden rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-black/20"
                     style={{
-                        background: 'var(--bg-card)',
-                        borderColor: 'var(--border)',
+                        background: 'linear-gradient(180deg, #111827 0%, #0f172a 100%)',
+                        borderColor: 'rgba(148,163,184,0.18)',
                     }}
                 >
                     {post.isSolved && (
@@ -119,7 +119,7 @@ function QuestionCard({ post, onVote }) {
                     )}
 
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"
-                        style={{ background: 'radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%), rgba(99,102,241,0.04), transparent 40%)' }}
+                        style={{ background: 'radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%), rgba(148,163,184,0.07), transparent 40%)' }}
                     />
 
                     <div className="flex gap-4 p-5 pl-7">
@@ -130,13 +130,13 @@ function QuestionCard({ post, onVote }) {
                         />
 
                         <div className="hidden sm:flex flex-col items-center justify-center gap-3 flex-shrink-0 w-16 text-center">
-                            <div className={`text-center px-2 py-1.5 rounded-xl border ${post.replyCount > 0 ? 'border-teal-500/20 bg-teal-500/10' : 'border-white/[0.06] bg-white/[0.03]'}`}>
-                                <p className={`text-sm font-bold ${post.replyCount > 0 ? 'text-teal-400' : 'text-slate-500'}`}>{post.replyCount}</p>
-                                <p className="text-[9px] text-slate-600 mt-0.5">réponses</p>
+                            <div className={`text-center px-2 py-1.5 rounded-xl border ${post.replyCount > 0 ? 'border-slate-600 bg-slate-800/80' : 'border-slate-700 bg-slate-900/70'}`}>
+                                <p className={`text-sm font-bold ${post.replyCount > 0 ? 'text-slate-200' : 'text-slate-500'}`}>{post.replyCount}</p>
+                                <p className="text-[9px] text-slate-500 mt-0.5">réponses</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-xs text-slate-500">{post.views}</p>
-                                <p className="text-[9px] text-slate-600">vues</p>
+                                <p className="text-xs text-slate-400">{post.views}</p>
+                                <p className="text-[9px] text-slate-500">vues</p>
                             </div>
                         </div>
 
@@ -147,11 +147,11 @@ function QuestionCard({ post, onVote }) {
                                 {isNew(post.createdAt) && <Badge type="new_" />}
                             </div>
 
-                            <h3 className="font-semibold text-sm text-white group-hover:text-teal-300 transition-colors leading-snug mb-1.5 line-clamp-2">
+                            <h3 className="font-semibold text-sm text-slate-100 group-hover:text-white transition-colors leading-snug mb-1.5 line-clamp-2">
                                 {post.title}
                             </h3>
 
-                            <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-3">
+                            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-3">
                                 {post.content}
                             </p>
 
@@ -165,10 +165,10 @@ function QuestionCard({ post, onVote }) {
                                 <div className="flex items-center gap-2">
                                     <UserAvatar user={post.author} size="xs" />
                                     <span className="text-xs font-medium text-slate-300">{post.author?.name}</span>
-                                    <span className="text-[11px] text-slate-600">· {timeAgo(post.createdAt)}</span>
+                                    <span className="text-[11px] text-slate-500">· {timeAgo(post.createdAt)}</span>
                                 </div>
 
-                                <div className="flex sm:hidden items-center gap-3 text-[11px] text-slate-600">
+                                <div className="flex sm:hidden items-center gap-3 text-[11px] text-slate-500">
                                     <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3" />{post.replyCount}</span>
                                     <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{post.views}</span>
                                 </div>
@@ -189,8 +189,8 @@ function EmptyState({ search, sort, onReset }) {
             animate={{ opacity: 1, scale: 1 }}
             className="card text-center py-16"
         >
-            <div className="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-teal-500/20 to-teal-600/20 flex items-center justify-center">
-                <MessagesSquare className="w-12 h-12 text-teal-400" />
+            <div className="w-24 h-24 mx-auto mb-5 rounded-full bg-gradient-to-br from-slate-700/40 to-slate-800/60 border border-slate-700/70 flex items-center justify-center">
+                <MessagesSquare className="w-12 h-12 text-slate-300" />
             </div>
             <h3 className="text-lg font-bold text-white mb-2">
                 {search ? `Aucun résultat pour "${search}"` : 'Aucune question ici'}
@@ -233,7 +233,7 @@ function ForumSidebar({ stats }) {
                                         ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
                                         : <MessageCircle className="w-3.5 h-3.5 text-slate-600 flex-shrink-0 mt-0.5" />
                                     }
-                                    <p className="text-xs text-slate-400 group-hover:text-teal-300 transition-colors line-clamp-2 leading-snug">
+                                    <p className="text-xs text-slate-300 group-hover:text-white transition-colors line-clamp-2 leading-snug">
                                         {p.title}
                                     </p>
                                 </div>
@@ -273,15 +273,15 @@ function ForumSidebar({ stats }) {
             {stats.popularTags?.length > 0 && (
                 <div className="card">
                     <div className="flex items-center gap-2 mb-3">
-                        <Tag className="w-4 h-4 text-teal-400" />
+                        <Tag className="w-4 h-4 text-slate-300" />
                         <h3 className="text-sm font-semibold text-white">Tags populaires</h3>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                         {stats.popularTags.map(({ _id: tag, count }) => (
                             <span key={tag}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] bg-teal-500/10 text-teal-400 border border-teal-500/20">
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] bg-slate-800/80 text-slate-300 border border-slate-700">
                                 {tag}
-                                <span className="text-teal-600 font-bold">{count}</span>
+                                <span className="text-slate-400 font-bold">{count}</span>
                             </span>
                         ))}
                     </div>
@@ -389,8 +389,8 @@ export default function ForumPage() {
                                 key={value}
                                 onClick={() => setSort(value)}
                                 className={`relative px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all border ${sort === value
-                                    ? 'bg-teal-600 border-teal-600 text-white shadow-lg shadow-teal-600/25'
-                                    : 'border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-300'
+                                    ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                                    : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200'
                                     }`}
                             >
                                 <Icon className="w-3.5 h-3.5" />
@@ -400,7 +400,7 @@ export default function ForumPage() {
                         {activeTag && (
                             <button
                                 onClick={() => setActiveTag('')}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs bg-teal-600/20 border border-teal-500/40 text-teal-300"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs bg-slate-800 border border-slate-600 text-slate-200"
                             >
                                 <Tag className="w-3 h-3" />{activeTag}
                                 <X className="w-3 h-3" />
@@ -410,7 +410,7 @@ export default function ForumPage() {
 
                     {loading ? (
                         <div className="flex justify-center py-24">
-                            <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
+                            <Loader2 className="w-10 h-10 text-slate-300 animate-spin" />
                         </div>
                     ) : posts.length === 0 ? (
                         <EmptyState search={search} sort={sort} onReset={() => { setSearch(''); setSort('newest'); setActiveTag(''); }} />
@@ -435,7 +435,7 @@ export default function ForumPage() {
                             <button
                                 onClick={() => loadPosts(page - 1)}
                                 disabled={page <= 1}
-                                className="px-3 py-1.5 rounded-xl text-xs border border-white/10 text-slate-400 disabled:opacity-30 hover:border-white/20 transition-all"
+                                className="px-3 py-1.5 rounded-xl text-xs border border-slate-700 text-slate-400 disabled:opacity-30 hover:border-slate-500 transition-all"
                             >
                                 ← Précédent
                             </button>
@@ -444,8 +444,8 @@ export default function ForumPage() {
                                     key={pg}
                                     onClick={() => loadPosts(pg)}
                                     className={`w-8 h-8 rounded-xl text-xs font-medium transition-all border ${pg === page
-                                        ? 'bg-teal-600 border-teal-600 text-white'
-                                        : 'border-white/10 text-slate-400 hover:border-white/20'
+                                        ? 'bg-emerald-600 border-emerald-600 text-white'
+                                        : 'border-slate-700 text-slate-400 hover:border-slate-500'
                                         }`}
                                 >
                                     {pg}
@@ -454,7 +454,7 @@ export default function ForumPage() {
                             <button
                                 onClick={() => loadPosts(page + 1)}
                                 disabled={page >= totalPages}
-                                className="px-3 py-1.5 rounded-xl text-xs border border-white/10 text-slate-400 disabled:opacity-30 hover:border-white/20 transition-all"
+                                className="px-3 py-1.5 rounded-xl text-xs border border-slate-700 text-slate-400 disabled:opacity-30 hover:border-slate-500 transition-all"
                             >
                                 Suivant →
                             </button>

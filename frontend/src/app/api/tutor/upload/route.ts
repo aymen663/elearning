@@ -11,12 +11,24 @@ export async function POST(req: NextRequest) {
     let rawText = ''
 
     if (file) {
-      if (file.type === 'application/pdf') {
-        // Dynamically import pdf-parse to avoid SSR issues
-        const pdfParse = (await import('pdf-parse')).default
-        const buffer = Buffer.from(await file.arrayBuffer())
-        const parsed = await pdfParse(buffer)
-        rawText = parsed.text
+      const fileName = file.name?.toLowerCase() ?? ''
+      const isPdf = file.type === 'application/pdf' || fileName.endsWith('.pdf')
+
+      if (isPdf) {
+        // Some browsers/OSes send unreliable MIME types, so we also detect by extension.
+        try {
+          const pdfParseModule = await import('pdf-parse')
+          const pdfParse = (pdfParseModule.default || pdfParseModule) as any
+          const buffer = Buffer.from(await file.arrayBuffer())
+          const parsed = await pdfParse(buffer)
+          rawText = parsed.text
+        } catch (pdfErr) {
+          throw new Error(
+            pdfErr instanceof Error
+              ? `PDF parsing failed: ${pdfErr.message}`
+              : 'PDF parsing failed'
+          )
+        }
       } else {
         rawText = await file.text()
       }
@@ -27,7 +39,10 @@ export async function POST(req: NextRequest) {
     }
 
     if (!rawText.trim()) {
-      return NextResponse.json({ error: 'No text content found' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'No readable text found in file. If this is a scanned PDF, OCR is required.' },
+        { status: 400 }
+      )
     }
 
     // Clear existing documents

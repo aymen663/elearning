@@ -7,17 +7,19 @@ import { Gamepad2, ArrowRight } from 'lucide-react';
 /* ── Design Tokens ──────────────────────────────────────────────────────── */
 const T = {
     card: {
-        bg: '#ffffff',
-        border: '1px solid #f1f5f9',
+        bg: '#111827',
+        border: '1px solid rgba(148,163,184,0.18)',
         radius: '24px',
-        shadow: '0 4px 20px rgba(0,0,0,0.03)',
-        shadowHover: '0 12px 30px rgba(0,0,0,0.08)',
+        shadow: '0 8px 24px rgba(0,0,0,0.22)',
+        shadowHover: '0 18px 38px rgba(0,0,0,0.35)',
     },
     text: {
-        primary: '#111827',
-        secondary: '#4b5563',
-        muted: '#6b7280',
+        primary: '#f3f4f6',
+        secondary: '#d1d5db',
+        muted: '#9ca3af',
     },
+    accent: '#22c55e',
+    accentSoft: 'rgba(34,197,94,0.14)',
 };
 
 const games = [
@@ -27,8 +29,6 @@ const games = [
         description: 'Jouez aux échecs contre une IA — 3 niveaux de difficulté.',
         image: '/games/chess.png',
         difficulty: 'Facile',
-        color: '#16a34a', // Green
-        bgTag: '#f0fdf4',
         tags: ['Stratégie', 'IA'],
     },
     {
@@ -37,8 +37,6 @@ const games = [
         description: 'Testez votre mémoire en associant les paires le plus vite possible.',
         image: '/games/memory.png',
         difficulty: 'Facile',
-        color: '#3b82f6', // Blue
-        bgTag: '#eff6ff',
         tags: ['Mémoire', 'Rapidité'],
     },
     {
@@ -47,8 +45,6 @@ const games = [
         description: 'Mémorisez la séquence et affrontez une IA neuronale.',
         image: '/games/mindcrash.png',
         difficulty: 'Moyen',
-        color: '#ec4899', // Pink
-        bgTag: '#fdf2f8',
         tags: ['Réflexes', 'Compétition'],
     },
     {
@@ -57,8 +53,6 @@ const games = [
         description: 'Formez des mots et marquez des points sur un plateau classique.',
         image: '/games/scrabble.png',
         difficulty: 'Facile',
-        color: '#f59e0b', // Orange
-        bgTag: '#fffbeb',
         tags: ['Vocabulaire', 'Réflexion'],
     },
 ];
@@ -76,16 +70,17 @@ export default function GamesPage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    marginBottom: 32,
+                    marginBottom: 36,
                     marginTop: 8
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                         <div style={{
                             width: 56, height: 56, borderRadius: 16, flexShrink: 0,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: '#f3e8ff', border: '1px solid #e9d5ff',
+                            background: '#111827', border: '1px solid rgba(148,163,184,0.22)',
+                            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                         }}>
-                            <Gamepad2 style={{ width: 28, height: 28, color: '#a855f7' }} />
+                            <Gamepad2 style={{ width: 28, height: 28, color: T.accent }} />
                         </div>
                         <div>
                             <h1 style={{ fontSize: 24, fontWeight: 800, color: T.text.primary, letterSpacing: '-0.02em', marginBottom: 2 }}>
@@ -101,12 +96,13 @@ export default function GamesPage() {
                     <div style={{
                         display: 'flex', alignItems: 'center', gap: 12,
                         padding: '12px 20px', borderRadius: 16,
-                        background: '#f0fdf4', border: '1px solid #bbf7d0',
+                        background: '#111827', border: '1px solid rgba(148,163,184,0.2)',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                     }}>
                         <span style={{ fontSize: 24 }}>🔥</span>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span style={{ fontSize: 16, fontWeight: 800, color: '#111827', lineHeight: 1.1 }}>12</span>
-                            <span style={{ fontSize: 11, fontWeight: 600, color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            <span style={{ fontSize: 16, fontWeight: 800, color: '#FFFFFF', lineHeight: 1.1 }}>12</span>
+                            <span style={{ fontSize: 11, fontWeight: 600, color: T.accent, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 Parties jouées
                             </span>
                         </div>
@@ -136,7 +132,7 @@ export default function GamesPage() {
                                     cursor: 'pointer',
                                     textAlign: 'left',
                                     transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)',
-                                    transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+                                    transform: isHovered ? 'translateY(-6px) scale(1.01)' : 'translateY(0) scale(1)',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     overflow: 'hidden',
@@ -158,20 +154,26 @@ export default function GamesPage() {
                                             height: '100%',
                                             objectFit: 'cover',
                                             transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-                                            transition: 'transform 0.4s ease'
+                                            transition: 'transform 0.4s ease',
+                                            filter: 'saturate(0.72) brightness(0.72) contrast(1.02)'
                                         }}
                                     />
                                     <div style={{
                                         position: 'absolute',
+                                        inset: 0,
+                                        background: 'linear-gradient(to bottom, rgba(11,18,32,0.1), rgba(11,18,32,0.55))'
+                                    }} />
+                                    <div style={{
+                                        position: 'absolute',
                                         top: 16,
                                         right: 16,
-                                        background: '#ffffff',
-                                        color: game.color,
+                                        background: game.difficulty === 'Moyen' ? 'rgba(245,158,11,0.18)' : T.accentSoft,
+                                        color: game.difficulty === 'Moyen' ? '#fbbf24' : '#86efac',
                                         padding: '4px 12px',
                                         borderRadius: 20,
                                         fontSize: 12,
                                         fontWeight: 700,
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                                        border: game.difficulty === 'Moyen' ? '1px solid rgba(245,158,11,0.35)' : '1px solid rgba(34,197,94,0.35)'
                                     }}>
                                         {game.difficulty}
                                     </div>
@@ -199,8 +201,9 @@ export default function GamesPage() {
                                                 <span key={tag} style={{
                                                     padding: '4px 10px', borderRadius: 8, fontSize: 11,
                                                     fontWeight: 600,
-                                                    background: game.bgTag,
-                                                    color: game.color,
+                                                    background: 'rgba(51,65,85,0.7)',
+                                                    color: '#cbd5e1',
+                                                    border: '1px solid rgba(100,116,139,0.4)',
                                                 }}>
                                                     {tag}
                                                 </span>
@@ -208,7 +211,7 @@ export default function GamesPage() {
                                         </div>
                                         <div style={{
                                             display: 'flex', alignItems: 'center', gap: 4,
-                                            fontSize: 13, fontWeight: 700, color: game.color,
+                                            fontSize: 13, fontWeight: 700, color: T.accent,
                                             transform: isHovered ? 'translateX(0)' : 'translateX(-4px)',
                                             transition: 'all 0.2s',
                                         }}>
@@ -224,21 +227,21 @@ export default function GamesPage() {
                     <div style={{
                         gridColumn: '3',
                         alignSelf: 'end', // Prevents the card from stretching vertically
-                        background: 'linear-gradient(135deg, #eefaf1 0%, #dcfce7 100%)',
+                        background: 'linear-gradient(145deg, #111827 0%, #0b1220 100%)',
                         borderRadius: T.card.radius,
-                        border: '1px solid #bbf7d0',
+                        border: '1px solid rgba(148,163,184,0.2)',
                         padding: '28px 24px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        boxShadow: '0 8px 30px rgba(22, 163, 74, 0.08)',
+                        boxShadow: '0 16px 36px rgba(0,0,0,0.3)',
                         position: 'relative',
                         overflow: 'hidden'
                     }}>
                         {/* Text and Button */}
                         <div style={{ flex: 1, position: 'relative', zIndex: 2, paddingRight: '12px' }}>
                             <h3 style={{
-                                fontSize: 16, fontWeight: 700, color: '#065f46',
+                                fontSize: 16, fontWeight: 700, color: '#e5e7eb',
                                 lineHeight: 1.4, marginBottom: 20
                             }}>
                                 Relevez des défis, améliorez-vous et gagnez des badges !
@@ -255,7 +258,7 @@ export default function GamesPage() {
                                 alignItems: 'center',
                                 gap: 6,
                                 cursor: 'pointer',
-                                boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)',
+                                    boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)',
                                 transition: 'all 0.2s ease',
                             }}
                             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(22, 163, 74, 0.3)'; }}
@@ -285,7 +288,7 @@ export default function GamesPage() {
                                     height: '180px', 
                                     maxWidth: 'none',
                                     objectFit: 'cover',
-                                    mixBlendMode: 'multiply',
+                                    opacity: 0.85,
                                     WebkitMaskImage: 'radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 65%)',
                                     maskImage: 'radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 65%)',
                                 }}
