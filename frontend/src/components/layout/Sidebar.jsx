@@ -413,12 +413,7 @@ export default function Sidebar({ children }) {
             )}
 
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden" style={{ position: 'relative', zIndex: 1 }}>
-                {/* Thin loading bar while Keycloak initializes */}
-                {!initialized && (
-                    <div className="h-0.5 w-full overflow-hidden flex-shrink-0" style={{ background: 'transparent' }}>
-                        <div className="h-0.5 animate-pulse" style={{ background: (!mounted || dark) ? 'linear-gradient(90deg, #475569, #94a3b8, #475569)' : 'linear-gradient(90deg, #94a3b8, #64748b, #94a3b8)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
-                    </div>
-                )}
+
                 <header className="h-12 border-b flex items-center gap-2.5 px-4 lg:px-5 flex-shrink-0"
                     style={{
                         background: (!mounted || dark) ? 'var(--bg-header)' : 'rgba(255,255,255,0.85)',

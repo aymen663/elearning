@@ -275,7 +275,7 @@ export default function LearnPage() {
             </div>
 
             {/* ── Main Layout ── */}
-            <div className="flex -mx-6 -mb-6" style={{ height: 'calc(100vh - 130px)' }}>
+            <div className="flex -mx-4 lg:-mx-5 -mb-4 lg:-mb-5" style={{ height: 'calc(100vh - 130px)' }}>
                 <div className="flex gap-0 h-full w-full">
 
                     {/* ── Lesson Sidebar ── */}
