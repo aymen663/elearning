@@ -4,8 +4,8 @@
 
 # 🎓 EduAI — AI-Powered E-Learning Platform
 
-**A next-generation e-learning platform supercharged by Generative AI.**  
-Built with a RAG-powered personal tutor, adaptive AI quizzes, real-time messaging, community forums, and automated certifications — all secured by Keycloak SSO.
+**A next-generation e-learning platform supercharged by Generative AI.**
+Built with a multi-provider AI tutor, adaptive quizzes, educational games, real-time messaging, community forums, and automated certifications — all secured by Keycloak SSO.
 
 <br/>
 
@@ -13,8 +13,7 @@ Built with a RAG-powered personal tutor, adaptive AI quizzes, real-time messagin
 [![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://mongodb.com/)
 [![Keycloak](https://img.shields.io/badge/Keycloak-SSO-4D629B?style=flat-square&logo=keycloak&logoColor=white)](https://www.keycloak.org/)
-[![LangChain](https://img.shields.io/badge/LangChain-RAG-FF6B35?style=flat-square)](https://langchain.com/)
-[![Groq](https://img.shields.io/badge/Groq-Llama%203.3%2070B-F55036?style=flat-square)](https://groq.com/)
+[![Gemini](https://img.shields.io/badge/Gemini-2.5%20Flash-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
@@ -35,21 +34,21 @@ Built with a RAG-powered personal tutor, adaptive AI quizzes, real-time messagin
 - [API Reference](#-api-reference)
 - [User Roles](#-user-roles)
 - [Teacher Onboarding Flow](#-teacher-onboarding-flow)
-- [RAG Architecture](#-rag-architecture-deep-dive)
+- [AI Architecture](#-ai-architecture-deep-dive)
 - [Author](#-author)
 
 ---
 
 ## 🌟 Overview
 
-**EduAI** is a full-stack e-learning platform built as a Final Year Project (PFE), designed to demonstrate the real-world integration of **Generative AI** into online education. It goes beyond a standard CRUD application by embedding a **RAG (Retrieval-Augmented Generation)** AI tutor directly into every course — providing students with accurate, context-aware answers grounded in the actual course material.
+**EduAI** is a full-stack e-learning platform built as a Final Year Project (PFE), designed to demonstrate the real-world integration of **Generative AI** into online education. It features a **multi-provider AI tutor** (Groq → OpenAI → Gemini failover chain), adaptive quiz generation, educational games, and a complete course management system — all unified under a premium SaaS-grade UI with light/dark theme support.
 
 The platform supports three distinct user roles:
 
 | Role | Description |
 |---|---|
-| 🎓 **Student** | Browse & enroll in courses, complete lessons, take AI quizzes, chat with the AI tutor, earn certificates |
-| 🧑‍🏫 **Instructor** | Create and manage courses & lessons, upload PDFs, view student analytics |
+| 🎓 **Student** | Browse & enroll in courses, complete lessons, take AI quizzes, chat with the AI tutor, play educational games, earn certificates |
+| 🧑‍🏫 **Instructor** | Create and manage courses & lessons, upload PDFs, view student analytics, manage access requests |
 | 🛡️ **Admin** | Full platform control — user management, course oversight, global statistics |
 
 ---
@@ -59,37 +58,51 @@ The platform supports three distinct user roles:
 ### 🤖 AI & Intelligence
 | Feature | Details |
 |---|---|
-| **RAG AI Tutor** | Per-course chatbot trained on lesson content using LangChain + Groq (Llama 3.3 70B) |
-| **Adaptive AI Quizzes** | Auto-generated multiple-choice quizzes tailored to lesson content and difficulty level |
-| **AI Translation** | Translate any lesson into 6 languages (FR, EN, AR, ES, DE, ZH) via Groq API |
-| **Auto-Ingestion** | Course content is automatically indexed into the vector store at server startup |
+| **Multi-Provider AI Tutor** | Per-course chatbot with automatic failover: Groq (Llama 3.3 70B) → OpenAI (GPT-4o-mini) → Gemini (2.5 Flash) |
+| **Adaptive AI Quizzes** | Auto-generated MCQ quizzes tailored to lesson content and difficulty level |
+| **AI Translation** | Translate any lesson into 6 languages (FR, EN, AR, ES, DE, ZH) |
+| **AI Flashcards** | Auto-generated study flashcards from course content |
+| **AI Summaries** | Automatic course content summarization |
+| **AI Exam Generation** | Full exam paper generation from course material |
+| **Auto-Ingestion** | Course content is automatically indexed into the AI context at server startup |
 
 ### 📚 Courses & Learning
 | Feature | Details |
 |---|---|
-| **Course Catalog** | Browse by category, level, keyword with full-text search, pagination & **creation date** |
+| **Course Catalog** | Browse by category, level, keyword with full-text search & pagination |
 | **Multi-format Lessons** | Rich text content + PDF upload with automatic text extraction |
+| **PDF Viewer** | Secure, authenticated in-browser PDF rendering (blob-based) |
 | **Progress Tracking** | Lesson-by-lesson advancement with completion percentage |
 | **Enrollment Management** | One-click enroll/unenroll with persistent state |
 | **Auto Certification** | Completion certificate with QR code generated at 100% course progress |
 | **Auto-Publication** | Course published automatically when ≥ 1 lesson; reverted to draft when 0 lessons |
 
+### 🎮 Educational Games
+| Feature | Details |
+|---|---|
+| **Chess** | Full chess game with AI opponent |
+| **Memory** | Card matching memory game |
+| **MindCrash** | Brain training puzzle game |
+| **Scrabble** | Word-building game |
+
 ### 👨‍🏫 Instructor Dashboard
 - Create, edit, and delete courses and individual lessons
-- Upload PDFs — text is automatically extracted and indexed for the RAG tutor
+- Upload PDFs — text is automatically extracted and indexed for the AI tutor
 - Analytics dashboard: enrolled students, lesson completion rates, published courses
 - Detailed per-student progress view
-- **Auto-publication**: a course is automatically published as soon as it has at least one lesson, and reverted to draft if all lessons are deleted — no manual publish button needed
+- Manage student access requests
+- Auto-publication: courses are published when they have at least one lesson
 
 ### 🛡️ Admin Panel
 - Full user management (students & instructors)
+- Course management and oversight
 - Global platform statistics dashboard
 
 ### 💬 Community & Social
 | Feature | Details |
 |---|---|
-| **Discussion Forum** | Course-linked threads with posts and replies |
-| **Direct Messaging** | Real-time user-to-user messaging |
+| **Discussion Forum** | Course-linked threads with posts, replies, likes & categories |
+| **Direct Messaging** | User-to-user messaging with emoji support |
 | **AI Chat Interface** | Dedicated chat page for the course AI tutor |
 
 ### 🔐 Authentication & Security
@@ -97,14 +110,20 @@ The platform supports three distinct user roles:
 |---|---|
 | **Keycloak SSO** | Centralized identity management with custom EduAI theme |
 | **Google OAuth** | One-click social login via Keycloak Identity Provider |
-| **GitHub OAuth** | One-click social login via Keycloak Identity Provider |
-| **JWT (RS256)** | Tokens verified via JWKS endpoint (RS256) — stateless and secure |
+| **JWT (RS256)** | Tokens verified via JWKS endpoint — stateless and secure |
 | **PKCE S256** | Secure Authorization Code flow with code challenge |
-| **JWKS Caching** | Public keys cached for 10 min to avoid redundant Keycloak calls |
 | **Silent SSO Check** | `check-sso` on app load — seamless session restore without redirect |
 | **Role-based Access** | Fine-grained route protection with `protect()` + `restrictTo()` middleware |
-| **Zustand Auth Store** | Client-side auth state with localStorage caching (`eduai_user_cache`) |
 | **Teacher Invitation** | Admin creates teacher accounts → email verification → password setup → KC sync |
+
+### 🎨 UI & Experience
+| Feature | Details |
+|---|---|
+| **Light/Dark Theme** | Full theme support with CSS variables and cookie persistence |
+| **Internationalization** | Multi-language support via custom i18n system |
+| **Responsive Design** | Mobile-first layout with glassmorphism effects |
+| **Global Search** | Platform-wide search modal |
+| **Micro-animations** | Framer Motion transitions throughout |
 
 ---
 
@@ -114,7 +133,7 @@ The platform supports three distinct user roles:
 ┌─────────────────────────────────────────────────────────────┐
 │                        CLIENT BROWSER                       │
 │                    Next.js 14  (Port 3000)                  │
-│          App Router · Tailwind CSS · Framer Motion          │
+│       App Router · Tailwind CSS · Framer Motion · Zustand   │
 └────────────────────────┬────────────────────────────────────┘
                          │  REST API (Axios)
                          │  JWT Bearer (RS256)
@@ -125,18 +144,19 @@ The platform supports three distinct user roles:
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
 │  │  /auth   │  │ /courses │  │  /quiz   │  │  /chat   │   │
 │  │  /forum  │  │/progress │  │ /admin   │  │/messages │   │
+│  │/students │  │          │  │          │  │          │   │
 │  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
 │                                                             │
 │  ┌───────────────────────────────────────┐                 │
-│  │          RAG Tutor Service            │                 │
-│  │  LangChain · MemoryVectorStore        │                 │
-│  │  Groq API (Llama 3.3 70B)            │                 │
+│  │       Multi-Provider AI Service       │                 │
+│  │  Groq (Llama 3.3) → OpenAI → Gemini  │                 │
+│  │  Auto-failover · Rate-limit retry     │                 │
 │  └───────────────────────────────────────┘                 │
 └────────────┬────────────────────────┬───────────────────────┘
              │                        │
     ┌────────▼───────┐      ┌─────────▼─────────┐
     │  MongoDB Atlas │      │      Keycloak      │
-    │  (Data + Auth) │      │   (Port 8080)      │
+    │  (Data Store)  │      │   (Port 8080)      │
     │                │      │  SSO · Roles · IDP │
     └────────────────┘      └───────────────────┘
 ```
@@ -150,114 +170,133 @@ The platform supports three distinct user roles:
 | Technology | Version | Role |
 |---|---|---|
 | **Next.js** | 14.0.4 | React framework (App Router, SSR, Client Components) |
-| **Tailwind CSS** | 3.3+ | Utility-first styling |
-| **Framer Motion** | 12+ | UI animations & transitions |
-| **Radix UI** | Latest | Accessible headless components (Dialog, Tabs, Select…) |
+| **Tailwind CSS** | 3.3 | Utility-first styling with custom design tokens |
+| **Framer Motion** | 12.35 | UI animations & transitions |
+| **Radix UI** | Latest | Accessible headless components (Dialog, Tabs, Select, Avatar…) |
 | **Lucide React** | 0.303 | Icon system |
-| **Recharts** | 3+ | Analytics charts & graphs |
-| **Zustand** | 4.4 | Global auth state management |
+| **Recharts** | 3.7 | Analytics charts & graphs |
+| **Zustand** | 4.4 | Global auth & theme state management |
 | **Axios** | 1.6 | HTTP client for API calls |
 | **keycloak-js** | 26.2 | Keycloak client-side integration |
 | **react-hot-toast** | 2.6 | Toast notifications |
 | **react-markdown** | 9.0 | Render AI Markdown responses |
 | **qrcode.react** | 4.2 | QR code generation for certificates |
+| **emoji-picker-react** | 4.18 | Emoji picker for messaging |
 
 ### Backend
 
 | Technology | Version | Role |
 |---|---|---|
-| **Node.js + Express** | 4.18 | REST API server |
+| **Node.js + Express** | 4.18 | REST API server (ES Modules) |
 | **MongoDB + Mongoose** | 8.0 | NoSQL database & ODM |
 | **LangChain** | 0.1 | RAG orchestration pipeline |
-| **Groq API** | — | Llama 3.3 70B inference (quiz, chat, translation) |
-| **OpenAI SDK** | 4.20 | Text embeddings for RAG |
+| **Groq API** | — | Llama 3.3 70B inference (primary AI provider) |
+| **OpenAI SDK** | 4.20 | GPT-4o-mini + text embeddings (fallback provider) |
+| **Gemini API** | — | Gemini 2.5 Flash (tertiary fallback) |
 | **pdf-parse** | 1.1 | PDF text extraction |
+| **Nodemailer** | 8.0 | Email service for teacher invitations |
 | **jsonwebtoken + jwks-rsa** | — | Keycloak JWT verification (RS256) |
-| **bcryptjs** | 2.4 | Local password hashing |
+| **bcryptjs** | 2.4 | Password hashing |
 | **multer** | 1.4 | File upload handling (PDF) |
-| **Cloudinary** | — | Cloud image storage (course thumbnails) |
 
 ### Infrastructure & Auth
 
 | Technology | Role |
 |---|---|
-| **Keycloak** | Identity Provider (SSO, roles, social login, custom theme) |
+| **Keycloak** | Identity Provider (SSO, roles, social login, custom EduAI theme) |
 | **Docker Compose** | Containerized Keycloak deployment |
 | **MongoDB Atlas** | Cloud database |
+| **Cloudinary** | Cloud image storage (course thumbnails) |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-elearning-pfe/
-├── frontend/                        # Next.js 14 application
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── page.jsx             # Landing page
-│   │   │   ├── layout.js            # Global layout (Keycloak Provider)
-│   │   │   ├── globals.css          # Global styles & design system
-│   │   │   ├── dashboard/           # Student dashboard
-│   │   │   ├── courses/             # Course catalog + [id] detail page
-│   │   │   ├── instructor/          # Instructor space (courses, analytics)
-│   │   │   ├── admin/               # Admin panel (users & stats — no courses page)
-│   │   │   ├── chat/                # AI tutor chat interface
-│   │   │   ├── forum/               # Community forum
-│   │   │   ├── messages/            # Direct messaging
-│   │   │   ├── certificates/        # Completion certificates
-│   │   │   ├── profile/             # User profile
-│   │   │   ├── login/               # Login page
-│   │   │   ├── register/            # Registration page
-│   │   │   └── auth/callback/       # Keycloak OAuth callback
-│   │   ├── components/
-│   │   │   ├── layout/              # Sidebar, Navbar
-│   │   │   ├── chat/                # AI chat components
-│   │   │   ├── quiz/                # Quiz UI components
-│   │   │   └── ui/                  # Reusable UI components
-│   │   └── lib/
-│   │       ├── keycloak.js          # Keycloak singleton instance
-│   │       ├── KeycloakProvider.jsx # Keycloak React provider
-│   │       ├── authStore.js         # Zustand auth store (+ localStorage cache)
-│   │       ├── api.js               # Axios client (all API endpoints)
-│   │       ├── githubAuth.js        # GitHub login helper
-│   │       └── socialAuth.js        # Social auth helpers
-│   ├── .env.local                   # Frontend environment variables
-│   └── package.json
+elearning/
+├── docker-compose.yml               # Keycloak container (dev entry point)
+├── package.json                      # Workspace scripts (npm run dev)
 │
-├── backend/                         # Express.js API
-│   ├── src/
-│   │   ├── server.js                # Entry point + RAG auto-ingest on startup
-│   │   ├── routes/
-│   │   │   ├── auth.js              # POST /api/auth/keycloak-sync
-│   │   │   ├── courses.js           # CRUD, PDF upload, AI translation
-│   │   │   ├── quiz.js              # AI quiz generation
-│   │   │   ├── progress.js          # Lesson progress tracking
-│   │   │   ├── chat.js              # RAG tutor endpoint
-│   │   │   ├── admin.js             # Admin routes
-│   │   │   ├── students.js          # Student management
-│   │   │   ├── messages.js          # Direct messaging
-│   │   │   └── forum.js             # Forum posts & replies
-│   │   ├── models/
-│   │   │   ├── User.js              # User model (multi-provider support)
-│   │   │   ├── Course.js            # Course + lessons + RAG vector IDs
-│   │   │   ├── Progress.js          # Per-student progress
-│   │   │   ├── Message.js           # Direct messages
-│   │   │   ├── ForumPost.js         # Forum posts
-│   │   │   └── ForumReply.js        # Forum replies
-│   │   ├── middleware/
-│   │   │   └── auth.js              # protect() + restrictTo() (Keycloak JWKS)
-│   │   └── services/
-│   │       └── rag/
-│   │           └── tutorService.js  # RAG ingest + query pipeline (LangChain)
-│   ├── .env                         # Backend environment variables
-│   └── package.json
+├── backend/                          # Express.js REST API
+│   ├── .env / .env.example
+│   ├── package.json
+│   ├── scripts/                      # Admin & maintenance scripts
+│   │   ├── fix-kc-profile.mjs        # Keycloak profile repair
+│   │   ├── check-instructors.js
+│   │   ├── debugUser.js
+│   │   ├── fixKcUser.js
+│   │   ├── publish-all.js
+│   │   ├── sync-instructors-to-keycloak.js
+│   │   └── testEmail.js
+│   └── src/
+│       ├── server.js                 # Entry point + RAG auto-ingest on startup
+│       ├── middleware/
+│       │   ├── auth.js               # protect() + restrictTo() (Keycloak JWKS)
+│       │   └── upload.js             # Multer file upload config
+│       ├── models/
+│       │   ├── User.js               # User model (multi-provider support)
+│       │   ├── Course.js             # Course + lessons schema
+│       │   ├── Progress.js           # Per-student progress
+│       │   ├── AccessRequest.js      # Course access requests
+│       │   ├── Message.js            # Direct messages
+│       │   ├── ForumPost.js          # Forum posts
+│       │   └── ForumReply.js         # Forum replies
+│       ├── routes/
+│       │   ├── auth.js               # Authentication & Keycloak sync
+│       │   ├── courses.js            # CRUD, PDF upload, AI translation
+│       │   ├── quiz.js               # AI quiz generation
+│       │   ├── chat.js               # AI tutor endpoint
+│       │   ├── progress.js           # Lesson progress tracking
+│       │   ├── admin.js              # Admin routes
+│       │   ├── students.js           # Student management
+│       │   ├── messages.js           # Direct messaging
+│       │   └── forum.js              # Forum posts & replies
+│       ├── services/
+│       │   ├── emailService.js       # Nodemailer email templates
+│       │   └── rag/
+│       │       └── tutorService.js   # Multi-provider AI service
+│       └── tests/
+│           └── api.test.js
 │
-├── infra/
-│   ├── docker-compose.yml           # Keycloak container definition
-│   └── keycloak/                    # Keycloak realm & theme config
+├── frontend/                         # Next.js 14 Application
+│   ├── .env.local
+│   ├── package.json
+│   ├── next.config.js / tsconfig.json / tailwind.config.js
+│   ├── public/
+│   │   ├── games/                    # Game thumbnail images
+│   │   ├── images/                   # Hero & marketing images
+│   │   └── silent-check-sso.html     # Keycloak silent SSO
+│   └── src/
+│       ├── app/
+│       │   ├── globals.css           # Design system & CSS variables
+│       │   ├── layout.js             # Root layout (Keycloak + theme provider)
+│       │   ├── page.jsx              # Landing page
+│       │   ├── not-found.jsx         # 404 page
+│       │   ├── (auth)/               # Login callback, set-password, verify-email
+│       │   ├── (dashboard)/          # Admin, instructor, student dashboards, profile
+│       │   ├── (marketing)/          # Contact, privacy, terms pages
+│       │   ├── (platform)/           # Courses, chat, forum, games, messages
+│       │   └── api/tutor/            # Next.js API routes for AI features
+│       ├── components/
+│       │   ├── layout/               # Sidebar, Header, Footer
+│       │   └── ui/                   # SearchModal, ToggleSwitch, UserAvatar
+│       └── lib/
+│           ├── keycloak.js           # Keycloak singleton instance
+│           ├── KeycloakProvider.jsx   # Keycloak React provider
+│           ├── authStore.js          # Zustand auth store
+│           ├── themeStore.js         # Zustand theme store (light/dark)
+│           ├── api.js                # Axios client (all API endpoints)
+│           ├── i18n.js               # Internationalization system
+│           └── tutor/                # AI tutor library (embeddings, RAG)
 │
-└── keycloak/
-    └── themes/                      # Custom EduAI Keycloak login theme
+├── services/                         # Standalone Microservices
+│   └── ai-tutor/                     # AI Tutor standalone app
+│       └── ai-tutor-main/            # Next.js + Supabase + Gemini
+│
+└── infra/                            # Infrastructure & DevOps
+    ├── keycloak/
+    │   └── themes/eduai/login/       # Custom Keycloak login/register theme
+    └── scripts/keycloak/             # PowerShell setup & config scripts
 ```
 
 ---
@@ -266,13 +305,13 @@ elearning-pfe/
 
 ### Prerequisites
 
-Make sure you have the following installed:
-
 - **Node.js** ≥ 18 — [Download](https://nodejs.org/)
 - **npm** ≥ 9
 - **Docker** + **Docker Compose** — [Download](https://www.docker.com/)
 - **MongoDB Atlas** account (or local MongoDB) — [Get started free](https://www.mongodb.com/atlas)
 - **Groq API Key** (free) — [console.groq.com](https://console.groq.com)
+- *(Optional)* **OpenAI API Key** — fallback AI provider
+- *(Optional)* **Gemini API Key** — tertiary fallback
 - *(Optional)* **Cloudinary** account for image uploads
 
 ---
@@ -280,8 +319,8 @@ Make sure you have the following installed:
 ### Step 1 — Clone the Repository
 
 ```bash
-git clone https://github.com/aymen663/elearning-pfe.git
-cd elearning-pfe
+git clone https://github.com/aymen663/elearning.git
+cd elearning
 ```
 
 ---
@@ -289,7 +328,6 @@ cd elearning-pfe
 ### Step 2 — Start Keycloak
 
 ```bash
-cd infra
 docker compose up -d
 ```
 
@@ -308,8 +346,8 @@ In the Keycloak Admin Console ([http://localhost:8080](http://localhost:8080)):
    - Client type: `Public`
    - Valid Redirect URIs: `http://localhost:3000/*`
    - Web Origins: `http://localhost:3000`
-3. *(Optional)* Add **Identity Providers** for Google and GitHub
-4. The custom **EduAI theme** is already included in `keycloak/themes/` — mount it via Docker volume (already configured in `docker-compose.yml`)
+3. *(Optional)* Add **Identity Providers** for Google OAuth
+4. The custom **EduAI theme** is automatically mounted via Docker volume
 
 ---
 
@@ -318,11 +356,7 @@ In the Keycloak Admin Console ([http://localhost:8080](http://localhost:8080)):
 ```bash
 cd backend
 cp .env.example .env
-```
-
-Edit `.env` with your values (see [Environment Variables](#-environment-variables)):
-
-```bash
+# Edit .env with your values (see Environment Variables section)
 npm install
 ```
 
@@ -332,6 +366,7 @@ npm install
 
 ```bash
 cd frontend
+npm install
 ```
 
 Create `.env.local`:
@@ -343,7 +378,12 @@ NEXT_PUBLIC_KEYCLOAK_REALM=elearning
 NEXT_PUBLIC_KEYCLOAK_CLIENT_ID=elearning-frontend
 ```
 
+---
+
+### Step 6 — Install Root Dependencies
+
 ```bash
+# From the project root
 npm install
 ```
 
@@ -358,13 +398,14 @@ npm install
 | `PORT` | Express server port (default: `5000`) | ✅ |
 | `MONGODB_URI` | MongoDB Atlas connection URI | ✅ |
 | `JWT_SECRET` | Secret key for local JWT signing | ✅ |
-| `KEYCLOAK_URL` | Keycloak base URL (e.g. `http://localhost:8080`) | ✅ |
+| `KEYCLOAK_URL` | Keycloak base URL | ✅ |
 | `KEYCLOAK_REALM` | Keycloak realm name (`elearning`) | ✅ |
 | `KEYCLOAK_CLIENT_ID` | Keycloak client ID (`elearning-frontend`) | ✅ |
 | `KEYCLOAK_ADMIN_USER` | Keycloak admin username | ✅ |
 | `KEYCLOAK_ADMIN_PASS` | Keycloak admin password | ✅ |
-| `GROQ_API_KEY` | Groq API key for Llama 3.3 inference | ✅ |
-| `OPENAI_API_KEY` | OpenAI API key (used for embeddings) | ⚡ |
+| `GROQ_API_KEY` | Groq API key — primary AI provider | ✅ |
+| `OPENAI_API_KEY` | OpenAI API key — fallback provider + embeddings | ⚡ |
+| `GEMINI_API_KEY` | Gemini API key — tertiary fallback | ⚡ |
 | `FRONTEND_URL` | Frontend base URL (`http://localhost:3000`) | ✅ |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | ⚡ |
 | `CLOUDINARY_API_KEY` | Cloudinary API key | ⚡ |
@@ -373,32 +414,6 @@ npm install
 | `GOOGLE_CLIENT_SECRET` | Google OAuth Client Secret | ⚡ |
 
 > ✅ Required &nbsp;·&nbsp; ⚡ Optional (feature is disabled if not set)
-
-**Example `backend/.env`:**
-
-```env
-PORT=5000
-MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.xxxx.mongodb.net/?appName=Cluster0
-JWT_SECRET=your_long_random_jwt_secret_here
-JWT_EXPIRES_IN=7d
-
-KEYCLOAK_URL=http://localhost:8080
-KEYCLOAK_REALM=elearning
-KEYCLOAK_CLIENT_ID=elearning-frontend
-KEYCLOAK_ADMIN_USER=admin
-KEYCLOAK_ADMIN_PASS=admin
-
-GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
-
-FRONTEND_URL=http://localhost:3000
-
-CLOUDINARY_CLOUD_NAME=xxxx
-CLOUDINARY_API_KEY=xxxx
-CLOUDINARY_API_SECRET=xxxx
-```
-
----
 
 ### Frontend — `frontend/.env.local`
 
@@ -413,50 +428,33 @@ CLOUDINARY_API_SECRET=xxxx
 
 ## ▶️ Running the App
 
-### Development Mode
+### Quick Start (Recommended)
 
-Open **3 separate terminals**:
+From the project root, start everything with a single command:
 
-**Terminal 1 — Keycloak (if not already running):**
 ```bash
-cd infra
+# 1. Start Keycloak
 docker compose up -d
-```
-> Keycloak available at [http://localhost:8080](http://localhost:8080)
 
-**Terminal 2 — Backend API:**
-```bash
-cd backend
+# 2. Start backend + frontend simultaneously
 npm run dev
 ```
-> API available at [http://localhost:5000](http://localhost:5000)
 
-**Terminal 3 — Frontend:**
-```bash
-cd frontend
-npm run dev
-```
-> App available at [http://localhost:3000](http://localhost:3000)
+| Service | URL |
+|---|---|
+| Frontend | [http://localhost:3000](http://localhost:3000) |
+| Backend API | [http://localhost:5000](http://localhost:5000) |
+| Keycloak | [http://localhost:8080](http://localhost:8080) |
 
----
-
-### Production Mode
+### Individual Services
 
 ```bash
-# Backend
-cd backend && npm start
-
-# Frontend
-cd frontend
-npm run build
-npm start
+npm run dev:backend    # Backend only (port 5000)
+npm run dev:frontend   # Frontend only (port 3000)
+npm run dev:tutor      # AI Tutor standalone service
 ```
-
----
 
 ### Health Check
-
-Verify the backend is connected and healthy:
 
 ```
 GET http://localhost:5000/api/health
@@ -470,35 +468,35 @@ GET http://localhost:5000/api/health
 ### Authentication
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `GET` | `/api/auth/me` | ✅ Bearer | Retourne le profil de l'utilisateur connecté |
-| `POST` | `/api/auth/keycloak-sync` | ✅ Bearer | Synchronise le compte Keycloak ↔ MongoDB après login |
-| `POST` | `/api/auth/verify-email` | — | Vérifie le token d'email et délivre un `setPasswordToken` (1h) |
-| `POST` | `/api/auth/set-password` | — | Définit le mot de passe, active le compte et synchronise Keycloak |
+| `GET` | `/api/auth/me` | ✅ Bearer | Get current user profile |
+| `POST` | `/api/auth/keycloak-sync` | ✅ Bearer | Sync Keycloak account ↔ MongoDB |
+| `POST` | `/api/auth/verify-email` | — | Verify email token |
+| `POST` | `/api/auth/set-password` | — | Set password & activate account |
 
 ### Courses
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `GET` | `/api/courses` | — | List all courses (supports `?category`, `?level`, `?search`, `?page`) |
-| `GET` | `/api/courses/:id` | — | Get course details + student progress |
+| `GET` | `/api/courses` | — | List courses (`?category`, `?level`, `?search`, `?page`) |
+| `GET` | `/api/courses/:id` | — | Course details + student progress |
 | `POST` | `/api/courses` | Instructor | Create a new course |
 | `PUT` | `/api/courses/:id` | Instructor | Update a course |
 | `DELETE` | `/api/courses/:id` | Instructor/Admin | Delete a course |
 | `POST` | `/api/courses/:id/enroll` | Student | Enroll in a course |
 | `DELETE` | `/api/courses/:id/enroll` | Student | Unenroll from a course |
-| `POST` | `/api/courses/:id/lessons/:lid/upload-pdf` | Instructor | Upload PDF, extract text, ingest into RAG |
+| `POST` | `/api/courses/:id/lessons/:lid/upload-pdf` | Instructor | Upload PDF & extract text |
 | `POST` | `/api/courses/:id/lessons/:lid/translate` | Student | AI-translate a lesson |
 
 ### AI Features
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `POST` | `/api/chat` | Student | Ask a question to the RAG AI tutor |
-| `POST` | `/api/quiz/generate` | Student | Generate an adaptive AI quiz for a lesson |
+| `POST` | `/api/chat` | Student | Ask the AI tutor a question |
+| `POST` | `/api/quiz/generate` | Student | Generate an adaptive AI quiz |
 
 ### Progress & Certificates
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `GET` | `/api/progress/:courseId` | Student | Get lesson progress for a course |
-| `POST` | `/api/progress/:courseId/lessons/:lid` | Student | Mark a lesson as complete |
+| `GET` | `/api/progress/:courseId` | Student | Get lesson progress |
+| `POST` | `/api/progress/:courseId/lessons/:lid` | Student | Mark lesson as complete |
 
 ### Community
 | Method | Endpoint | Auth | Description |
@@ -506,7 +504,7 @@ GET http://localhost:5000/api/health
 | `GET` | `/api/forum` | Student | List forum posts |
 | `POST` | `/api/forum` | Student | Create a forum post |
 | `POST` | `/api/forum/:id/replies` | Student | Reply to a post |
-| `GET` | `/api/messages` | Student | Get direct message threads |
+| `GET` | `/api/messages` | Student | Get message threads |
 | `POST` | `/api/messages` | Student | Send a direct message |
 
 ### Admin
@@ -514,79 +512,78 @@ GET http://localhost:5000/api/health
 |---|---|---|---|
 | `GET` | `/api/admin/stats` | Admin | Global platform statistics |
 | `GET` | `/api/admin/users` | Admin | List all users |
-| `PATCH` | `/api/admin/users/:id/role` | Admin | Update a user's role |
+| `PATCH` | `/api/admin/users/:id/role` | Admin | Update user role |
 | `DELETE` | `/api/admin/users/:id` | Admin | Delete a user |
-| `POST` | `/api/admin/teachers` | Admin | Create a teacher account and send email invitation |
-| `POST` | `/api/admin/resend-verification/:id` | Admin | Resend the verification email to a teacher |
+| `POST` | `/api/admin/teachers` | Admin | Create teacher & send invitation |
+| `POST` | `/api/admin/resend-verification/:id` | Admin | Resend verification email |
 
 ---
 
 ## 👤 User Roles
 
-Roles are stored in MongoDB and assigned by admins. To promote a user programmatically:
-
-```http
-PATCH /api/admin/users/:id/role
-Authorization: Bearer <admin_jwt>
-Content-Type: application/json
-
-{ "role": "instructor" }
-```
-
 | Role | Accessible Features |
 |---|---|
-| `student` | Course catalog (with creation date), lessons, AI tutor, adaptive quizzes, forum, DMs, certificates, profile |
-| `instructor` | All student features + course creation/editing, PDF uploads, student analytics (courses auto-published on first lesson) |
-| `admin` | User management (students & instructors), global statistics dashboard |
+| `student` | Courses, lessons, AI tutor, quizzes, games, forum, DMs, certificates, profile |
+| `instructor` | All student features + course creation, PDF uploads, student analytics, access requests |
+| `admin` | User management, course oversight, global statistics |
 
 ---
 
 ## 👩‍🏫 Teacher Onboarding Flow
 
-When an admin creates a teacher account, the following process is triggered automatically:
-
 ```
 1. Admin  →  POST /api/admin/teachers
-              └─ MongoDB: User created (isActive: false, emailVerified: false)
+              └─ MongoDB: User created (isActive: false)
               └─ Keycloak Admin API: user created, keycloakId stored
-              └─ Email Service: invitation email sent with a signed token
+              └─ Email Service: invitation email sent with signed token
 
-2. Teacher opens the email link  →  /verify-email?token=<raw_token>
+2. Teacher opens email link  →  /verify-email?token=<token>
               └─ POST /api/auth/verify-email
               └─ SHA-256(token) matched in DB
               └─ emailVerified = true
-              └─ New setPasswordToken generated (1h TTL)
+              └─ setPasswordToken generated (1h TTL)
 
 3. Teacher sets password  →  /set-password
-              └─ POST /api/auth/set-password { token, password, confirmPassword }
-              └─ Password hashed via bcrypt hook → saved to MongoDB
+              └─ POST /api/auth/set-password
+              └─ Password hashed (bcrypt) → MongoDB
               └─ isActive = true
-              └─ Keycloak Admin API: password synced (PUT /reset-password)
-              └─ Keycloak Admin API: profile updated + requiredActions cleared
-              └─ Account is now fully active ✅
+              └─ Keycloak: password synced + requiredActions cleared
+              └─ Account fully active ✅
 ```
 
-> **Token security:** All email tokens are stored as `SHA-256` hashes in MongoDB — the raw token is only ever sent by email and never stored in plain text.
+> **Token security:** All email tokens are stored as `SHA-256` hashes — the raw token is only ever sent by email.
 
 ---
 
-## 🧠 RAG Architecture Deep Dive
+## 🧠 AI Architecture Deep Dive
 
-The AI tutor uses **Retrieval-Augmented Generation (RAG)** to provide accurate, grounded answers:
+EduAI uses a **multi-provider AI service** with automatic failover for maximum reliability:
 
 ```
+┌─────────────────── AI PROVIDER CHAIN ────────────────────────┐
+│                                                               │
+│  Request arrives (quiz, chat, translation, etc.)              │
+│         ↓                                                     │
+│  Provider 1: Groq (Llama 3.3 70B)  ← Primary (fastest)      │
+│         ↓ (on failure)                                        │
+│  Provider 2: OpenAI (GPT-4o-mini)  ← Fallback               │
+│         ↓ (on failure)                                        │
+│  Provider 3: Gemini (2.5 Flash)    ← Tertiary (rate retry)  │
+│         ↓                                                     │
+│  Response returned to student                                 │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
 ┌─────────────────── INDEXING PIPELINE ────────────────────────┐
 │                                                               │
 │  Instructor uploads PDF / lesson text                         │
 │         ↓                                                     │
 │  pdf-parse extracts raw text                                  │
 │         ↓                                                     │
-│  LangChain RecursiveCharacterTextSplitter                     │
-│  → creates overlapping chunks (e.g. 500 tokens, 50 overlap)  │
+│  Content stored in MongoDB lesson schema                      │
 │         ↓                                                     │
-│  OpenAI Embeddings API → vector representations              │
-│         ↓                                                     │
-│  MemoryVectorStore (per-course, keyed by courseId)           │
+│  On server startup: all published course content              │
+│  is auto-ingested into the AI tutor context                   │
 │                                                               │
 └───────────────────────────────────────────────────────────────┘
 
@@ -594,24 +591,20 @@ The AI tutor uses **Retrieval-Augmented Generation (RAG)** to provide accurate, 
 │                                                               │
 │  Student sends a question via /chat                           │
 │         ↓                                                     │
-│  Embed the question with OpenAI Embeddings                    │
+│  Course content retrieved as context (up to 30K chars)        │
 │         ↓                                                     │
-│  Semantic similarity search in course's vector store         │
+│  System prompt + context + question                           │
 │         ↓                                                     │
-│  Top-k relevant chunks retrieved as context                  │
+│  AI provider chain generates a grounded response              │
 │         ↓                                                     │
-│  Context + question injected into system prompt              │
-│         ↓                                                     │
-│  Groq API → Llama 3.3 70B generates a grounded response      │
-│         ↓                                                     │
-│  Response streamed back to the student                       │
+│  Response returned to the student                             │
 │                                                               │
 └───────────────────────────────────────────────────────────────┘
 ```
 
-> **Auto-ingestion:** On every server startup, all published course content is automatically re-ingested into the vector store — ensuring the AI tutor is always up to date without manual intervention.
+> **Auto-ingestion:** On every server startup, all published course content is automatically re-ingested — ensuring the AI tutor is always up to date.
 
-> **Auto-publication:** Courses are published automatically as soon as the first lesson is created, and reverted to draft status if all lessons are removed. No manual publish/unpublish action is required from instructors.
+> **Auto-publication:** Courses are published automatically when they have at least one lesson, and reverted to draft if all lessons are removed.
 
 ---
 
@@ -625,7 +618,7 @@ Contributions, issues, and feature requests are welcome!
 4. **Push** to the branch: `git push origin feature/amazing-feature`
 5. **Open** a Pull Request
 
-Please follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for commit messages.
+Please follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
 
 ---
 
@@ -633,13 +626,13 @@ Please follow the [Conventional Commits](https://www.conventionalcommits.org/) s
 
 **Aymen Ben Salah**
 
-> 🎓 Final Year Project (PFE) — AI-Powered E-Learning Platform with Generative AI  
+> 🎓 Final Year Project (PFE) — AI-Powered E-Learning Platform with Generative AI
 > Built with ❤️ using Next.js, Express, LangChain, and Keycloak
 
 ---
 
 <div align="center">
 
-**© 2026 EduAI** &nbsp;·&nbsp; Powered by Llama 3.3 70B & LangChain &nbsp;·&nbsp; Secured by Keycloak ...
+**© 2026 EduAI** &nbsp;·&nbsp; Multi-Provider AI (Groq · OpenAI · Gemini) &nbsp;·&nbsp; Secured by Keycloak
 
 </div>
