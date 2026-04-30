@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { progressAPI, messagesAPI } from '@/lib/api';
+import NetworkBackground from '@/components/ui/NetworkBackground';
 
 
 function NotificationBell() {
@@ -386,7 +387,7 @@ export default function Sidebar({ children }) {
     );
 
     return (
-        <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-primary)', position: 'relative' }}>
+        <div className="flex h-screen overflow-hidden" style={{ position: 'relative' }}>
             <aside
                 onMouseEnter={() => isChatPage && setSidebarHoverExpanded(true)}
                 onMouseLeave={() => isChatPage && setSidebarHoverExpanded(false)}
@@ -420,9 +421,9 @@ export default function Sidebar({ children }) {
                 )}
                 <header className="h-12 border-b flex items-center gap-2.5 px-4 lg:px-5 flex-shrink-0"
                     style={{
-                        background: (!mounted || dark) ? 'var(--bg-header)' : '#ffffff',
-                        backdropFilter: (!mounted || dark) ? 'blur(16px)' : 'none',
-                        WebkitBackdropFilter: (!mounted || dark) ? 'blur(16px)' : 'none',
+                        background: (!mounted || dark) ? 'var(--bg-header)' : 'rgba(255,255,255,0.85)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
                         borderColor: (!mounted || dark) ? 'var(--border-sidebar)' : '#e2e8f0'
                     }}>
 
@@ -479,11 +480,12 @@ export default function Sidebar({ children }) {
                 </header>
 
                 <main className={`flex-1 overflow-y-auto animate-fade-in ${isChatPage ? 'p-0' : 'p-4 lg:p-5'}`}
-                    style={{ background: (!mounted || dark) ? 'transparent' : '#f0f2f5' }}>
+                    style={{ background: 'transparent' }}>
                     {children}
                 </main>
             </div>
             <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+            <NetworkBackground mode={(!mounted || dark) ? 'dark' : 'light'} />
         </div>
     );
 }

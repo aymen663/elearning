@@ -333,17 +333,18 @@ export default function InstructorDashboard() {
                             style={{
                                 display: 'flex', alignItems: 'center',
                                 padding: '16px 20px', borderRadius: T.card.radius,
-                                background: '#f0fdf4',
-                                border: '1px solid #a7f3d0',
+                                background: 'var(--bg-card)',
+                                border: '1px solid var(--border)',
+                                borderLeft: '4px solid #10b981',
                             }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(5,150,105,0.1)', border: '1px solid rgba(5,150,105,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Sparkles style={{ width: 17, height: 17, color: '#059669' }} />
+                                <div style={{ width: 36, height: 36, borderRadius: 9, background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Sparkles style={{ width: 17, height: 17, color: '#10b981' }} />
                                 </div>
                                 <div>
-                                    <h3 style={{ fontWeight: 600, color: '#064e3b', fontSize: 13 }}>Gérez vos cours comme un pro !</h3>
-                                    <p style={{ fontSize: 12, color: '#059669', marginTop: 1 }}>EduAI vous offre tous les outils pour réussir.</p>
+                                    <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: 13 }}>Gérez vos cours comme un pro !</h3>
+                                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 1 }}>EduAI vous offre tous les outils pour réussir.</p>
                                 </div>
                             </div>
                         </div>
