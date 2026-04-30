@@ -98,4 +98,122 @@ router.get('/me/stats', protect, async (req, res) => {
 });
 
 
+// ─── Change password (authenticated) ─────────────────────────────────────────
+router.put('/me/password', protect, async (req, res) => {
+    try {
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+
+        if (!currentPassword) return res.status(400).json({ message: 'Mot de passe actuel requis' });
+        if (!newPassword)     return res.status(400).json({ message: 'Nouveau mot de passe requis' });
+        if (newPassword.length < 8)
+            return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 8 caractères' });
+        if (newPassword !== confirmPassword)
+            return res.status(400).json({ message: 'Les mots de passe ne correspondent pas' });
+
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ message: 'Utilisateur introuvable' });
+
+        const isMatch = await user.comparePassword(currentPassword);
+        if (!isMatch) return res.status(401).json({ message: 'Mot de passe actuel incorrect' });
+
+        user.password = newPassword;
+        await user.save(); // bcrypt hash hook fires automatically
+
+        // Sync to Keycloak if user has a keycloakId
+        if (user.keycloakId) {
+            try {
+                const KC_URL   = process.env.KEYCLOAK_URL   || 'http://localhost:8080';
+                const KC_REALM = process.env.KEYCLOAK_REALM || 'elearning';
+                const tokenRes = await fetch(`${KC_URL}/realms/master/protocol/openid-connect/token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        grant_type: 'password', client_id: 'admin-cli',
+                        username: process.env.KEYCLOAK_ADMIN_USER || 'admin',
+                        password: process.env.KEYCLOAK_ADMIN_PASS || 'admin',
+                    }),
+                    signal: AbortSignal.timeout(5000),
+                });
+                if (tokenRes.ok) {
+                    const { access_token } = await tokenRes.json();
+                    await fetch(`${KC_URL}/admin/realms/${KC_REALM}/users/${user.keycloakId}/reset-password`, {
+                        method: 'PUT',
+                        headers: { Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: 'password', value: newPassword, temporary: false }),
+                        signal: AbortSignal.timeout(5000),
+                    });
+                }
+            } catch (e) {
+                console.warn('[change-password] KC sync error:', e.message);
+            }
+        }
+
+        res.json({ message: 'Mot de passe mis à jour avec succès' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+});
+
+
+// ─── Get preferences ─────────────────────────────────────────────────────────
+router.get('/me/preferences', protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('preferences').lean();
+        res.json({
+            preferences: user?.preferences || {
+                language: 'fr',
+                notifications: { email: true, courseUpdates: true, newLessons: true, reminders: false },
+            },
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+});
+
+// ─── Update preferences ──────────────────────────────────────────────────────
+router.put('/me/preferences', protect, async (req, res) => {
+    try {
+        const { language, notifications } = req.body;
+        const update = {};
+        if (language && ['fr', 'en'].includes(language)) {
+            update['preferences.language'] = language;
+        }
+        if (notifications && typeof notifications === 'object') {
+            for (const key of ['email', 'courseUpdates', 'newLessons', 'reminders']) {
+                if (typeof notifications[key] === 'boolean') {
+                    update[`preferences.notifications.${key}`] = notifications[key];
+                }
+            }
+        }
+        const user = await User.findByIdAndUpdate(req.user._id, { $set: update }, { new: true })
+            .select('preferences').lean();
+        res.json({ preferences: user.preferences, message: 'Préférences mises à jour' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+});
+
+// ─── Delete account ──────────────────────────────────────────────────────────
+router.delete('/me', protect, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const Message = (await import('../models/Message.js')).default;
+        const ForumPost = (await import('../models/ForumPost.js')).default;
+        const ForumReply = (await import('../models/ForumReply.js')).default;
+
+        await Promise.all([
+            Progress.deleteMany({ student: userId }),
+            Message.deleteMany({ $or: [{ sender: userId }, { receiver: userId }] }),
+            ForumReply.deleteMany({ author: userId }),
+            ForumPost.deleteMany({ author: userId }),
+            Course.updateMany({}, { $pull: { enrolledStudents: userId } }),
+        ]);
+        await User.findByIdAndDelete(userId);
+        res.json({ message: 'Compte supprimé avec succès' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erreur serveur', error: error.message });
+    }
+});
+
+
 export default router;

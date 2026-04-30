@@ -18,6 +18,15 @@ const userSchema = new mongoose.Schema(
     provider: { type: String, enum: ['local', 'google', 'github', 'apple', 'keycloak'], default: 'local' },
     providerId: { type: String, default: '' },
     keycloakId: { type: String, default: '', index: true },
+    preferences: {
+      language: { type: String, enum: ['fr', 'en'], default: 'fr' },
+      notifications: {
+        email: { type: Boolean, default: true },
+        courseUpdates: { type: Boolean, default: true },
+        newLessons: { type: Boolean, default: true },
+        reminders: { type: Boolean, default: false },
+      },
+    },
   },
   { timestamps: true }
 );

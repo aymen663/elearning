@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from '@/lib/authStore';
 import { useKeycloak } from '@react-keycloak/web';
 import UserAvatar from '@/components/ui/UserAvatar';
+import { useLangStore } from '@/lib/i18n';
 import SearchModal from '@/components/ui/SearchModal';
 import {
     LayoutDashboard, Users, BookOpen, GraduationCap,
@@ -167,81 +168,58 @@ function CalendarDropdown() {
 }
 
 
-const adminNav = [
-    {
-        title: 'GÉNÉRAL',
-        items: [
-            { href: '/admin', icon: LayoutDashboard, label: 'Tableau de bord' },
-            { href: '/admin/courses', icon: BookOpen, label: 'Cours' },
-        ]
-    },
-    {
-        title: 'GESTION',
-        items: [
-            { href: '/admin/teachers', icon: GraduationCap, label: 'Professeurs' },
-            { href: '/admin/students', icon: Users, label: 'Étudiants' },
-        ]
-    }
-];
+function getAdminNav(t) { return [
+    { title: t('nav.general'), items: [
+        { href: '/admin', icon: LayoutDashboard, label: t('nav.board') },
+        { href: '/admin/courses', icon: BookOpen, label: t('nav.courses') },
+    ]},
+    { title: t('nav.management'), items: [
+        { href: '/admin/teachers', icon: GraduationCap, label: t('nav.teachers') },
+        { href: '/admin/students', icon: Users, label: t('nav.students') },
+    ]},
+];}
 
-const instructorNav = [
-    {
-        title: 'GÉNÉRAL',
-        items: [
-            { href: '/instructor', icon: LayoutDashboard, label: 'Tableau de bord' },
-            { href: '/instructor/courses/new', icon: BookOpen, label: 'Nouveau cours' },
-            { href: '/instructor/students', icon: Users, label: 'Mes Étudiants' },
-        ]
-    },
-    {
-        title: 'GESTION',
-        items: [
-            { href: '/instructor/requests', icon: CheckCircle, label: "Demandes d'accès" },
-            { href: '/instructor/analytics', icon: BarChart2, label: 'Analytics' },
-        ]
-    },
-    {
-        title: 'COMMUNICATION',
-        items: [
-            { href: '/messages', icon: MessageSquare, label: 'Messages' },
-            { href: '/forum', icon: MessagesSquare, label: 'Forum' },
-        ]
-    }
-];
+function getInstructorNav(t) { return [
+    { title: t('nav.general'), items: [
+        { href: '/instructor', icon: LayoutDashboard, label: t('nav.board') },
+        { href: '/instructor/courses/new', icon: BookOpen, label: t('nav.newCourse') },
+        { href: '/instructor/students', icon: Users, label: t('nav.myStudents') },
+    ]},
+    { title: t('nav.management'), items: [
+        { href: '/instructor/requests', icon: CheckCircle, label: t('nav.requests') },
+        { href: '/instructor/analytics', icon: BarChart2, label: t('nav.analytics') },
+    ]},
+    { title: t('nav.communication'), items: [
+        { href: '/messages', icon: MessageSquare, label: t('nav.messages') },
+        { href: '/forum', icon: MessagesSquare, label: t('nav.forum') },
+    ]},
+    { title: t('nav.other'), items: [
+        { href: '/profile', icon: Settings, label: t('nav.settings') },
+    ]},
+];}
 
-const studentNav = [
-    {
-        title: 'GÉNÉRAL',
-        items: [
-            { href: '/dashboard', icon: Home, label: 'Mon espace' },
-            { href: '/courses', icon: Book, label: 'Liste de cours' },
-        ]
-    },
-    {
-        title: 'COMMUNICATION',
-        items: [
-            { href: '/messages', icon: MessageSquare, label: 'Messages' },
-            { href: '/forum', icon: User, label: 'Forum' },
-        ]
-    },
-    {
-        title: 'IA & OUTILS',
-        items: [
-            { href: '/chat', icon: Bot, label: 'Tuteur IA' },
-        ]
-    },
-    {
-        title: 'AUTRE',
-        items: [
-            { href: '/games', icon: Gamepad2, label: 'Jeux' },
-            { href: '/profile', icon: Settings, label: 'Paramètres' },
-        ]
-    }
-];
+function getStudentNav(t) { return [
+    { title: t('nav.general'), items: [
+        { href: '/dashboard', icon: Home, label: t('nav.dashboard') },
+        { href: '/courses', icon: Book, label: t('nav.courses') },
+    ]},
+    { title: t('nav.communication'), items: [
+        { href: '/messages', icon: MessageSquare, label: t('nav.messages') },
+        { href: '/forum', icon: User, label: t('nav.forum') },
+    ]},
+    { title: t('nav.tools'), items: [
+        { href: '/chat', icon: Bot, label: t('nav.tutor') },
+    ]},
+    { title: t('nav.other'), items: [
+        { href: '/games', icon: Gamepad2, label: t('nav.games') },
+        { href: '/profile', icon: Settings, label: t('nav.settings') },
+    ]},
+];}
 
 export default function Sidebar({ children }) {
     const pathname = usePathname();
     const { user, logout } = useAuthStore();
+    const { t } = useLangStore();
     const { initialized } = useKeycloak();
     const [open, setOpen] = useState(false);
     const [dark, setDark] = useState(() => {
@@ -252,6 +230,11 @@ export default function Sidebar({ children }) {
     const [searchOpen, setSearchOpen] = useState(false);
     const [sidebarPinnedExpanded, setSidebarPinnedExpanded] = useState(false);
     const [sidebarHoverExpanded, setSidebarHoverExpanded] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
 
 
@@ -306,9 +289,9 @@ export default function Sidebar({ children }) {
     };
 
     const nav =
-        user?.role === 'admin' ? adminNav :
-            user?.role === 'instructor' ? instructorNav :
-                studentNav;
+        user?.role === 'admin' ? getAdminNav(t) :
+            user?.role === 'instructor' ? getInstructorNav(t) :
+                getStudentNav(t);
     const isChatPage = pathname?.startsWith('/chat');
     const isDesktopCompact = isChatPage && !sidebarPinnedExpanded && !sidebarHoverExpanded;
 
@@ -346,7 +329,7 @@ export default function Sidebar({ children }) {
 
             {/* ── Navigation ── */}
             <nav className={`flex-1 py-2 overflow-y-auto ${compact ? 'px-2' : 'px-4'}`}>
-                {nav.map((group, idx) => (
+                {(!mounted ? getStudentNav(t) : nav).map((group, idx) => (
                     <div key={idx} className="mb-6">
                         {!compact && <p className="px-3 mb-2 text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-[0.14em]">{group.title}</p>}
                         <div className="space-y-1">
@@ -381,7 +364,7 @@ export default function Sidebar({ children }) {
             {/* ── Bottom section ── */}
             <div className={`mt-auto space-y-2 ${compact ? 'p-2' : 'p-4'}`}>
                 {/* User card */}
-                {user && (
+                {mounted && user && (
                     <div className={`rounded-xl p-2.5 flex items-center ${compact ? 'justify-center' : 'gap-3'} border transition-all duration-300 bg-slate-900/35 border-slate-700/40 hover:bg-slate-800/45`} title={compact ? `${user.name} (${user.email})` : undefined}>
                         <div className="relative flex-shrink-0">
                             <UserAvatar user={user} size="sm" showStatus isOnline />
@@ -394,9 +377,9 @@ export default function Sidebar({ children }) {
                 )}
 
                 {/* Logout */}
-                <button onClick={logout} title={compact ? 'Déconnexion' : undefined} className={`flex items-center ${compact ? 'justify-center' : 'gap-3'} px-3 py-2.5 w-full rounded-lg text-sm font-medium transition-all duration-300 hover:translate-x-0.5 text-slate-400 hover:bg-slate-800/50 hover:text-red-300`}>
+                <button onClick={logout} title={compact ? t('nav.logout') : undefined} className={`flex items-center ${compact ? 'justify-center' : 'gap-3'} px-3 py-2.5 w-full rounded-lg text-sm font-medium transition-all duration-300 hover:translate-x-0.5 text-slate-400 hover:bg-slate-800/50 hover:text-red-300`}>
                     <LogOut className="w-5 h-5" />
-                    {!compact && <span>Déconnexion</span>}
+                    {!compact && <span>{t('nav.logout')}</span>}
                 </button>
             </div>
         </div>
@@ -432,15 +415,15 @@ export default function Sidebar({ children }) {
                 {/* Thin loading bar while Keycloak initializes */}
                 {!initialized && (
                     <div className="h-0.5 w-full overflow-hidden flex-shrink-0" style={{ background: 'transparent' }}>
-                        <div className="h-0.5 animate-pulse" style={{ background: dark ? 'linear-gradient(90deg, #475569, #94a3b8, #475569)' : 'linear-gradient(90deg, #94a3b8, #64748b, #94a3b8)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
+                        <div className="h-0.5 animate-pulse" style={{ background: (!mounted || dark) ? 'linear-gradient(90deg, #475569, #94a3b8, #475569)' : 'linear-gradient(90deg, #94a3b8, #64748b, #94a3b8)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite' }} />
                     </div>
                 )}
                 <header className="h-12 border-b flex items-center gap-2.5 px-4 lg:px-5 flex-shrink-0"
                     style={{
-                        background: dark ? 'var(--bg-header)' : '#ffffff',
-                        backdropFilter: dark ? 'blur(16px)' : 'none',
-                        WebkitBackdropFilter: dark ? 'blur(16px)' : 'none',
-                        borderColor: dark ? 'var(--border-sidebar)' : '#e2e8f0'
+                        background: (!mounted || dark) ? 'var(--bg-header)' : '#ffffff',
+                        backdropFilter: (!mounted || dark) ? 'blur(16px)' : 'none',
+                        WebkitBackdropFilter: (!mounted || dark) ? 'blur(16px)' : 'none',
+                        borderColor: (!mounted || dark) ? 'var(--border-sidebar)' : '#e2e8f0'
                     }}>
 
                     {/* Mobile menu trigger */}
@@ -452,10 +435,10 @@ export default function Sidebar({ children }) {
                     <button
                         onClick={() => setSearchOpen(true)}
                         className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs flex-1 max-w-sm text-left transition-all"
-                        style={{ background: dark ? 'rgba(255,255,255,0.06)' : '#eef2f6', border: dark ? '1px solid var(--border)' : '1.5px solid var(--border-strong)', color: 'var(--text-muted)' }}
+                        style={{ background: (!mounted || dark) ? 'rgba(255,255,255,0.06)' : '#eef2f6', border: (!mounted || dark) ? '1px solid var(--border)' : '1.5px solid var(--border-strong)', color: 'var(--text-muted)' }}
                     >
                         <Search className="w-3.5 h-3.5" />
-                        <span className="flex-1">Rechercher des cours, leçons...</span>
+                        <span className="flex-1">{t('topbar.search')}</span>
                         <kbd className="flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] border" style={{ borderColor: 'var(--border-strong)' }}>⌘K</kbd>
                     </button>
 
@@ -478,15 +461,16 @@ export default function Sidebar({ children }) {
                         <button
                             onClick={toggleTheme}
                             className="topbar-icon-btn"
-                            title={dark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+                            title={(!mounted || dark) ? t('topbar.lightMode') : t('topbar.darkMode')}
+                            suppressHydrationWarning
                         >
-                            {dark
+                            {(!mounted || dark)
                                 ? <Sun className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} />
                                 : <Moon className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} />}
                         </button>
 
                         {/* User avatar */}
-                        {user && (
+                        {mounted && user && (
                             <div className="flex-shrink-0 ml-1">
                                 <UserAvatar user={user} size="sm" showStatus isOnline />
                             </div>
@@ -495,7 +479,7 @@ export default function Sidebar({ children }) {
                 </header>
 
                 <main className={`flex-1 overflow-y-auto animate-fade-in ${isChatPage ? 'p-0' : 'p-4 lg:p-5'}`}
-                    style={{ background: dark ? 'transparent' : '#f0f2f5' }}>
+                    style={{ background: (!mounted || dark) ? 'transparent' : '#f0f2f5' }}>
                     {children}
                 </main>
             </div>

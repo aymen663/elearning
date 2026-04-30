@@ -4,22 +4,22 @@ import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/layout/Sidebar';
 import { Gamepad2, ArrowRight } from 'lucide-react';
 
-/* ── Design Tokens ──────────────────────────────────────────────────────── */
+/* ── Design Tokens (theme-aware) ───────────────────────────────────────── */
 const T = {
     card: {
-        bg: '#111827',
-        border: '1px solid rgba(148,163,184,0.18)',
-        radius: '24px',
-        shadow: '0 8px 24px rgba(0,0,0,0.22)',
-        shadowHover: '0 18px 38px rgba(0,0,0,0.35)',
+        bg: 'var(--bg-card)',
+        border: '1.5px solid var(--border-strong)',
+        radius: '16px',
+        shadow: 'var(--card-shadow)',
+        shadowHover: 'var(--card-shadow-hover)',
     },
     text: {
-        primary: '#f3f4f6',
-        secondary: '#d1d5db',
-        muted: '#9ca3af',
+        primary: 'var(--text-primary)',
+        secondary: 'var(--text-secondary)',
+        muted: 'var(--text-muted)',
     },
-    accent: '#22c55e',
-    accentSoft: 'rgba(34,197,94,0.14)',
+    accent: 'var(--accent)',
+    accentSoft: 'var(--accent-dim)',
 };
 
 const games = [
@@ -77,8 +77,8 @@ export default function GamesPage() {
                         <div style={{
                             width: 56, height: 56, borderRadius: 16, flexShrink: 0,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: '#111827', border: '1px solid rgba(148,163,184,0.22)',
-                            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                            background: 'var(--bg-card)', border: '1.5px solid var(--border-strong)',
+                            boxShadow: 'var(--card-shadow)',
                         }}>
                             <Gamepad2 style={{ width: 28, height: 28, color: T.accent }} />
                         </div>
@@ -96,12 +96,12 @@ export default function GamesPage() {
                     <div style={{
                         display: 'flex', alignItems: 'center', gap: 12,
                         padding: '12px 20px', borderRadius: 16,
-                        background: '#111827', border: '1px solid rgba(148,163,184,0.2)',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                        background: 'var(--bg-card)', border: '1.5px solid var(--border-strong)',
+                        boxShadow: 'var(--card-shadow)',
                     }}>
                         <span style={{ fontSize: 24 }}>🔥</span>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span style={{ fontSize: 16, fontWeight: 800, color: '#FFFFFF', lineHeight: 1.1 }}>12</span>
+                            <span style={{ fontSize: 16, fontWeight: 800, color: T.text.primary, lineHeight: 1.1 }}>12</span>
                             <span style={{ fontSize: 11, fontWeight: 600, color: T.accent, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 Parties jouées
                             </span>
@@ -201,9 +201,9 @@ export default function GamesPage() {
                                                 <span key={tag} style={{
                                                     padding: '4px 10px', borderRadius: 8, fontSize: 11,
                                                     fontWeight: 600,
-                                                    background: 'rgba(51,65,85,0.7)',
-                                                    color: '#cbd5e1',
-                                                    border: '1px solid rgba(100,116,139,0.4)',
+                                                    background: 'var(--bg-secondary)',
+                                                    color: 'var(--text-secondary)',
+                                                    border: '1px solid var(--border)',
                                                 }}>
                                                     {tag}
                                                 </span>
@@ -226,28 +226,28 @@ export default function GamesPage() {
                     {/* ── Trophy Card (placed dynamically via CSS Grid) ── */}
                     <div style={{
                         gridColumn: '3',
-                        alignSelf: 'end', // Prevents the card from stretching vertically
-                        background: 'linear-gradient(145deg, #111827 0%, #0b1220 100%)',
+                        alignSelf: 'end',
+                        background: 'var(--bg-card)',
                         borderRadius: T.card.radius,
-                        border: '1px solid rgba(148,163,184,0.2)',
+                        border: '1.5px solid var(--border-strong)',
                         padding: '28px 24px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        boxShadow: '0 16px 36px rgba(0,0,0,0.3)',
+                        boxShadow: 'var(--card-shadow)',
                         position: 'relative',
                         overflow: 'hidden'
                     }}>
                         {/* Text and Button */}
                         <div style={{ flex: 1, position: 'relative', zIndex: 2, paddingRight: '12px' }}>
                             <h3 style={{
-                                fontSize: 16, fontWeight: 700, color: '#e5e7eb',
+                                fontSize: 16, fontWeight: 700, color: T.text.primary,
                                 lineHeight: 1.4, marginBottom: 20
                             }}>
                                 Relevez des défis, améliorez-vous et gagnez des badges !
                             </h3>
                             <button style={{
-                                background: '#16a34a',
+                                background: 'linear-gradient(135deg, var(--accent-light), var(--accent))',
                                 color: '#ffffff',
                                 border: 'none',
                                 borderRadius: 10,
@@ -258,7 +258,7 @@ export default function GamesPage() {
                                 alignItems: 'center',
                                 gap: 6,
                                 cursor: 'pointer',
-                                    boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)',
+                                boxShadow: 'var(--shadow-accent)',
                                 transition: 'all 0.2s ease',
                             }}
                             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(22, 163, 74, 0.3)'; }}

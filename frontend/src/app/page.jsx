@@ -161,14 +161,16 @@ export default function HomePage() {
                             </div>
                         </motion.div>
                         <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                            className="absolute -top-2 right-8 z-20 bg-white/10 backdrop-blur-xl rounded-2xl p-3.5 border border-[color:var(--border-hover)] shadow-2xl">
+                            className="absolute -top-2 right-8 z-20 backdrop-blur-xl rounded-2xl p-3.5 border border-[color:var(--border-hover)] shadow-2xl"
+                            style={{ background: isLightMode ? 'rgba(255,255,255,0.9)' : 'rgba(11,61,46,0.8)' }}>
                             <div className="flex items-center gap-2.5">
                                 <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: Y }}><Zap className="w-4 h-4" style={{ color: isLightMode ? '#ffffff' : G }} /></div>
                                 <div><p className="text-[color:var(--text-main)] text-xs font-bold">Quiz Adaptatifs</p><p className="text-[color:var(--text-light)] text-[10px]">Générés par IA</p></div>
                             </div>
                         </motion.div>
                         <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-                            className="absolute bottom-8 -left-4 z-20 bg-white/10 backdrop-blur-xl rounded-2xl p-3.5 border border-[color:var(--border-hover)] shadow-2xl">
+                            className="absolute bottom-8 -left-4 z-20 backdrop-blur-xl rounded-2xl p-3.5 border border-[color:var(--border-hover)] shadow-2xl"
+                            style={{ background: isLightMode ? 'rgba(255,255,255,0.9)' : 'rgba(11,61,46,0.8)' }}>
                             <div className="flex items-center gap-2.5">
                                 <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: Y }}><BarChart2 className="w-4 h-4" style={{ color: isLightMode ? '#ffffff' : G }} /></div>
                                 <div><p className="text-[color:var(--text-main)] text-xs font-bold">Progression</p><p className="text-[color:var(--text-light)] text-[10px]">En temps réel</p></div>

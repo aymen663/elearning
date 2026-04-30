@@ -1020,6 +1020,15 @@ router.get('/:id/lessons/:lessonId/pdf', async (req, res) => {
     }
 
     const filename = lesson.pdfName || 'cours.pdf';
+
+    // Return as base64 JSON to bypass download managers (IDM, etc.)
+    if (req.query.format === 'base64') {
+      const base64 = Buffer.isBuffer(lesson.pdfData)
+        ? lesson.pdfData.toString('base64')
+        : Buffer.from(lesson.pdfData).toString('base64');
+      return res.json({ pdf: base64, filename });
+    }
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
     res.send(lesson.pdfData);

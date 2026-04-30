@@ -29,21 +29,27 @@ const T = {
 };
 
 /* ── Badge helpers ─────────────────────────────────────────────────────── */
-const CAT_COLORS = {
-    'programmation':             { bg: 'rgba(34,197,94,0.12)',   color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
-    'intelligence artificielle': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
-    'data science':              { bg: 'rgba(59,130,246,0.12)',  color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
-    'design':                    { bg: 'rgba(236,72,153,0.12)',  color: '#f472b6', border: 'rgba(236,72,153,0.3)' },
-    'développement web':         { bg: 'rgba(96,165,250,0.12)',  color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
-    'développement':             { bg: 'rgba(96,165,250,0.12)',  color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
-    'marketing':                 { bg: 'rgba(251,146,60,0.12)',  color: '#fb923c', border: 'rgba(251,146,60,0.3)' },
-    'business':                  { bg: 'rgba(251,191,36,0.12)',  color: '#fbbf24', border: 'rgba(251,191,36,0.3)' },
-    'cybersécurité':             { bg: 'rgba(248,113,113,0.12)', color: '#f87171', border: 'rgba(248,113,113,0.3)' },
-};
+const BADGE_PALETTE = [
+    { bg: 'rgba(59,130,246,0.12)', color: '#3b82f6', border: 'rgba(59,130,246,0.3)' }, // Blue
+    { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.3)' }, // Purple
+    { bg: 'rgba(236,72,153,0.12)', color: '#ec4899', border: 'rgba(236,72,153,0.3)' }, // Pink
+    { bg: 'rgba(249,115,22,0.12)', color: '#f97316', border: 'rgba(249,115,22,0.3)' }, // Orange
+    { bg: 'rgba(14,165,233,0.12)', color: '#0ea5e9', border: 'rgba(14,165,233,0.3)' }, // Sky
+    { bg: 'rgba(239,68,68,0.12)', color: '#ef4444', border: 'rgba(239,68,68,0.3)' }, // Red
+    { bg: 'rgba(6,182,212,0.12)', color: '#06b6d4', border: 'rgba(6,182,212,0.3)' }, // Cyan
+    { bg: 'rgba(234,179,8,0.12)', color: '#eab308', border: 'rgba(234,179,8,0.3)' }, // Yellow
+];
+
+function getCategoryBadge(category) {
+    if (!category) return { bg: 'var(--bg-secondary)', color: 'var(--text-muted)', border: 'var(--border)' };
+    const hash = category.toLowerCase().split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return BADGE_PALETTE[hash % BADGE_PALETTE.length];
+}
+
 const LVL_COLORS = {
-    'débutant':      { bg: 'rgba(34,197,94,0.12)',   color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
-    'intermédiaire': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
-    'avancé':        { bg: 'rgba(59,130,246,0.12)',  color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
+    'débutant': { bg: 'rgba(168,85,247,0.12)', color: '#a855f7', border: 'rgba(168,85,247,0.3)' }, // Purple
+    'intermédiaire': { bg: 'rgba(59,130,246,0.12)', color: '#3b82f6', border: 'rgba(59,130,246,0.3)' }, // Blue
+    'avancé': { bg: 'rgba(244,63,94,0.12)', color: '#f43f5e', border: 'rgba(244,63,94,0.3)' }, // Rose
 };
 const ICON_COLORS = [
     ['#3b82f6','#1d4ed8'], ['#8b5cf6','#6d28d9'], ['#ec4899','#be185d'],
@@ -61,19 +67,7 @@ function Badge({ label, bg, color, border }) {
     );
 }
 
-function CourseIcon({ title, index }) {
-    const [a, b] = ICON_COLORS[index % ICON_COLORS.length];
-    return (
-        <div style={{
-            width: 36, height: 36, borderRadius: 9, flexShrink: 0,
-            background: `linear-gradient(135deg, ${a}, ${b})`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 14, fontWeight: 800, color: '#fff',
-        }}>
-            {title?.[0]?.toUpperCase() || '?'}
-        </div>
-    );
-}
+
 
 /* ── Delete Confirm Modal ───────────────────────────────────────────────── */
 function DeleteModal({ course, onConfirm, onCancel, loading }) {
@@ -123,9 +117,9 @@ function DeleteModal({ course, onConfirm, onCancel, loading }) {
 /* ── Course Row ─────────────────────────────────────────────────────────── */
 function CourseRow({ course, index, onToggle, onDelete, togglingId, deletingId }) {
     const [hover, setHover] = useState(false);
-    const cat = course.category?.toLowerCase();
+    const cat = course.category;
     const lvl = course.level?.toLowerCase();
-    const cBdg = CAT_COLORS[cat]  || { bg: 'rgba(99,102,241,0.1)', color: '#818cf8', border: 'rgba(99,102,241,0.2)' };
+    const cBdg = getCategoryBadge(cat);
     const lBdg = LVL_COLORS[lvl]  || { bg: 'rgba(156,163,175,0.1)', color: '#9ca3af', border: 'rgba(156,163,175,0.2)' };
     const students = course.enrolledStudents?.length ?? 0;
     const date = course.createdAt
@@ -148,7 +142,6 @@ function CourseRow({ course, index, onToggle, onDelete, togglingId, deletingId }
         >
             {/* COURS */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                <CourseIcon title={course.title} index={index} />
                 <div style={{ minWidth: 0 }}>
                     <p style={{ fontSize: 13, fontWeight: 700, color: T.text.primary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {course.title}

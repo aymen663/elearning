@@ -92,6 +92,8 @@ export const coursesAPI = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+  getLessonPdf: (courseId, lessonId) =>
+    api.get(`/courses/${courseId}/lessons/${lessonId}/pdf?format=base64`),
   getMyCourses: () => api.get('/courses/instructor/my'),
 
   // ── Secure join system ──
@@ -124,10 +126,14 @@ export const progressAPI = {
 };
 
 export const studentAPI = {
-  getProfile:    ()              => api.get('/students/me'),
-  updateProfile: (data)          => api.put('/students/me', data),
-  uploadAvatar:  (avatarDataUrl) => api.put('/students/me', { avatar: avatarDataUrl }),
-  getStats:      ()              => api.get('/students/me/stats'),
+  getProfile:       ()              => api.get('/students/me'),
+  updateProfile:    (data)          => api.put('/students/me', data),
+  uploadAvatar:     (avatarDataUrl) => api.put('/students/me', { avatar: avatarDataUrl }),
+  getStats:         ()              => api.get('/students/me/stats'),
+  changePassword:   (data)          => api.put('/students/me/password', data),
+  getPreferences:   ()              => api.get('/students/me/preferences'),
+  updatePreferences:(data)          => api.put('/students/me/preferences', data),
+  deleteAccount:    ()              => api.delete('/students/me'),
 };
 
 export const adminAPI = {

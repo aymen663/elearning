@@ -1,14 +1,10 @@
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
-import dynamic from 'next/dynamic';
-
-const KeycloakProvider = dynamic(() => import('@/lib/KeycloakProvider'), {
-  ssr: false,
-});
+import KeycloakProvider from '@/lib/KeycloakProvider';
 
 export const metadata = {
-    title: 'EduAI – Plateforme E-Learning',
-    description: 'Plateforme e-learning intelligente avec tuteur IA, quiz adaptatifs et suivi de progression.',
+  title: 'EduAI – Plateforme E-Learning',
+  description: 'Plateforme e-learning intelligente avec tuteur IA, quiz adaptatifs et suivi de progression.',
 };
 
 // Blocking script that runs before paint to prevent theme flicker.
@@ -32,27 +28,27 @@ const themeScript = `
 `;
 
 export default function RootLayout({ children }) {
-    return (
-        <html lang="fr" suppressHydrationWarning>
-            <head>
-                <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-            </head>
-            <body>
-                <KeycloakProvider>
-                    {children}
-                    <Toaster
-                        position="top-right"
-                        toastOptions={{
-                            style: {
-                                background: '#1c1c30',
-                                color: '#e2e8f0',
-                                border: '1px solid rgba(99,102,241,0.2)',
-                                borderRadius: '12px',
-                            },
-                        }}
-                    />
-                </KeycloakProvider>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body>
+        <KeycloakProvider>
+          {children}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: '#1c1c30',
+                color: '#e2e8f0',
+                border: '1px solid rgba(99,102,241,0.2)',
+                borderRadius: '12px',
+              },
+            }}
+          />
+        </KeycloakProvider>
+      </body>
+    </html>
+  );
 }

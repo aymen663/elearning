@@ -7,11 +7,11 @@
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const SIZES = {
-    xs: { px: 28, font: 10, ring: 1.5, statusDot: 7,  statusBorder: 1.5, radius: '50%' },
-    sm: { px: 36, font: 12, ring: 2,   statusDot: 9,  statusBorder: 2,   radius: '50%' },
-    md: { px: 44, font: 14, ring: 2,   statusDot: 11, statusBorder: 2,   radius: '50%' },
+    xs: { px: 28, font: 10, ring: 1.5, statusDot: 7, statusBorder: 1.5, radius: '50%' },
+    sm: { px: 36, font: 12, ring: 2, statusDot: 9, statusBorder: 2, radius: '50%' },
+    md: { px: 44, font: 14, ring: 2, statusDot: 11, statusBorder: 2, radius: '50%' },
     lg: { px: 64, font: 22, ring: 2.5, statusDot: 14, statusBorder: 2.5, radius: 14 },
-    xl: { px: 80, font: 28, ring: 3,   statusDot: 16, statusBorder: 3,   radius: 16 },
+    xl: { px: 80, font: 28, ring: 3, statusDot: 16, statusBorder: 3, radius: 16 },
 };
 
 /* ── Gradient palette — deterministic from initials ───────────────────── */

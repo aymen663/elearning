@@ -99,8 +99,8 @@ export default function TermsPage() {
                         </p>
                     </div>
                 </div>
+
+                <Footer />
             </div>
-            <Footer />
-        </div>
-    );
+            );
 }

@@ -45,8 +45,8 @@ export default function Footer() {
                         Les inscriptions sont ouvertes pour la prochaine session
                     </motion.p>
                     <motion.button whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }} onClick={login}
-                        className="inline-flex items-center gap-2 font-bold px-4 py-1.5 rounded-full text-xs text-white"
-                        style={{ background: G }}>
+                        className="inline-flex items-center gap-2 font-bold px-4 py-1.5 rounded-full text-xs"
+                        style={{ background: G, color: isLightMode ? '#ffffff' : Y }}>
                         S&apos;inscrire <ArrowRight className="w-3.5 h-3.5" />
                     </motion.button>
                 </div>

@@ -8,69 +8,36 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-/* ── Badge colors — rgba works in both dark & light ───────────────────── */
-const CAT_BADGE = {
-    'programmation': { bg: 'rgba(34,197,94,0.12)', color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
-    'intelligence artificielle': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
-    'data science': { bg: 'rgba(59,130,246,0.12)', color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
-    'design': { bg: 'rgba(236,72,153,0.12)', color: '#f472b6', border: 'rgba(236,72,153,0.3)' },
-    'cybersécurité': { bg: 'rgba(248,113,113,0.12)', color: '#f87171', border: 'rgba(248,113,113,0.3)' },
-    'développement web': { bg: 'rgba(96,165,250,0.12)', color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
-    'développement': { bg: 'rgba(96,165,250,0.12)', color: '#60a5fa', border: 'rgba(96,165,250,0.3)' },
-    'marketing': { bg: 'rgba(251,146,60,0.12)', color: '#fb923c', border: 'rgba(251,146,60,0.3)' },
-    'business': { bg: 'rgba(251,191,36,0.12)', color: '#fbbf24', border: 'rgba(251,191,36,0.3)' },
+/* ── Color-coded Badge ── */
+const badgeStyles = {
+    category: { bg: '#EEF2FF', color: '#4338CA', border: '#C7D2FE' },
+    level:    { bg: '#FFF7ED', color: '#C2410C', border: '#FED7AA' },
+    students: { bg: '#F0FDF4', color: '#15803D', border: '#BBF7D0' },
+    published:{ bg: '#ECFDF5', color: '#047857', border: '#86EFAC' },
+    draft:    { bg: '#FFFBEB', color: '#B45309', border: '#FDE68A' },
+    default:  { bg: 'var(--bg-secondary)', color: 'var(--text-secondary)', border: 'var(--border)' },
 };
-const LVL_BADGE = {
-    'débutant': { bg: 'rgba(34,197,94,0.12)', color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
-    'intermédiaire': { bg: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: 'rgba(139,92,246,0.3)' },
-    'avancé': { bg: 'rgba(59,130,246,0.12)', color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
-};
-const ICON_COLORS = [
-    ['#3b82f6', '#1d4ed8'], ['#8b5cf6', '#6d28d9'], ['#ec4899', '#be185d'],
-    ['#f59e0b', '#b45309'], ['#10b981', '#047857'], ['#ef4444', '#b91c1c'],
-    ['#06b6d4', '#0e7490'], ['#84cc16', '#4d7c0f'],
-];
-
-/* ── Sub-components ────────────────────────────────────────────────────── */
-function CourseIcon({ title, index }) {
-    const [a, b] = ICON_COLORS[index % ICON_COLORS.length];
-    return (
-        <div style={{
-            width: 44, height: 44, borderRadius: 14, flexShrink: 0,
-            background: `linear-gradient(135deg, ${a}, ${b})`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 18, fontWeight: 800, color: '#fff',
-            boxShadow: `0 8px 16px -4px ${a}66, inset 0 2px 4px rgba(255,255,255,0.3)`,
-            border: `1px solid ${a}33`,
-            textShadow: '0 2px 4px rgba(0,0,0,0.2)'
-        }}>
-            {title?.[0]?.toUpperCase() || '?'}
-        </div>
-    );
-}
-
-function Bdg({ label, bg, color, border }) {
+function Bdg({ label, type = 'default' }) {
+    const s = badgeStyles[type] || badgeStyles.default;
     return (
         <span style={{
-            display: 'inline-flex', alignItems: 'center', height: 24, padding: '0 10px', borderRadius: 12,
-            fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', whiteSpace: 'nowrap',
-            background: bg, color, border: `1px solid ${border}`,
-            textTransform: 'uppercase'
+            display: 'inline-flex', alignItems: 'center', height: 28, padding: '0 12px', borderRadius: 8,
+            fontSize: 12, fontWeight: 600, letterSpacing: '0.02em', whiteSpace: 'nowrap',
+            background: s.bg, color: s.color, border: `1px solid ${s.border}`,
+            textTransform: 'capitalize',
         }}>{label}</span>
     );
 }
 
-/* ── Course Row (Ultra Premium List Layout) ─────────────────────────────── */
-function CourseRow({ course, index, enrolledIds, onEnroll, enrollingId, requestedIds, onRequest, requestingId, router }) {
+/* ── Course Card (Professional Redesign) ─────────────────────────────── */
+function CourseCard({ course, enrolledIds, onEnroll, enrollingId, requestedIds, onRequest, requestingId, router }) {
     const [hover, setHover] = useState(false);
     const isEnrolled = enrolledIds.has(course._id);
     const isEnrolling = enrollingId === course._id;
     const isRequested = requestedIds?.has(course._id);
     const isRequesting = requestingId === course._id;
-    const cat = course.category?.toLowerCase();
-    const lvl = course.level?.toLowerCase();
-    const cBdg = CAT_BADGE[cat] || { bg: 'var(--bg-secondary)', color: 'var(--text-muted)', border: 'var(--border)' };
-    const lBdg = LVL_BADGE[lvl] || { bg: 'var(--bg-secondary)', color: 'var(--text-muted)', border: 'var(--border)' };
+    const cat = course.category;
+    const lvl = course.level;
     const students = course.enrolledStudents?.length ?? 0;
     const date = course.createdAt
         ? new Date(course.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -79,110 +46,116 @@ function CourseRow({ course, index, enrolledIds, onEnroll, enrollingId, requeste
     return (
         <div
             style={{
-                display: 'grid',
-                gridTemplateColumns: '2.5fr 140px 120px 100px 120px 220px',
+                display: 'flex',
                 alignItems: 'center',
-                padding: '16px 24px',
-                borderBottom: '1px solid var(--border)',
-                background: hover ? 'var(--bg-hover)' : 'transparent',
+                justifyContent: 'space-between',
+                padding: '20px 28px',
+                background: 'var(--bg-card)',
+                border: hover ? '1.5px solid var(--accent)' : '1.5px solid var(--border-strong)',
+                borderRadius: '14px',
+                boxShadow: hover
+                    ? '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)'
+                    : '0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.02)',
                 transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                cursor: 'default',
+                transform: hover ? 'translateY(-2px)' : 'none',
+                gap: 24,
             }}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
         >
-            {/* COURS */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, minWidth: 0, transition: 'transform 0.25s', transform: hover ? 'scale(1.02)' : 'none' }}>
-                <div style={{ transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)', transform: hover ? 'scale(1.08) rotate(3deg)' : 'none' }}>
-                    <CourseIcon title={course.title} index={index} />
-                </div>
-                <div style={{ minWidth: 0, textAlign: 'center' }}>
-                    <p style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', letterSpacing: '-0.01em' }}>
-                        {course.title}
-                    </p>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 13, color: 'var(--text-muted)' }}>
-                        <span style={{ fontWeight: 600 }}>{course.instructor?.name || '—'}</span>
-                        <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--border-strong)' }} />
-                        <span>{date}</span>
-                    </div>
-                </div>
+            {/* 1. LEFT: Course info */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1.2, minWidth: 0 }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8, letterSpacing: '-0.01em', lineHeight: 1.4 }}>
+                    {course.title}
+                </h3>
+                <p style={{ display: 'flex', alignItems: 'center', fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500, gap: 8 }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{
+                            width: 28, height: 28, borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #10B981, #0D9F6E)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 12, fontWeight: 700, color: '#fff',
+                            boxShadow: '0 2px 6px rgba(13,159,110,0.25)',
+                        }}>
+                            {course.instructor?.name?.charAt(0) || '?'}
+                        </div>
+                        <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                            {course.instructor?.name || '—'}
+                        </span>
+                    </span>
+                    <span style={{ color: 'var(--border-strong)' }}>·</span>
+                    <span suppressHydrationWarning style={{ color: 'var(--text-muted)', fontSize: 12 }}>{date}</span>
+                </p>
             </div>
 
-            {/* CATÉGORIE */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}><Bdg label={course.category || 'Général'} {...cBdg} /></div>
+            {/* 2. CENTER: Tags & metadata */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap', flex: 1.5 }}>
+                {cat && <Bdg label={cat} type="category" />}
+                {lvl && <Bdg label={lvl} type="level" />}
 
-            {/* NIVEAU */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                {course.level
-                    ? <Bdg label={course.level} {...lBdg} />
-                    : <span style={{ color: 'var(--text-muted)', fontSize: 13, fontWeight: 600 }}>—</span>
-                }
-            </div>
+                <Bdg label={`${students} étud.`} type="students" />
 
-            {/* ÉTUDIANTS */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 14, color: 'var(--text-secondary)' }}>
-                <Users size={16} style={{ color: 'var(--text-muted)', transition: 'color 0.2s', color: hover ? 'var(--text-primary)' : 'var(--text-muted)' }} />
-                <span style={{ fontWeight: 700 }}>{students}</span>
-            </div>
-
-            {/* STATUT */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {course.isPublished
-                    ? <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', background: 'rgba(34,197,94,0.1)', borderRadius: 20, border: '1px solid rgba(34,197,94,0.2)' }}><div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }} /><span style={{ fontSize: 12, fontWeight: 800, color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Publié</span></div>
-                    : <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', background: 'rgba(245,158,11,0.1)', borderRadius: 20, border: '1px solid rgba(245,158,11,0.2)' }}><div style={{ width: 6, height: 6, borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 8px #f59e0b' }} /><span style={{ fontSize: 12, fontWeight: 800, color: '#d97706', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Brouillon</span></div>
+                    ? <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '0 12px', height: 28, background: '#ECFDF5', borderRadius: 8, border: '1px solid #86EFAC' }}>
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
+                        <span style={{ fontSize: 12, fontWeight: 600, color: '#047857' }}>Publié</span>
+                      </div>
+                    : <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '0 12px', height: 28, background: '#FFFBEB', borderRadius: 8, border: '1px solid #FDE68A' }}>
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#F59E0B' }} />
+                        <span style={{ fontSize: 12, fontWeight: 600, color: '#B45309' }}>Brouillon</span>
+                      </div>
                 }
             </div>
 
-            {/* ACTIONS */}
-            <div style={{ display: 'flex', justifyContent: 'center', transition: 'opacity 0.2s', opacity: hover ? 1 : 0.6 }}>
+            {/* 3. RIGHT: Actions */}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
                 {isEnrolled ? (
                     <button onClick={() => router.push(`/courses/${course._id}`)} style={{
-                        padding: '8px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                        background: 'var(--accent)', color: '#fff',
-                        border: 'none', display: 'flex', alignItems: 'center', gap: 6,
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'pointer',
-                        boxShadow: '0 4px 12px rgba(34,197,94,0.3)'
+                        padding: '9px 22px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                        background: 'linear-gradient(135deg, #10B981, #0D9F6E)', color: '#fff',
+                        border: 'none', display: 'flex', alignItems: 'center', gap: 7,
+                        transition: 'all 0.25s ease', cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(13,159,110,0.25)',
                     }}
-                        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(34,197,94,0.4)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(34,197,94,0.3)'; }}
+                        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(13,159,110,0.35)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(13,159,110,0.25)'; }}
                     >
-                        <Play size={13} fill="currentColor" /> Continuer
+                        <Play size={13} fill="currentColor" strokeWidth={0} /> Continuer
                     </button>
                 ) : isRequested ? (
                     <span style={{
-                        padding: '8px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                        background: 'rgba(245,158,11,0.1)', color: '#d97706',
-                        border: '1px solid rgba(245,158,11,0.2)', display: 'flex', alignItems: 'center', gap: 6,
+                        padding: '9px 22px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                        background: '#F5F7FA', color: 'var(--text-muted)',
+                        border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 7,
                     }}>
-                        <Clock size={13} /> En attente
+                        <Clock size={13} strokeWidth={2} /> En attente
                     </span>
                 ) : (
                     <div style={{ display: 'flex', gap: 8 }}>
-                        <button onClick={() => onEnroll(course._id)} disabled={isEnrolling} style={{
-                            padding: '8px 16px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                            background: 'var(--bg-card)', color: 'var(--text-primary)',
-                            border: '1px solid var(--border-strong)', display: 'flex', alignItems: 'center', gap: 6,
-                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', cursor: isEnrolling ? 'wait' : 'pointer',
-                            boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
-                        }}
-                            onMouseEnter={e => { if (!isEnrolling) { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(34,197,94,0.15)'; } }}
-                            onMouseLeave={e => { if (!isEnrolling) { e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)'; } }}
-                        >
-                            {isEnrolling ? <Loader2 size={13} className="animate-spin" /> : <Play size={13} />}
-                            {isEnrolling ? '…' : 'Ouvrir'}
-                        </button>
                         <button onClick={() => onRequest(course._id)} disabled={isRequesting} title="Demander l'accès" style={{
-                            padding: '8px 16px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                            background: 'var(--bg-card)', color: 'var(--text-primary)',
-                            border: '1px solid var(--border-strong)', display: 'flex', alignItems: 'center', gap: 6,
-                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', cursor: isRequesting ? 'wait' : 'pointer',
-                            boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
+                            padding: '9px 18px', borderRadius: 10, fontSize: 13, fontWeight: 500,
+                            background: 'transparent', color: 'var(--text-secondary)',
+                            border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 7,
+                            transition: 'all 0.2s ease', cursor: isRequesting ? 'wait' : 'pointer',
                         }}
-                            onMouseEnter={e => { if (!isRequesting) { e.currentTarget.style.borderColor = '#fbbf24'; e.currentTarget.style.color = '#d97706'; e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(245,158,11,0.15)'; } }}
-                            onMouseLeave={e => { if (!isRequesting) { e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)'; } }}
+                            onMouseEnter={e => { if (!isRequesting) { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.background = 'var(--bg-secondary)'; } }}
+                            onMouseLeave={e => { if (!isRequesting) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'transparent'; } }}
                         >
-                            {isRequesting ? <Loader2 size={13} className="animate-spin" /> : <SendHorizonal size={13} />}
+                            {isRequesting ? <Loader2 size={13} className="animate-spin" /> : <SendHorizonal size={13} strokeWidth={2} />}
                             Demander
+                        </button>
+                        <button onClick={() => onEnroll(course._id)} disabled={isEnrolling} style={{
+                            padding: '9px 22px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                            background: 'linear-gradient(135deg, #10B981, #0D9F6E)', color: '#fff',
+                            border: 'none', display: 'flex', alignItems: 'center', gap: 7,
+                            transition: 'all 0.25s ease', cursor: isEnrolling ? 'wait' : 'pointer',
+                            boxShadow: '0 2px 8px rgba(13,159,110,0.25)',
+                        }}
+                            onMouseEnter={e => { if (!isEnrolling) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(13,159,110,0.35)'; } }}
+                            onMouseLeave={e => { if (!isEnrolling) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(13,159,110,0.25)'; } }}
+                        >
+                            {isEnrolling ? <Loader2 size={13} className="animate-spin" /> : <Play size={13} strokeWidth={2} />}
+                            {isEnrolling ? '…' : "S'inscrire"}
                         </button>
                     </div>
                 )}
@@ -440,22 +413,23 @@ export default function CoursesListPage() {
 
     const inputStyle = {
         background: 'var(--bg-input)', border: '1px solid var(--border)',
-        color: 'var(--text-primary)', borderRadius: 8, fontSize: 13, outline: 'none',
+        color: 'var(--text-primary)', borderRadius: 10, fontSize: 13, outline: 'none',
+        transition: 'all 0.2s ease',
     };
     const selStyle = {
-        ...inputStyle, padding: '9px 32px 9px 12px',
+        ...inputStyle, padding: '11px 32px 11px 14px',
         cursor: 'pointer', appearance: 'none', minWidth: 150,
         color: 'var(--text-secondary)',
     };
 
     return (
         <Sidebar>
-            <div style={{ maxWidth: 1150, margin: '0 auto' }}>
+            <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
                 {/* ── Header ── */}
-                <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ marginBottom: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
-                        <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4 }}>
+                        <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4, letterSpacing: '-0.02em' }}>
                             Liste de cours
                         </h1>
                         <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
@@ -466,29 +440,29 @@ export default function CoursesListPage() {
                         onClick={() => setJoinModalOpen(true)}
                         style={{
                             display: 'inline-flex', alignItems: 'center', gap: 8,
-                            padding: '10px 20px', borderRadius: 12,
-                            fontSize: 14, fontWeight: 700,
+                            padding: '10px 20px', borderRadius: 10,
+                            fontSize: 13, fontWeight: 600,
                             color: '#fff',
-                            background: 'linear-gradient(135deg, #059669, #22c55e)',
+                            background: 'linear-gradient(135deg, #10B981, #0D9F6E)',
                             border: 'none', cursor: 'pointer',
-                            boxShadow: '0 4px 14px rgba(34,197,94,0.35)',
-                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                            boxShadow: '0 2px 8px rgba(13,159,110,0.25)',
+                            transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                         }}
-                        onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(34,197,94,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 14px rgba(34,197,94,0.35)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                        onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 16px rgba(13,159,110,0.35)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 8px rgba(13,159,110,0.25)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                     >
-                        <KeyRound size={16} /> Rejoindre avec un code
+                        <KeyRound size={15} /> Rejoindre avec un code
                     </button>
                 </div>
 
                 {/* ── Filters ── */}
-                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 20 }}>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginBottom: 24 }}>
                     <div style={{ position: 'relative', flex: '1 1 260px', minWidth: 220 }}>
-                        <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                        <Search size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
                         <input
                             type="text" placeholder="Rechercher un cours, instructeur…"
                             value={search} onChange={e => setSearch(e.target.value)}
-                            style={{ ...inputStyle, width: '100%', padding: '9px 12px 9px 36px' }}
+                            style={{ ...inputStyle, width: '100%', padding: '11px 14px 11px 38px' }}
                             onFocus={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.boxShadow = '0 0 0 3px var(--accent-dim)'; }}
                             onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
                         />
@@ -498,56 +472,30 @@ export default function CoursesListPage() {
                             <option value="">Toutes catégories</option>
                             {categories.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
-                        <ChevronDown size={13} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                        <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
                     </div>
                     <div style={{ position: 'relative' }}>
                         <select value={filterLvl} onChange={e => setFilterLvl(e.target.value)} style={{ ...selStyle, minWidth: 140 }}>
                             <option value="">Tous niveaux</option>
                             {levels.map(l => <option key={l} value={l}>{l.charAt(0).toUpperCase() + l.slice(1)}</option>)}
                         </select>
-                        <ChevronDown size={13} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                        <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
                     </div>
                     {(search || filterCat || filterLvl) && (
                         <button onClick={() => { setSearch(''); setFilterCat(''); setFilterLvl(''); }} style={{
-                            padding: '9px 14px', borderRadius: 8, fontSize: 12, fontWeight: 500,
+                            padding: '10px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600,
                             background: 'var(--danger-bg)', color: 'var(--danger)',
-                            border: '1px solid var(--danger)', cursor: 'pointer',
+                            border: '1px solid rgba(239,68,68,0.2)', cursor: 'pointer',
+                            transition: 'all 0.2s ease',
                         }}>
                             Réinitialiser
                         </button>
                     )}
                 </div>
 
-                {/* ── Table Container ── */}
-                <div style={{
-                    background: 'var(--bg-card)',
-                    border: '1px solid var(--border-strong)',
-                    borderRadius: 20,
-                    overflow: 'hidden',
-                    boxShadow: '0 12px 40px -12px rgba(0,0,0,0.08)',
-                }}>
-                    {/* Header */}
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: '2.5fr 140px 120px 100px 120px 220px',
-                        padding: '16px 24px',
-                        background: 'rgba(0,0,0,0.02)',
-                        borderBottom: '1px solid var(--border-strong)',
-                        backdropFilter: 'blur(10px)'
-                    }}>
-                        {['COURS', 'CATÉGORIE', 'NIVEAU', 'ÉTUDIANTS', 'STATUT', 'ACTIONS'].map((h, idx) => (
-                            <span key={idx} style={{
-                                fontSize: 12,
-                                fontWeight: 800,
-                                color: '#475569',
-                                letterSpacing: '0.08em',
-                                textTransform: 'uppercase',
-                                textAlign: 'center'
-                            }}>{h}</span>
-                        ))}
-                    </div>
+                {/* ── Cards Container ── */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-                    {/* Rows */}
                     {loading ? (
                         <div style={{ padding: '60px 0', textAlign: 'center' }}>
                             <Loader2 size={28} className="animate-spin" style={{ color: 'var(--accent)', margin: '0 auto 10px', display: 'block' }} />
@@ -560,10 +508,10 @@ export default function CoursesListPage() {
                             <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Modifiez vos filtres</p>
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {filtered.map((course, i) => (
-                                <CourseRow
-                                    key={course._id} course={course} index={i}
+                                <CourseCard
+                                    key={course._id} course={course}
                                     enrolledIds={enrolledIds} onEnroll={handleEnroll} enrollingId={enrollingId}
                                     requestedIds={requestedIds} onRequest={handleRequest} requestingId={requestingId}
                                     router={router}

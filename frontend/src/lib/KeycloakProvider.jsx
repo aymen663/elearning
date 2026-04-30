@@ -32,13 +32,36 @@ function TokenSyncer({ children }) {
 
 export default function KeycloakProvider({ children }) {
   const kc = getKeycloak();
+  const isServer = typeof window === 'undefined';
 
+  // Dummy client for SSR to prevent useKeycloak errors and hydration mismatches
+  const dummyKc = {
+    init: () => Promise.resolve(false),
+    login: () => {},
+    logout: () => {},
+    register: () => {},
+    accountManagement: () => {},
+    createLoginUrl: () => '',
+    createLogoutUrl: () => '',
+    createRegisterUrl: () => '',
+    createAccountUrl: () => '',
+    isTokenExpired: () => false,
+    updateToken: () => Promise.resolve(false),
+    clearToken: () => {},
+    hasRealmRole: () => false,
+    hasResourceRole: () => false,
+    loadUserInfo: () => Promise.resolve({}),
+    loadUserProfile: () => Promise.resolve({}),
+    authenticated: false,
+  };
 
-  if (!kc) return children;
+  const authClient = isServer ? dummyKc : kc;
+
+  if (!authClient) return children;
 
   return (
     <ReactKeycloakProvider
-      authClient={kc}
+      authClient={authClient}
       initOptions={{
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: typeof window !== 'undefined' ? window.location.origin + '/silent-check-sso.html' : '',

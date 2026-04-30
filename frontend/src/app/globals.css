@@ -142,76 +142,76 @@ html:not(.dark):not(.light) *::after {
    ============================================================ */
 html.light {
   /* ─── Backgrounds ───────────────────────────────────────────────────────
-     PROBLÈME IDENTIFIÉ : fond blanc + cards blanches = bordures invisibles.
-     FIX : fond gris clair #eef0f4, cards restent #ffffff → contraste net.
+     Professional warm-neutral palette — Coursera/Linear inspired.
+     #F5F7FA background + #FFFFFF cards = clear layered hierarchy.
   ──────────────────────────────────────────────────────────────────────── */
-  --bg-base: #e8ebf0;
-  --bg-primary: #e8ebf0;
-  --bg-secondary: #dde1e8;
+  --bg-base: #F5F7FA;
+  --bg-primary: #F5F7FA;
+  --bg-secondary: #EDF0F4;
   --bg-sidebar: #ffffff;
   --bg-header: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #f8f9fb;
-  --bg-hover: rgba(22, 163, 74, 0.07);
+  --bg-card-hover: #FAFBFC;
+  --bg-hover: rgba(13, 159, 110, 0.06);
   --bg-input: #ffffff;
   --input-bg: #ffffff;
 
-  /* Bordures — style SaaS subtil (ne pas modifier) */
-  --border: #e2e8f0;
-  --border-sidebar: #e8edf2;
-  --border-strong: #b0bcc8;
+  /* Bordures — clearly visible against white cards */
+  --border: #CBD3DC;
+  --border-sidebar: #D5DBE3;
+  --border-strong: #9FADB8;
 
-  /* Accent */
-  --accent: #16a34a;
-  --accent-light: #22c55e;
-  --accent-hover: #15803d;
-  --accent-dim: rgba(34, 197, 94, 0.1);
+  /* Accent — professional emerald */
+  --accent: #0D9F6E;
+  --accent-light: #10B981;
+  --accent-hover: #0B8A5E;
+  --accent-dim: rgba(13, 159, 110, 0.08);
 
   /* Boutons */
-  --btn-primary-bg: linear-gradient(135deg, #22c55e, #16a34a);
+  --btn-primary-bg: linear-gradient(135deg, #10B981, #0D9F6E);
   --btn-primary-text: #ffffff;
-  --btn-secondary-bg: rgba(34, 197, 94, 0.08);
-  --btn-secondary-text: #16a34a;
+  --btn-secondary-bg: rgba(13, 159, 110, 0.08);
+  --btn-secondary-text: #0D9F6E;
 
   /* Tags */
-  --tag-bg: rgba(34, 197, 94, 0.08);
-  --tag-text: #16a34a;
-  --tag-published-bg: #dcfce7;
-  --tag-published-text: #16a34a;
+  --tag-bg: rgba(13, 159, 110, 0.08);
+  --tag-text: #0D9F6E;
+  --tag-published-bg: #ECFDF5;
+  --tag-published-text: #047857;
 
   /* Icônes stats */
   --icon-courses: #3b82f6;
-  --icon-courses-bg: rgba(59, 130, 246, 0.1);
-  --icon-published: #22c55e;
-  --icon-published-bg: rgba(34, 197, 94, 0.1);
+  --icon-courses-bg: rgba(59, 130, 246, 0.08);
+  --icon-published: #10B981;
+  --icon-published-bg: rgba(16, 185, 129, 0.08);
   --icon-students: #f59e0b;
-  --icon-students-bg: rgba(245, 158, 11, 0.1);
+  --icon-students-bg: rgba(245, 158, 11, 0.08);
   --icon-lessons: #8b5cf6;
-  --icon-lessons-bg: rgba(139, 92, 246, 0.1);
+  --icon-lessons-bg: rgba(139, 92, 246, 0.08);
 
-  /* Textes */
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --text-logo: #0f172a;
+  /* Textes — richer, more readable */
+  --text-primary: #1A1D23;
+  --text-secondary: #5A6370;
+  --text-muted: #8B95A2;
+  --text-logo: #1A1D23;
 
   /* États */
-  --success: #22c55e;
-  --success-bg: rgba(34, 197, 94, 0.1);
-  --warning: #f59e0b;
-  --warning-bg: rgba(245, 158, 11, 0.1);
-  --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.1);
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.08);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.08);
+  --danger: #EF4444;
+  --danger-bg: rgba(239, 68, 68, 0.08);
 
   /* Thumbnail */
-  --thumb-gradient: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  --thumb-gradient: linear-gradient(135deg, #E8ECF1, #D5DBE3);
 
-  /* Ombres — bien marquées */
-  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.10), 0 4px 20px rgba(0, 0, 0, 0.10);
-  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.14);
-  --shadow-accent: 0 4px 14px rgba(34, 197, 94, 0.2);
-  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.10), 0 4px 20px rgba(0, 0, 0, 0.10);
-  --card-shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.10);
+  /* Ombres — layered depth */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-accent: 0 4px 14px rgba(13, 159, 110, 0.18);
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
 
   /* Rayons */
   --radius-lg: 16px;
@@ -220,8 +220,8 @@ html.light {
   --radius-full: 9999px;
 
   /* Scrollbar / body */
-  --scrollbar-track: #e6e9ef;
-  --glow-bg1: rgba(34, 197, 94, 0.04);
+  --scrollbar-track: #EDF0F4;
+  --glow-bg1: rgba(13, 159, 110, 0.03);
   --glow-bg2: rgba(59, 130, 246, 0.02);
   --body-bg-image: none;
 }
@@ -255,7 +255,7 @@ html.light {
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #22c55e, #4ade80);
+    background: linear-gradient(to bottom, #374151, #1f2937);
     border-radius: 10px;
   }
 }
@@ -284,8 +284,8 @@ html.light {
   html.light .card {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    border: 1.5px solid #7b93a8 !important;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10), 0 1px 4px rgba(0, 0, 0, 0.07) !important;
+    border: 1.5px solid var(--border-strong) !important;
+    box-shadow: var(--card-shadow) !important;
   }
 
   html.light .card:hover {
