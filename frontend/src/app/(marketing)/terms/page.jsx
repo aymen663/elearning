@@ -11,7 +11,7 @@ const SECTIONS = [
     },
     {
         title: '2. Description du service',
-        content: `EduAI est une plateforme d'apprentissage en ligne qui propose des cours interactifs, des quiz adaptatifs générés par intelligence artificielle, un tuteur IA basé sur la technologie RAG, ainsi que des certifications à l'issue des parcours complétés.`,
+        content: `EduAI est une plateforme d'apprentissage en ligne qui propose des cours interactifs, des quiz adaptatifs générés par intelligence artificielle, un tuteur IA basé sur la technologie RAG, ainsi qu'un suivi de progression détaillé.`,
     },
     {
         title: '3. Compte utilisateur',
@@ -23,26 +23,22 @@ const SECTIONS = [
     },
     {
         title: '5. Propriété intellectuelle',
-        content: `Tout le contenu disponible sur EduAI (cours, vidéos, quiz, certifications, logos, interface) est la propriété exclusive d'EduAI ou de ses partenaires et est protégé par les lois sur la propriété intellectuelle. Toute reproduction, distribution ou utilisation commerciale sans autorisation écrite préalable est strictement interdite.`,
+        content: `Tout le contenu disponible sur EduAI (cours, vidéos, quiz, logos, interface) est la propriété exclusive d'EduAI ou de ses partenaires et est protégé par les lois sur la propriété intellectuelle. Toute reproduction, distribution ou utilisation commerciale sans autorisation écrite préalable est strictement interdite.`,
     },
     {
-        title: '6. Certifications',
-        content: `Les certifications délivrées par EduAI attestent de la complétion d'un cours sur notre plateforme. Elles ne constituent pas des diplômes officiels reconnus par des institutions d'État. EduAI se réserve le droit de révoquer une certification en cas de fraude ou de violation des présentes conditions.`,
-    },
-    {
-        title: '7. Limitation de responsabilité',
+        title: '6. Limitation de responsabilité',
         content: `EduAI met tout en œuvre pour assurer la disponibilité et la qualité de ses services, mais ne peut garantir un accès ininterrompu à la plateforme. En aucun cas EduAI ne pourra être tenu responsable de dommages indirects, accessoires ou consécutifs résultant de l'utilisation ou de l'impossibilité d'utiliser ses services.`,
     },
     {
-        title: '8. Modifications des conditions',
+        title: '7. Modifications des conditions',
         content: `EduAI se réserve le droit de modifier les présentes conditions à tout moment. Les modifications entrent en vigueur dès leur publication sur la plateforme. L'utilisation continue des services après publication constitue votre acceptation des nouvelles conditions.`,
     },
     {
-        title: '9. Résiliation',
+        title: '8. Résiliation',
         content: `EduAI se réserve le droit de suspendre ou de résilier votre accès à la plateforme sans préavis en cas de violation des présentes conditions. Vous pouvez également supprimer votre compte à tout moment en nous contactant via la page de contact.`,
     },
     {
-        title: '10. Droit applicable',
+        title: '9. Droit applicable',
         content: `Les présentes conditions sont régies par le droit en vigueur en Tunisie. Tout litige relatif à l'utilisation de la plateforme sera soumis à la compétence exclusive des tribunaux compétents.`,
     },
 ];
