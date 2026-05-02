@@ -8,6 +8,7 @@ import {
     Loader2, Eye, Trash2, ToggleLeft, ToggleRight,
     Plus, Filter, AlertTriangle
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -338,9 +339,8 @@ export default function AdminCoursesPage() {
 
                     {/* Body */}
                     {loading ? (
-                        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-                            <Loader2 size={26} className="animate-spin" style={{ color: 'var(--accent)', margin: '0 auto 10px', display: 'block' }} />
-                            <p style={{ fontSize: 13, color: T.text.muted }}>Chargement des cours…</p>
+                        <div style={{ padding: '40px 0' }}>
+                            <CardLoader />
                         </div>
                     ) : filtered.length === 0 ? (
                         <div style={{ padding: '60px 0', textAlign: 'center' }}>

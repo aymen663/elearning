@@ -19,12 +19,18 @@ const NAV_LINKS = [
 
 export default function Header() {
     const pathname = usePathname();
-    const { user } = useAuthStore();
+    const { user: storeUser } = useAuthStore();
     const { isLightMode, toggleLightMode } = useThemeStore();
     const Y = isLightMode ? '#059669' : '#D4E157';
     const G = '#0B3D2E';
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => { setMounted(true); }, []);
+
+    // Only use `user` after mount to avoid hydration mismatch
+    const user = mounted ? storeUser : null;
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 20);
@@ -35,7 +41,7 @@ export default function Header() {
     const login = () => {
         const kc = getKeycloak();
         if (kc?.authenticated) return;
-        kc?.login();
+        kc?.login({ redirectUri: window.location.origin + '/auth/callback' });
     };
 
     const navBg = isLightMode 

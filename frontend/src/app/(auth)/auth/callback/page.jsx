@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/authStore';
-import { Loader2 } from 'lucide-react';
+import CubeLoader from '@/components/ui/CubeLoader';
 
 export default function AuthCallbackPage() {
     const router = useRouter();
@@ -18,8 +18,8 @@ export default function AuthCallbackPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
             <div className="flex flex-col items-center gap-4">
-                <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
-                <p className="text-slate-400 text-sm">Redirection en cours...</p>
+                <CubeLoader />
+                <p className="text-slate-400 text-sm mt-4">Redirection en cours...</p>
             </div>
         </div>
     );

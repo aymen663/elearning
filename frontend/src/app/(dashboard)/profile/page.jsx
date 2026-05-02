@@ -10,6 +10,7 @@ import {
     User, Shield, Bell, Globe, LogOut, Trash2, Lock, ChevronRight, AlertTriangle,
     BellRing, BookMarked, Clock, Languages, Save
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import toast from 'react-hot-toast';
 import { useLangStore } from '@/lib/i18n';
 
@@ -223,7 +224,7 @@ export default function ProfilePage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 animate-spin" style={{ color: 'var(--accent)' }} /></div></Sidebar>
+        <Sidebar><div className="py-16"><CardLoader /></div></Sidebar>
     );
 
     return (

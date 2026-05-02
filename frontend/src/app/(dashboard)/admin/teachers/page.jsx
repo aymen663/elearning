@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { adminAPI } from '@/lib/api';
 import Sidebar from '@/components/layout/Sidebar';
 import { Plus, Search, Trash2, Pencil, BookOpen, Users, CheckCircle, XCircle, GraduationCap, MailCheck, Loader2 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -55,24 +56,6 @@ export default function TeachersPage() {
         }
     };
 
-    const SkeletonCard = () => (
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4 animate-pulse space-y-3">
-            <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex-shrink-0" />
-                <div className="flex-1 space-y-2">
-                    <div className="h-3.5 bg-white/10 rounded w-1/2" />
-                    <div className="h-3 bg-white/5 rounded w-3/4" />
-                </div>
-                <div className="h-6 w-14 bg-white/10 rounded-full" />
-            </div>
-            <div className="flex items-center gap-2">
-                <div className="h-6 w-20 bg-white/10 rounded-full" />
-                <div className="h-4 w-12 bg-white/5 rounded" />
-                <div className="h-4 w-12 bg-white/5 rounded" />
-            </div>
-        </div>
-    );
-
     return (
         <Sidebar>
             <div className="page-header">
@@ -116,15 +99,7 @@ export default function TeachersPage() {
                     </thead>
                     <tbody className="divide-y divide-white/[0.04]">
                         {loading ? (
-                            [...Array(5)].map((_, i) => (
-                                <tr key={i} className="animate-pulse">
-                                    {[...Array(6)].map((_, j) => (
-                                        <td key={j} className="px-4 py-3.5">
-                                            <div className="h-4 bg-white/5 rounded" />
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
+                            <tr><td colSpan={6}><CardLoader /></td></tr>
                         ) : teachers.length === 0 ? (
                             <tr>
                                 <td colSpan={6} className="text-center py-14 text-slate-500">
@@ -211,7 +186,7 @@ export default function TeachersPage() {
             {/* ── Mobile Cards (< md) ── */}
             <div className="md:hidden space-y-3">
                 {loading ? (
-                    [...Array(4)].map((_, i) => <SkeletonCard key={i} />)
+                    <CardLoader />
                 ) : teachers.length === 0 ? (
                     <div className="text-center py-14 text-slate-500 text-sm">
                         Aucun professeur trouvé

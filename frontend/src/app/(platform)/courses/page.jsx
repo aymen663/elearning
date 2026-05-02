@@ -7,6 +7,7 @@ import { Search, BookOpen, Users, ChevronDown, Loader2, Play, KeyRound, X, Shiel
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import CardLoader from '@/components/ui/CardLoader';
 
 /* ── Color-coded Badge ── */
 const badgeStyles = {
@@ -497,9 +498,8 @@ export default function CoursesListPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
                     {loading ? (
-                        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-                            <Loader2 size={28} className="animate-spin" style={{ color: 'var(--accent)', margin: '0 auto 10px', display: 'block' }} />
-                            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Chargement…</p>
+                        <div style={{ padding: '40px 0' }}>
+                            <CardLoader />
                         </div>
                     ) : filtered.length === 0 ? (
                         <div style={{ padding: '60px 0', textAlign: 'center' }}>

@@ -7,6 +7,7 @@ import {
     ArrowLeft, Plus, Loader2, BookOpen, X, Save, Trash2,
     GripVertical, Edit3, Check, FileText, Upload, ChevronDown, ChevronUp
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -122,7 +123,7 @@ export default function EditCoursePage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-8 h-8 text-teal-400 animate-spin" /></div></Sidebar>
+        <Sidebar><div className="py-16"><CardLoader /></div></Sidebar>
     );
 
     return (

@@ -6,6 +6,7 @@ import {
     Users, Loader2, ArrowLeft, Search, Mail, BookOpen,
     TrendingUp, CheckCircle, Clock, ChevronDown, ShieldCheck
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -190,9 +191,8 @@ export default function InstructorStudentsPage() {
 
                     {/* Body */}
                     {loading ? (
-                        <div style={{ padding: '60px 0', textAlign: 'center' }}>
-                            <Loader2 size={28} className="animate-spin" style={{ color: 'var(--accent)', margin: '0 auto 10px', display: 'block' }} />
-                            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Chargement…</p>
+                        <div style={{ padding: '40px 0' }}>
+                            <CardLoader />
                         </div>
                     ) : filtered.length === 0 ? (
                         <div style={{ padding: '60px 0', textAlign: 'center' }}>

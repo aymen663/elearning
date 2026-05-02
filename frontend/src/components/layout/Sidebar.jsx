@@ -169,53 +169,80 @@ function CalendarDropdown() {
 }
 
 
-function getAdminNav(t) { return [
-    { title: t('nav.general'), items: [
-        { href: '/admin', icon: LayoutDashboard, label: t('nav.board') },
-        { href: '/admin/courses', icon: BookOpen, label: t('nav.courses') },
-    ]},
-    { title: t('nav.management'), items: [
-        { href: '/admin/teachers', icon: GraduationCap, label: t('nav.teachers') },
-        { href: '/admin/students', icon: Users, label: t('nav.students') },
-    ]},
-];}
+function getAdminNav(t) {
+    return [
+        {
+            title: t('nav.general'), items: [
+                { href: '/admin', icon: LayoutDashboard, label: t('nav.board') },
+                { href: '/admin/courses', icon: BookOpen, label: t('nav.courses') },
+            ]
+        },
+        {
+            title: t('nav.management'), items: [
+                { href: '/admin/teachers', icon: GraduationCap, label: t('nav.teachers') },
+                { href: '/admin/students', icon: Users, label: t('nav.students') },
+            ]
+        },
+    ];
+}
 
-function getInstructorNav(t) { return [
-    { title: t('nav.general'), items: [
-        { href: '/instructor', icon: LayoutDashboard, label: t('nav.board') },
-        { href: '/instructor/courses/new', icon: BookOpen, label: t('nav.newCourse') },
-        { href: '/instructor/students', icon: Users, label: t('nav.myStudents') },
-    ]},
-    { title: t('nav.management'), items: [
-        { href: '/instructor/requests', icon: CheckCircle, label: t('nav.requests') },
-        { href: '/instructor/analytics', icon: BarChart2, label: t('nav.analytics') },
-    ]},
-    { title: t('nav.communication'), items: [
-        { href: '/messages', icon: MessageSquare, label: t('nav.messages') },
-        { href: '/forum', icon: MessagesSquare, label: t('nav.forum') },
-    ]},
-    { title: t('nav.other'), items: [
-        { href: '/profile', icon: Settings, label: t('nav.settings') },
-    ]},
-];}
+function getInstructorNav(t) {
+    return [
+        {
+            title: t('nav.general'), items: [
+                { href: '/instructor', icon: LayoutDashboard, label: t('nav.board') },
+                { href: '/instructor/courses/new', icon: BookOpen, label: t('nav.newCourse') },
+                { href: '/instructor/students', icon: Users, label: t('nav.myStudents') },
+            ]
+        },
+        {
+            title: t('nav.management'), items: [
+                { href: '/instructor/requests', icon: CheckCircle, label: t('nav.requests') },
+                { href: '/instructor/analytics', icon: BarChart2, label: t('nav.analytics') },
+            ]
+        },
+        {
+            title: t('nav.communication'), items: [
+                { href: '/messages', icon: MessageSquare, label: t('nav.messages') },
+                { href: '/forum', icon: MessagesSquare, label: t('nav.forum') },
+            ]
+        },
+        {
+            title: t('nav.other'), items: [
+                { href: '/profile', icon: Settings, label: t('nav.settings') },
+            ]
+        },
+    ];
+}
 
-function getStudentNav(t) { return [
-    { title: t('nav.general'), items: [
-        { href: '/dashboard', icon: Home, label: t('nav.dashboard') },
-        { href: '/courses', icon: Book, label: t('nav.courses') },
-    ]},
-    { title: t('nav.communication'), items: [
-        { href: '/messages', icon: MessageSquare, label: t('nav.messages') },
-        { href: '/forum', icon: User, label: t('nav.forum') },
-    ]},
-    { title: t('nav.tools'), items: [
-        { href: '/chat', icon: Bot, label: t('nav.tutor') },
-    ]},
-    { title: t('nav.other'), items: [
-        { href: '/games', icon: Gamepad2, label: t('nav.games') },
-        { href: '/profile', icon: Settings, label: t('nav.settings') },
-    ]},
-];}
+function getStudentNav(t) {
+    return [
+        {
+            title: t('nav.general'), items: [
+                { href: '/dashboard', icon: Home, label: t('nav.dashboard') },
+                { href: '/courses', icon: Book, label: t('nav.courses') },
+            ]
+        },
+        {
+            title: t('nav.communication'), items: [
+                { href: '/messages', icon: MessageSquare, label: t('nav.messages') },
+                { href: '/forum', icon: User, label: t('nav.forum') },
+            ]
+        },
+        {
+            title: t('nav.tools'), items: [
+                { href: '/chat', icon: Bot, label: t('nav.tutor') },
+                { href: '/calendar', icon: Calendar, label: t('nav.calendar') },
+            ]
+        },
+        {
+            title: t('nav.other'), items: [
+                { href: '/games', icon: Gamepad2, label: t('nav.games') },
+                { href: '/profile', icon: Settings, label: t('nav.settings') },
+            ]
+        },
+    ];
+}
 
 export default function Sidebar({ children }) {
     const pathname = usePathname();
@@ -294,17 +321,18 @@ export default function Sidebar({ children }) {
             user?.role === 'instructor' ? getInstructorNav(t) :
                 getStudentNav(t);
     const isChatPage = pathname?.startsWith('/chat');
-    const isDesktopCompact = isChatPage && !sidebarPinnedExpanded && !sidebarHoverExpanded;
+    const isCompactPage = isChatPage || pathname?.startsWith('/calendar');
+    const isDesktopCompact = isCompactPage && !sidebarPinnedExpanded && !sidebarHoverExpanded;
 
     useEffect(() => {
-        if (!isChatPage) {
+        if (!isCompactPage) {
             setSidebarPinnedExpanded(true);
             setSidebarHoverExpanded(false);
         } else {
             setSidebarPinnedExpanded(false);
             setSidebarHoverExpanded(false);
         }
-    }, [isChatPage]);
+    }, [isCompactPage]);
 
     const SidebarContent = ({ compact = false }) => (
         <div
@@ -389,8 +417,8 @@ export default function Sidebar({ children }) {
     return (
         <div className="flex h-screen overflow-hidden" style={{ position: 'relative' }}>
             <aside
-                onMouseEnter={() => isChatPage && setSidebarHoverExpanded(true)}
-                onMouseLeave={() => isChatPage && setSidebarHoverExpanded(false)}
+                onMouseEnter={() => isCompactPage && setSidebarHoverExpanded(true)}
+                onMouseLeave={() => isCompactPage && setSidebarHoverExpanded(false)}
                 className="hidden lg:flex flex-col flex-shrink-0 border-r transition-[width] duration-300 ease-in-out"
                 style={{
                     width: isDesktopCompact ? 76 : 256,
@@ -474,7 +502,7 @@ export default function Sidebar({ children }) {
                     </div>
                 </header>
 
-                <main className={`flex-1 overflow-y-auto animate-fade-in ${isChatPage ? 'p-0' : 'p-4 lg:p-5'}`}
+                <main className={`flex-1 overflow-y-auto animate-fade-in ${isCompactPage ? 'p-0' : 'p-4 lg:p-5'}`}
                     style={{ background: 'transparent' }}>
                     {children}
                 </main>

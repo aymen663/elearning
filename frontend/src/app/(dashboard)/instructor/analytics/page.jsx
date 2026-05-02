@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { coursesAPI } from '@/lib/api';
 import Sidebar from '@/components/layout/Sidebar';
 import { BarChart2, Users, CheckCircle, TrendingUp, BookOpen, Loader2, ArrowLeft, Activity, ChevronDown, Trophy, PieChart, Star } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -193,10 +194,8 @@ export default function InstructorAnalyticsPage() {
                 </div>
 
                 {loading ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} style={{ height: 76, borderRadius: T.card.radius, background: '#e5e7eb' }} className="animate-pulse" />
-                        ))}
+                    <div style={{ padding: '40px 0' }}>
+                        <CardLoader />
                     </div>
                 ) : (
                     <>

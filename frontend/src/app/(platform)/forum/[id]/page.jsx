@@ -10,6 +10,7 @@ import {
     ArrowLeft, ChevronUp, ChevronDown, CheckCircle2,
     MessageCircle, Eye, Tag, Trash2, Loader2, Send, Clock
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import toast from 'react-hot-toast';
 
 function timeAgo(dateStr) {
@@ -127,7 +128,7 @@ export default function ForumThreadPage() {
     };
 
     if (loading) return (
-        <Sidebar><div className="flex justify-center py-24"><Loader2 className="w-10 h-10 text-teal-400 animate-spin" /></div></Sidebar>
+        <Sidebar><div className="py-16"><CardLoader /></div></Sidebar>
     );
 
     if (!post) return (

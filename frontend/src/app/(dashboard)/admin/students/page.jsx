@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { adminAPI } from '@/lib/api';
 import Sidebar from '@/components/layout/Sidebar';
 import { Users, Mail, Calendar, Search, Trash2, Loader2 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import toast from 'react-hot-toast';
 
 export default function AdminStudentsPage() {
@@ -63,7 +64,7 @@ export default function AdminStudentsPage() {
                     </thead>
                     <tbody>
                         {loading ? (
-                            [...Array(5)].map((_, i) => <tr key={i}>{[...Array(4)].map((_, j) => <td key={j}><div className="h-4 bg-white/5 rounded animate-pulse" /></td>)}</tr>)
+                            <tr><td colSpan={4}><CardLoader /></td></tr>
                         ) : students.length === 0 ? (
                             <tr><td colSpan={4} className="text-center py-12 text-slate-500">Aucun étudiant</td></tr>
                         ) : students.map((s) => (

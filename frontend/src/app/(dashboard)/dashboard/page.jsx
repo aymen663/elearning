@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import CardLoader from '@/components/ui/CardLoader';
 
 /* ── Design tokens — same as admin ─────────────────────────────────────── */
 const T = {
@@ -214,10 +215,8 @@ export default function DashboardPage() {
                 </div>
 
                 {loading ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-                        {[...Array(6)].map((_, i) => (
-                            <div key={i} style={{ height: 76, borderRadius: T.card.radius, background: 'var(--border)' }} className="animate-pulse" />
-                        ))}
+                    <div style={{ padding: '40px 0' }}>
+                        <CardLoader />
                     </div>
                 ) : (
                     <>

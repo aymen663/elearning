@@ -6,6 +6,7 @@ import { useAuthStore } from '@/lib/authStore';
 import Sidebar from '@/components/layout/Sidebar';
 import UserAvatar from '@/components/ui/UserAvatar';
 import { MessageSquare, Loader2, Search, ChevronRight } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -57,8 +58,8 @@ export default function MessagesPage() {
             </div>
 
             {loading ? (
-                <div className="flex justify-center py-24">
-                    <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
+                <div className="py-16">
+                    <CardLoader />
                 </div>
             ) : filtered.length === 0 ? (
                 <div className="card text-center py-20">

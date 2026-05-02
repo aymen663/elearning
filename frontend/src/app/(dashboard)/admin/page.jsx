@@ -5,6 +5,7 @@ import { useAuthStore } from '@/lib/authStore';
 import Sidebar from '@/components/layout/Sidebar';
 import { GraduationCap, BookOpen, Users, TrendingUp, Heart, ArrowUpRight, ArrowRight, Activity, UserPlus, FileEdit, Sparkles, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
+import CardLoader from '@/components/ui/CardLoader';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    DESIGN TOKENS — CSS vars (Emerald Dark glassmorphism)
@@ -226,10 +227,8 @@ export default function AdminDashboard() {
                 </div>
 
                 {loading ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-                        {[...Array(6)].map((_, i) => (
-                            <div key={i} style={{ height: 76, borderRadius: T.card.radius, background: '#e5e7eb' }} className="animate-pulse" />
-                        ))}
+                    <div style={{ padding: '40px 0' }}>
+                        <CardLoader />
                     </div>
                 ) : (
                     <>

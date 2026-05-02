@@ -7,6 +7,7 @@ import {
     ArrowLeft, Users, Loader2, Mail, TrendingUp,
     BookOpen, CheckCircle, Clock
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -53,8 +54,8 @@ export default function CourseStudentsPage() {
             </div>
 
             {loading ? (
-                <div className="flex justify-center py-24">
-                    <Loader2 className="w-8 h-8 text-teal-400 animate-spin" />
+                <div className="py-16">
+                    <CardLoader />
                 </div>
             ) : students.length === 0 ? (
                 <div className="card text-center py-20 max-w-lg mx-auto">

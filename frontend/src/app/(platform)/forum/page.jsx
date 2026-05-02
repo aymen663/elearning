@@ -11,6 +11,7 @@ import {
     HelpCircle, Star, Filter, X, Award
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import CubeLoader from '@/components/ui/CubeLoader';
 
 
 function timeAgo(dateStr) {
@@ -223,8 +224,9 @@ function EmptyState({ search, sort, onReset }) {
                         <X className="w-3.5 h-3.5" /> Réinitialiser
                     </button>
                 )}
-                <Link href="/forum/new" className="btn-primary text-sm">
-                    <Plus className="w-4 h-4" /> Poser une question
+                <Link href="/forum/new" className="btn-github-style">
+                    <Plus style={{ width: 16, height: 16 }} />
+                    <span>Poser une question</span>
                 </Link>
             </div>
         </motion.div>
@@ -368,6 +370,32 @@ export default function ForumPage() {
 
     return (
         <Sidebar>
+            <style>{`
+              .btn-github-style {
+                cursor: pointer;
+                display: inline-flex;
+                gap: 0.5rem;
+                border: 1px solid var(--border-strong);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                border-radius: 100px;
+                font-weight: 700;
+                align-items: center;
+                justify-content: center;
+                padding: 0.75rem 1.25rem;
+                font-size: 0.875rem;
+                background-color: var(--bg-card);
+                color: var(--text-primary);
+                text-decoration: none;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+              }
+              .btn-github-style:hover {
+                border-color: var(--accent);
+                color: #fff;
+                transform: translateY(-4px);
+                background-color: var(--accent);
+                box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+              }
+            `}</style>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
                 <div>
                     <h1 className="page-title">Forum de discussion</h1>
@@ -375,8 +403,9 @@ export default function ForumPage() {
                         {total.toLocaleString()} question{total !== 1 ? 's' : ''} — entraidez-vous !
                     </p>
                 </div>
-                <Link href="/forum/new" className="btn-primary" style={{ flexShrink: 0 }}>
-                    <Plus style={{ width: 16, height: 16 }} /> Poser une question
+                <Link href="/forum/new" className="btn-github-style" style={{ flexShrink: 0 }}>
+                    <Plus style={{ width: 16, height: 16 }} />
+                    <span>Poser une question</span>
                 </Link>
             </div>
 
@@ -446,7 +475,7 @@ export default function ForumPage() {
                     {/* Posts list */}
                     {loading ? (
                         <div style={{ display: 'flex', justifyContent: 'center', padding: '96px 0' }}>
-                            <Loader2 style={{ width: 40, height: 40, color: 'var(--text-muted)' }} className="animate-spin" />
+                            <CubeLoader />
                         </div>
                     ) : posts.length === 0 ? (
                         <EmptyState search={search} sort={sort} onReset={() => { setSearch(''); setSort('newest'); setActiveTag(''); }} />

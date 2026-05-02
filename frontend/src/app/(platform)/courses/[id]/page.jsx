@@ -8,6 +8,7 @@ import {
     BookOpen, Users, Clock, CheckCircle, MessageSquare, Brain,
     Play, ArrowRight, Loader2, ArrowLeft, Star, Award, Mail
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -48,7 +49,7 @@ export default function CourseDetailPage() {
     };
 
     if (loading) return (
-        <Sidebar><div style={{ display: 'flex', justifyContent: 'center', padding: '96px 0' }}><Loader2 style={{ width: 40, height: 40, color: 'var(--accent)' }} className="animate-spin" /></div></Sidebar>
+        <Sidebar><div className="py-16"><CardLoader /></div></Sidebar>
     );
 
     if (!data) return <Sidebar><p style={{ color: 'var(--text-muted)' }}>Cours introuvable</p></Sidebar>;

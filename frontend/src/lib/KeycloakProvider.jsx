@@ -67,7 +67,6 @@ export default function KeycloakProvider({ children }) {
         silentCheckSsoRedirectUri: typeof window !== 'undefined' ? window.location.origin + '/silent-check-sso.html' : '',
         checkLoginIframe: false,
         pkceMethod: 'S256',
-        redirectUri: typeof window !== 'undefined' ? window.location.origin + '/auth/callback' : '',
       }}
       onEvent={(eventType) => {
         // Resolve KC ready promise on any init outcome

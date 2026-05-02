@@ -31,7 +31,7 @@ export default function Footer() {
     const login = () => {
         const kc = getKeycloak();
         if (kc?.authenticated) return;
-        kc?.login();
+        kc?.login({ redirectUri: window.location.origin + '/auth/callback' });
     };
 
     return (

@@ -7,6 +7,7 @@ import {
     ArrowLeft, User, Mail, Calendar, BookOpen, Trophy,
     Loader2, TrendingUp, CheckCircle, Clock
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -29,8 +30,8 @@ export default function AdminStudentDetailPage() {
 
     if (loading) return (
         <Sidebar>
-            <div className="flex justify-center py-24">
-                <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
+            <div className="py-16">
+                <CardLoader />
             </div>
         </Sidebar>
     );

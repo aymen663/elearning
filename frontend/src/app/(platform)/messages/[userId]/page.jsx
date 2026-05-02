@@ -9,6 +9,7 @@ import {
     Loader2, Send, ArrowLeft, Trash2, CheckCheck,
     Smile, Paperclip, Phone, MoreVertical, Search
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import EmojiPicker from 'emoji-picker-react';
@@ -239,8 +240,8 @@ export default function ThreadPage() {
     /* ── Loading ── */
     if (loading) return (
         <Sidebar>
-            <div className="flex justify-center py-32">
-                <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+            <div className="py-16">
+                <CardLoader />
             </div>
         </Sidebar>
     );

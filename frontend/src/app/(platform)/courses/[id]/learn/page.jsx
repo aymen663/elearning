@@ -7,6 +7,7 @@ import {
     BookOpen, CheckCircle, Clock, ChevronRight, ChevronLeft,
     Loader2, FileText, Download, Maximize2, X, Eye
 } from 'lucide-react';
+import CardLoader from '@/components/ui/CardLoader';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -229,9 +230,8 @@ export default function LearnPage() {
 
     if (loading) return (
         <Sidebar>
-            <div className="flex flex-col items-center justify-center py-32 gap-4">
-                <Loader2 className="w-10 h-10 text-teal-400 animate-spin" />
-                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Chargement du cours…</p>
+            <div className="py-16">
+                <CardLoader />
             </div>
         </Sidebar>
     );

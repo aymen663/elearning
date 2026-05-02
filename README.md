@@ -116,10 +116,18 @@ The platform supports three distinct user roles:
 | **Role-based Access** | Fine-grained route protection with `protect()` + `restrictTo()` middleware |
 | **Teacher Invitation** | Admin creates teacher accounts → email verification → password setup → KC sync |
 
+### 📅 Calendar & Planner
+| Feature | Details |
+|---|---|
+| **Interactive Calendar** | Monthly calendar with drag-and-drop event management |
+| **Study Planner** | Plan and organize study sessions linked to courses |
+| **Event Management** | Create, edit, and delete events with color coding |
+
 ### 🎨 UI & Experience
 | Feature | Details |
 |---|---|
 | **Light/Dark Theme** | Full theme support with CSS variables and cookie persistence |
+| **Unified Loading System** | CubeLoader (page transitions) + CardLoader (data loading) — zero layout shift |
 | **Internationalization** | Multi-language support via custom i18n system |
 | **Responsive Design** | Mobile-first layout with glassmorphism effects |
 | **Global Search** | Platform-wide search modal |
@@ -133,7 +141,7 @@ The platform supports three distinct user roles:
 ┌─────────────────────────────────────────────────────────────┐
 │                        CLIENT BROWSER                       │
 │                    Next.js 14  (Port 3000)                  │
-│       App Router · Tailwind CSS · Framer Motion · Zustand   │
+│     App Router · CSS Variables · Framer Motion · Zustand    │
 └────────────────────────┬────────────────────────────────────┘
                          │  REST API (Axios)
                          │  JWT Bearer (RS256)
@@ -273,20 +281,26 @@ elearning/
 │       │   ├── page.jsx              # Landing page
 │       │   ├── not-found.jsx         # 404 page
 │       │   ├── (auth)/               # Login callback, set-password, verify-email
-│       │   ├── (dashboard)/          # Admin, instructor, student dashboards, profile
+│       │   ├── (dashboard)/          # Admin, instructor, student dashboards
+│       │   │   ├── admin/            # Admin panel (users, courses, stats)
+│       │   │   ├── instructor/       # Instructor dashboard (courses, analytics)
+│       │   │   ├── dashboard/        # Student dashboard
+│       │   │   ├── calendar/         # Interactive calendar & planner
+│       │   │   └── profile/          # User profile & settings
 │       │   ├── (marketing)/          # Contact, privacy, terms pages
 │       │   ├── (platform)/           # Courses, chat, forum, games, messages
 │       │   └── api/tutor/            # Next.js API routes for AI features
 │       ├── components/
 │       │   ├── layout/               # Sidebar, Header, Footer
-│       │   └── ui/                   # SearchModal, ToggleSwitch, UserAvatar
+│       │   └── ui/                   # CubeLoader, CardLoader, SearchModal, UserAvatar
 │       └── lib/
 │           ├── keycloak.js           # Keycloak singleton instance
-│           ├── KeycloakProvider.jsx   # Keycloak React provider
-│           ├── authStore.js          # Zustand auth store
+│           ├── KeycloakProvider.jsx   # Keycloak React provider (check-sso)
+│           ├── authStore.js          # Zustand auth store (localStorage cache)
 │           ├── themeStore.js         # Zustand theme store (light/dark)
 │           ├── api.js                # Axios client (all API endpoints)
 │           ├── i18n.js               # Internationalization system
+│           ├── calendar/             # Calendar utilities & state management
 │           └── tutor/                # AI tutor library (embeddings, RAG)
 │
 ├── services/                         # Standalone Microservices
