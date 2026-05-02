@@ -222,20 +222,22 @@ The platform supports three distinct user roles:
 
 ```
 elearning/
+├── .gitignore
+├── README.md
 ├── docker-compose.yml               # Keycloak container (dev entry point)
 ├── package.json                      # Workspace scripts (npm run dev)
 │
 ├── backend/                          # Express.js REST API
-│   ├── .env / .env.example
+│   ├── .env.example
 │   ├── package.json
-│   ├── scripts/                      # Admin & maintenance scripts
-│   │   ├── fix-kc-profile.mjs        # Keycloak profile repair
+│   ├── scripts/                      # Admin & maintenance CLI tools
 │   │   ├── check-instructors.js
-│   │   ├── debugUser.js
-│   │   ├── fixKcUser.js
+│   │   ├── debug-user.js
+│   │   ├── fix-kc-profile.js
+│   │   ├── fix-kc-user.js
 │   │   ├── publish-all.js
-│   │   ├── sync-instructors-to-keycloak.js
-│   │   └── testEmail.js
+│   │   ├── sync-instructors.js
+│   │   └── test-email.js
 │   └── src/
 │       ├── server.js                 # Entry point + RAG auto-ingest on startup
 │       ├── middleware/
@@ -267,9 +269,11 @@ elearning/
 │           └── api.test.js
 │
 ├── frontend/                         # Next.js 14 Application
-│   ├── .env.local
 │   ├── package.json
-│   ├── next.config.js / tsconfig.json / tailwind.config.js
+│   ├── jsconfig.json
+│   ├── next.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
 │   ├── public/
 │   │   ├── games/                    # Game thumbnail images
 │   │   ├── images/                   # Hero & marketing images
@@ -278,6 +282,7 @@ elearning/
 │       ├── app/
 │       │   ├── globals.css           # Design system & CSS variables
 │       │   ├── layout.js             # Root layout (Keycloak + theme provider)
+│       │   ├── loading.jsx           # Global loading boundary (CubeLoader)
 │       │   ├── page.jsx              # Landing page
 │       │   ├── not-found.jsx         # 404 page
 │       │   ├── (auth)/               # Login callback, set-password, verify-email
@@ -294,18 +299,14 @@ elearning/
 │       │   ├── layout/               # Sidebar, Header, Footer
 │       │   └── ui/                   # CubeLoader, CardLoader, SearchModal, UserAvatar
 │       └── lib/
-│           ├── keycloak.js           # Keycloak singleton instance
-│           ├── KeycloakProvider.jsx   # Keycloak React provider (check-sso)
-│           ├── authStore.js          # Zustand auth store (localStorage cache)
-│           ├── themeStore.js         # Zustand theme store (light/dark)
 │           ├── api.js                # Axios client (all API endpoints)
+│           ├── authStore.js          # Zustand auth store (localStorage cache)
+│           ├── keycloak.js           # Keycloak singleton instance
+│           ├── KeycloakProvider.jsx  # Keycloak React provider (check-sso)
+│           ├── themeStore.js         # Zustand theme store (light/dark)
 │           ├── i18n.js               # Internationalization system
 │           ├── calendar/             # Calendar utilities & state management
 │           └── tutor/                # AI tutor library (embeddings, RAG)
-│
-├── services/                         # Standalone Microservices
-│   └── ai-tutor/                     # AI Tutor standalone app
-│       └── ai-tutor-main/            # Next.js + Supabase + Gemini
 │
 └── infra/                            # Infrastructure & DevOps
     ├── keycloak/
@@ -465,7 +466,6 @@ npm run dev
 ```bash
 npm run dev:backend    # Backend only (port 5000)
 npm run dev:frontend   # Frontend only (port 3000)
-npm run dev:tutor      # AI Tutor standalone service
 ```
 
 ### Health Check
